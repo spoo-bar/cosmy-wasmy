@@ -2,7 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { normalize } from 'path';
+import { Account } from './models/Account';
+import { Contract } from './models/Contract';
+import { AccountDataProvider } from './AccountDataProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -14,14 +16,22 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Account.deleteAllAccounts(context.globalState);
 
-	const todayTaskViewProvider = new AccountDataProvider(context.globalState);
-	vscode.window.registerTreeDataProvider('account', todayTaskViewProvider);
+	const accountViewProvider = new AccountDataProvider(context.globalState);
+	vscode.window.registerTreeDataProvider('account', accountViewProvider);
+
+	
+	const contractViewProvider = new ContractDataProvider(context.globalState);
+	vscode.window.registerTreeDataProvider('contract', contractViewProvider);
 
 	registerCommands();
 
 	function registerCommands() {
 		registerHelloWorldCmd();
 		registerAddAccountCmd();
+		registerCopyAccountAddressCmd();
+		registerCopyMnemonicCmd();
+		registerDeleteAddressCmd();
+		registerSelectAccountCmd();
 	}
 
 	// The command has been defined in the package.json file
@@ -50,6 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const options = ["Generate seed phrase for me (Recommended)", "I have a seed phrase"];
 					vscode.window.showQuickPick(options).then(rr => {
 						if (rr) {
+							//todo : reload webview aftir new account
 							if (rr == "Generate seed phrase for me (Recommended)") {
 								DirectSecp256k1HdWallet.generate(24).then(wallet => {
 									const account = new Account(accountLabel, wallet.mnemonic)
@@ -78,98 +89,66 @@ export function activate(context: vscode.ExtensionContext) {
 
 		context.subscriptions.push(disposable);
 	}
+
+	function registerCopyAccountAddressCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyAddress', (item: vscode.TreeItem) => {
+			if(item.description) {
+				vscode.window.showInformationMessage("Copying addr"); //todo
+			}
+			
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerCopyMnemonicCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: vscode.TreeItem) => {
+			if(item.description) {
+				vscode.window.showInformationMessage("Copying mnemonic"); //todo
+			}
+			
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerDeleteAddressCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteAccount', (item: vscode.TreeItem) => {
+			if(item.description) {
+				vscode.window.showInformationMessage("Deleting account"); //todo
+			}
+			
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerSelectAccountCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.selectAccount', (account: Account) => {
+			vscode.window.showInformationMessage(account.mnemonic); 
+		});
+		context.subscriptions.push(disposable);
+	}
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() { }
 
-class Account {
-	label: string;
-	mnemonic: string;
-	wallet: string;
+export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 
-	/**
-	 *
-	 */
-	constructor(label: string, mnemonic: string) {
-		this.label = label;
-		this.mnemonic = mnemonic;
-		this.wallet = "";
-	}
-
-	public static getAccounts(context: vscode.Memento): Account[] {
-		const accountData = context.get<Account[]>("account");
-		if (accountData) {
-			return accountData;
-		}
-		return [];
-	}
-
-	public static addAccount(context: vscode.Memento, account: Account) {
-		const accounts = this.getAccounts(context);
-		accounts.push(account);
-		context.update("account", accounts);
-	}
-
-	public static deleteAllAccounts(context: vscode.Memento) {
-		context.update("account", []);
-	}
-
-	public static getWallets(context: vscode.Memento): Account[] {
-		const accountData = this.getAccounts(context);
-		accountData.forEach(async account => {
-			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: "cosmos",
-			})
-			const accounts = await wallet.getAccounts()
-			const acc = accounts[0];
-			account.wallet = acc.address;
-		})
-		return accountData;
-	}
-}
-
-
-export class AccountDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-
-	private accounts: Account[];
+	private contracts: Contract[];
 
 	/**
 	 *
 	 */
 	constructor(context: vscode.Memento) {
-		this.accounts = Account.getWallets(context);
+		this.contracts = [];
 	}
+	onDidChangeTreeData?: vscode.Event<void | Contract | Contract[] | null | undefined> | undefined;
 
-	onDidChangeTreeData?: vscode.Event<void | vscode.TreeItem | vscode.TreeItem[] | null | undefined> | undefined;
-
-	getTreeItem(element: vscode.TreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+	getTreeItem(element: Contract): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		return element;
 	}
-	getChildren(element?: vscode.TreeItem): vscode.ProviderResult<vscode.TreeItem[]> {
-		if (!element) {
-			const accounts = this.accounts;
-			return Promise.resolve(new Promise(function (resolve, reject) {
-				let items: vscode.TreeItem[] = [];
-				if (accounts && accounts.length > 0) {
-					accounts.forEach(account => {
-						const item = new vscode.TreeItem(account.label);
-						item.id = account.label;
-						item.description = account.wallet;
-						item.tooltip = account.mnemonic;
-						item.contextValue = "addr";
-						item.command = {
-							title: "Hello",
-							command: "cosmy-wasmy.helloWorld",
-							arguments: [account.mnemonic]
-						}
-						items.push(item);
-					});
-				};
-				resolve(items);
-			}));
-		}
-	}
 
+	getChildren(element?: Contract): vscode.ProviderResult<Contract[]> {
+		throw new Error('Method not implemented.');
+	}
 
 }

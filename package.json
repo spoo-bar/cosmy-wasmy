@@ -21,15 +21,96 @@
       },
       {
         "command": "cosmy-wasmy.addAccount",
-        "title": "Add Account"
+        "title": "Add Account",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.copyAddress",
+        "title": "Copy Address",
+        "enablement": "viewItem == account",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.copyMnemonic",
+        "title": "Copy Mnemonic",
+        "enablement": "viewItem == account",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.deleteAccount",
+        "title": "Delete Account",
+        "enablement": "viewItem == account",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "cosmy-wasmy.addAccount",
+          "when": "view == account",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "cosmy-wasmy.copyAddress",
+          "when": "view == account",
+          "group": "inline"
+        },
+        {
+          "command": "cosmy-wasmy.copyMnemonic",
+          "when": "view == account",
+          "group": "inline"
+        },
+        {
+          "command": "cosmy-wasmy.deleteAccount",
+          "when": "view == account",
+          "group": "inline"
+        }
+      ]
+    },
     "views": {
       "cosmy-wasmy": [
         {
           "id": "account",
           "name": "Account",
           "type": "tree",
+          "visibility": "visible"
+        },
+        {
+          "id": "contract",
+          "name": "Contract",
+          "type": "tree",
+          "visibility": "visible"
+        },
+        {
+          "id": "query",
+          "name": "Query",
+          "type": "webview",
+          "visibility": "visible"
+        },
+        {
+          "id": "execute",
+          "name": "Execute",
+          "type": "webview",
+          "visibility": "visible"
+        },
+        {
+          "id": "sign",
+          "name": "Sign",
+          "type": "webview",
           "visibility": "visible"
         }
       ]
@@ -78,6 +159,7 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.28.4",
     "@cosmjs/proto-signing": "^0.28.4"
   }
 }
