@@ -8,6 +8,8 @@ import { ContractDataProvider } from './ContractDataProvider';
 import { Contract, ContractData } from './models/Contract';
 import { ExtData } from './models/ExtData';
 import { SignProvider } from './SignProvider';
+import { QueryProvider } from './QueryProvider';
+import { TxProvider } from './TxProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -28,6 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const signingViewProvider = new SignProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider("sign", signingViewProvider));
+
+	const queryViewProvider = new QueryProvider(context.extensionUri);
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider("query", queryViewProvider));
+
+	const txViewProvider = new TxProvider(context.extensionUri);
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider("execute", txViewProvider));
 
 	registerCommands();
 
