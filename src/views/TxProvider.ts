@@ -1,13 +1,10 @@
 import * as vscode from 'vscode';
 import {
-	CosmWasmClient,
 	SigningCosmWasmClient,
 } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
-import { ExtData } from '../models/ExtData';
-import { ChainConfig } from '../models/ChainConfig';
-import { sign } from 'crypto';
 import { GasPrice } from '@cosmjs/stargate';
+import { Workspace } from '../models/Workspace';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -34,11 +31,11 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const account = ExtData.GetSelectedAccount();
+						const account = Workspace.GetSelectedAccount();
 						if (!account) {
 							vscode.window.showErrorMessage("No account selected");
 						}
-						const contract = ExtData.GetSelectedContract();
+						const contract = Workspace.GetSelectedContract();
 						if (!contract) {
 							vscode.window.showErrorMessage("No contract selected");
 						}
@@ -48,10 +45,10 @@ export class TxProvider implements vscode.WebviewViewProvider {
 						).then(doc => {
 							vscode.window.showTextDocument(doc).then(editor => {
 								DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-									prefix: ChainConfig.GetWorkspaceChainConfig().addressPrefix,
+									prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
 								}).then(signer => {
 									SigningCosmWasmClient.connectWithSigner(
-										ChainConfig.GetWorkspaceChainConfig().rpcEndpoint, 
+										Workspace.GetWorkspaceChainConfig().rpcEndpoint, 
 										signer, {
 											gasPrice: GasPrice.fromString("0.025ujunox")
 										}).then(client => {

@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import { ExtData } from './ExtData';
-import { ChainConfig } from './ChainConfig';
 
 
 export class Contract extends vscode.TreeItem {
@@ -32,11 +30,4 @@ export class Contract extends vscode.TreeItem {
     }
 }
 
-export class ContractData {
-    public static async GetContract(contractAddress: string): Promise<Contract> {
-        let client  = await CosmWasmClient.connect(ChainConfig.GetWorkspaceChainConfig().rpcEndpoint);
-        const contractInfo = await client.getContract(contractAddress);
-        let cc = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator);
-        return cc;
-    }
-}
+

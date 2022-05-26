@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { ExtData } from './ExtData';
-import { ChainConfig } from './ChainConfig';
+import { Workspace } from './Workspace';
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -22,7 +22,7 @@ export class Account extends vscode.TreeItem {
 		const accountData = this.getAccountsBasic(context);
 		accountData.forEach(async (account) => {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: ChainConfig.GetWorkspaceChainConfig().addressPrefix,
+				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;
@@ -38,17 +38,5 @@ export class Account extends vscode.TreeItem {
 		const accounts = this.getAccountsBasic(context);
 		accounts.push(account);
 		ExtData.SaveAccounts(context, accounts);
-	}
-
-	//todo
-	public static deleteAccount(context: vscode.Memento, account: Account) {
-		const accountData = this.getAccountsBasic(context);
-		const newAccData = accountData.filter(acc => acc.label !== acc.label);
-		context.update("account", newAccData);
-	}
-
-	//todo
-	public static deleteAllAccounts(context: vscode.Memento) {
-		context.update("account", []);
 	}
 }

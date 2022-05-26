@@ -4,13 +4,14 @@ import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Account } from './models/Account';
 import { AccountDataProvider } from './views/AccountDataProvider';
-import { ContractDataProvider } from './views/ContractDataProvider';
-import { Contract, ContractData } from './models/Contract';
+import { ContractDataProvider } from './ContractDataProvider';
+import { Contract } from './models/Contract';
+import { CosmwasmAPI } from "./models/CosmwasmAPI";
 import { ExtData } from './models/ExtData';
 import { SignProvider } from './views/SignProvider';
 import { QueryProvider } from './views/QueryProvider';
 import { TxProvider } from './views/TxProvider';
-import { ChainConfig } from './models/ChainConfig';
+import { Workspace } from './models/Workspace';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "cosmy-wasmy" is now active!');
 
-	const config = ChainConfig.GetWorkspaceChainConfig();
+	const config = Workspace.GetWorkspaceChainConfig();
 	if (!config || !config.chainName || !config.addressPrefix || !config.rpcEndpoint) {
 		return;
 	}
@@ -146,7 +147,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerSelectAccountCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.selectAccount', (account: Account) => {
-			ExtData.SetSelectedAccount(account);
+			Workspace.SetSelectedAccount(account);
 		});
 		context.subscriptions.push(disposable);
 	}
@@ -159,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}).then(contractAddr => {
 				// todo : check if resp already used
 				if (contractAddr) {
-					ContractData.GetContract(contractAddr).then(contract => {
+					CosmwasmAPI.GetContract(contractAddr).then(contract => {
 						Contract.AddContract(context.globalState, contract);
 						vscode.window.showInformationMessage("added new contract" + contract.contractAddress);
 						const contracts = Contract.GetContracts(context.globalState);
@@ -174,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerSelectContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.selectContract', (contract: Contract) => {
-			ExtData.SetSelectedContract(contract);
+			Workspace.SetSelectedContract(contract);
 		});
 		context.subscriptions.push(disposable);
 	}

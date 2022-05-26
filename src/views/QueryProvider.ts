@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import { ExtData } from '../models/ExtData';
-import { ChainConfig } from '../models/ChainConfig';
+import { Workspace } from '../models/Workspace';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -28,32 +28,38 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const account = ExtData.GetSelectedAccount();
+						const account = Workspace.GetSelectedAccount();
 						if(!account) {
 							vscode.window.showErrorMessage("No account selected");
 						}
-						const contract = ExtData.GetSelectedContract();
+						const contract = Workspace.GetSelectedContract();
 						if(!contract) {
 							vscode.window.showErrorMessage("No contract selected");
 						}
+						//todo progress bar
 						else {
-							vscode.workspace.openTextDocument({
-								language: "jsonc"
-							}).then(doc => {
-								vscode.window.showTextDocument(doc).then(editor => {
-									CosmWasmClient.connect(ChainConfig.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
-										const query = JSON.parse(data.value);
-										client.queryContractSmart(contract.contractAddress, query).then(resp => {
-											let output = "// Input: \n";
-											output += JSON.stringify(query, null, 4) + "\n\n";
-											output += "// Query Result \n\n";
-											output += JSON.stringify(resp, null, 4);
+							CosmWasmClient.connect(Workspace.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
+								const query = JSON.parse(data.value);
+								// todo check json parse fail
+								client.queryContractSmart(contract.contractAddress, query).then(resp => {
+									let output = "// Input: \n";
+									output += JSON.stringify(query, null, 4) + "\n\n";
+									output += "// Query Result \n\n";
+									output += JSON.stringify(resp, null, 4);									
+									vscode.workspace.openTextDocument({
+										language: "jsonc"
+									}).then(doc => {
+										vscode.window.showTextDocument(doc).then(editor => {
 											editor.insertSnippet(new vscode.SnippetString(output));
-										}).catch(err => {
-											let output = "// Input: \n";
-											output += data.value + "\n\n";
-											output += "// ⚠️ Query failed \n\n";
-											output += err;
+										})
+									})
+								}).catch(err => {
+									let output = "// Input: \n";
+									output += data.value + "\n\n";
+									output += "// ⚠️ Query failed \n\n";
+									output += err;
+									vscode.workspace.openTextDocument().then(doc => {
+										vscode.window.showTextDocument(doc).then(editor => {
 											editor.insertSnippet(new vscode.SnippetString(output));
 										})
 									})
