@@ -1,39 +1,41 @@
 import * as vscode from 'vscode';
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-export class Contract extends vscode.TreeItem {
+import { ExtData } from './ExtData';
 
-    name: string;
-    id: string;
-    contract_address: string;
-    creator_address: string;
-    admin_address: string | undefined;
+
+export class Contract extends vscode.TreeItem {
+    label: string;
+    contractAddress: string;
+    codeId: number;
+    creator: string;
 
     /**
      *
      */
-    constructor(name: string, id: string, contract: string, creator: string, admin: string | undefined) {
-        super(name);
-        this.name = name;
-        this.id = id;
-        this.contract_address = contract;
-        this.creator_address = creator;
-        this.admin_address = admin;
+    constructor(id: string, contract: string, codeId: number, creator: string) {
+        super(id);
+        this.label = id;
+        this.contractAddress = contract;
+        this.codeId = codeId;
+        this.creator = creator;
     }
 
     public static GetContracts(context: vscode.Memento): Contract[] {
-        const contractData = context.get<Contract[]>("contract");
-		if (contractData) {
-			return contractData;
-		}
-		return [];
+        return ExtData.GetExtensionData(context).contracts;
     }
 
-    public static async AddContracts(context: vscode.Memento, contract: Contract) {
-        // let client  = await CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi");
-        // const c = await client.getContract("");
-        // let cc = new Contract(c.label, c.codeId.toString(), c.address, c.creator, c.admin);
+    public static AddContract(context: vscode.Memento, contract: Contract) {
         let contracts = this.GetContracts(context);
 		contracts.push(contract);
-		context.update("contract", contracts);
+		ExtData.SaveContracts(context, contracts);
+    }
+}
+
+export class ContractData {
+    public static async GetContract(contractAddress: string): Promise<Contract> {
+        let client  = await CosmWasmClient.connect("https://rpc-juno.itastakers.com/");
+        const contractInfo = await client.getContract(contractAddress);
+        let cc = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator);
+        return cc;
     }
 }

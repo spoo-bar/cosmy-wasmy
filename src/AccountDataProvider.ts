@@ -9,8 +9,8 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 	/**
 	 *
 	 */
-	constructor(context: vscode.Memento) {
-		this.accounts = Account.getAccounts(context);
+	constructor(accounts: Account[]) {
+		this.accounts = accounts;
 	}
 
 	onDidChangeTreeData?: vscode.Event<void | Account | Account[] | null | undefined> | undefined;
@@ -23,7 +23,6 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 		if (!element) {
 			const accounts = this.accounts;
 			return Promise.resolve(new Promise(function (resolve, reject) {
-				let items: vscode.TreeItem[] = [];
 				if (accounts && accounts.length > 0) {
 					accounts.forEach(account => {
 						account.id = account.label;

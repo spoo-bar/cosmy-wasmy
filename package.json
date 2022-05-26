@@ -30,7 +30,7 @@
       {
         "command": "cosmy-wasmy.copyAddress",
         "title": "Copy Address",
-        "enablement": "viewItem == account",
+        "enablement": "viewItem == account || viewItem == contract",
         "icon": {
           "light": "media/icon.svg",
           "dark": "media/icon.svg"
@@ -53,6 +53,27 @@
           "light": "media/icon.svg",
           "dark": "media/icon.svg"
         }
+      },
+      {
+        "command": "cosmy-wasmy.addContract",
+        "title": "Add Contract",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.deleteContract",
+        "title": "Delete Contract",
+        "enablement": "viewItem == contract",
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.resetData",
+        "title": "Cosmy Wasmy: Reset Data"
       }
     ],
     "menus": {
@@ -61,12 +82,17 @@
           "command": "cosmy-wasmy.addAccount",
           "when": "view == account",
           "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.addContract",
+          "when": "view == contract",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "cosmy-wasmy.copyAddress",
-          "when": "view == account",
+          "when": "view == account || view == contract",
           "group": "inline"
         },
         {
@@ -77,6 +103,11 @@
         {
           "command": "cosmy-wasmy.deleteAccount",
           "when": "view == account",
+          "group": "inline"
+        },  
+        {
+          "command": "cosmy-wasmy.deleteContract",
+          "when": "view == contract",
           "group": "inline"
         }
       ]
@@ -128,6 +159,10 @@
       {
         "view": "account",
         "contents": "⚠️ Looks like there are no accounts set up. \n [Add an account](command:cosmy-wasmy.addAccount)"
+      },
+      {
+        "view": "contract",
+        "contents": "⚠️ Looks like there are no contracts are import. \n [Import a contract](command:cosmy-wasmy.addContract)"
       }
     ]
   },

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { ExtData } from './ExtData';
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -29,25 +30,23 @@ export class Account extends vscode.TreeItem {
 	}
 
 	public static getAccountsBasic(context: vscode.Memento): Account[] {
-		const accountData = context.get<Account[]>("account");
-		if (accountData) {
-			return accountData;
-		}
-		return [];
+		return ExtData.GetExtensionData(context).accounts;
 	}
 
 	public static addAccount(context: vscode.Memento, account: Account) {
 		const accounts = this.getAccountsBasic(context);
 		accounts.push(account);
-		context.update("account", accounts);
+		ExtData.SaveAccounts(context, accounts);
 	}
 
+	//todo
 	public static deleteAccount(context: vscode.Memento, account: Account) {
 		const accountData = this.getAccountsBasic(context);
 		const newAccData = accountData.filter(acc => acc.label !== acc.label);
 		context.update("account", newAccData);
 	}
 
+	//todo
 	public static deleteAllAccounts(context: vscode.Memento) {
 		context.update("account", []);
 	}
