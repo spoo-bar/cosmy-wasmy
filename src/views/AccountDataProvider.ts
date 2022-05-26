@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Account } from './models/Account';
+import { Account } from '../models/Account';
 
 
 export class AccountDataProvider implements vscode.TreeDataProvider<Account> {

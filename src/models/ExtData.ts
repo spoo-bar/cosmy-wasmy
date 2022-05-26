@@ -7,6 +7,7 @@ export class ExtData {
 	contracts: Contract[];
 
 	private static readonly storeKey = "cosmy-wasmy";
+	private static selectedAccount: Account;
 
 	/**
 	 *
@@ -38,6 +39,14 @@ export class ExtData {
 
 	public static ResetExtensionData(context: vscode.Memento) {
 		context.update(ExtData.storeKey, undefined);
+	}
+
+	public static SetSelectedAccount(account: Account) {
+		this.selectedAccount = account;
+	}
+
+	public static GetSelectedAccount(): Account {
+		return this.selectedAccount;
 	}
 
 	private static SaveExtensionData(context: vscode.Memento, data: ExtData) {

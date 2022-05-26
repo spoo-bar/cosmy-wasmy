@@ -104,7 +104,7 @@
           "command": "cosmy-wasmy.deleteAccount",
           "when": "view == account",
           "group": "inline"
-        },  
+        },
         {
           "command": "cosmy-wasmy.deleteContract",
           "when": "view == contract",
@@ -194,7 +194,9 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
+    "@cosmjs/amino": "^0.28.4",
     "@cosmjs/cosmwasm-stargate": "^0.28.4",
+    "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.28.4"
   }
 }

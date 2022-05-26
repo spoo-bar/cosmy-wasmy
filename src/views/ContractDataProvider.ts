@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Contract } from './models/Contract';
+import { Contract } from '../models/Contract';
 
 
 export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {

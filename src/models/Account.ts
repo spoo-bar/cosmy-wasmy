@@ -21,7 +21,7 @@ export class Account extends vscode.TreeItem {
 		const accountData = this.getAccountsBasic(context);
 		accountData.forEach(async (account) => {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: "cosmos",
+				prefix: "juno",
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;

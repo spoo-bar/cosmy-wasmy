@@ -1,4 +1,7 @@
 import * as vscode from 'vscode';
+import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { StdSignDoc  } from "@cosmjs/amino";
+import { ExtData } from '../models/ExtData';
 
 
 export class SignProvider implements vscode.WebviewViewProvider {
@@ -25,11 +28,33 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'sign-text':
 					{
-						vscode.workspace.openTextDocument().then(doc => {
-							vscode.window.showTextDocument(doc).then(editor => {
-								editor.insertSnippet(new vscode.SnippetString(data.value));
+						const account = ExtData.GetSelectedAccount();
+						if(!account) {
+							vscode.window.showErrorMessage("No account selected");
+						}
+						else {
+							vscode.workspace.openTextDocument({
+								language: "jsonc"
+							}).then(doc => {
+								vscode.window.showTextDocument(doc).then(editor => {
+									Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
+										prefix: "juno",
+									  }).then(wallet => {
+										const signDoc = makeADR36AminoSignDoc(
+											account.address,
+											data.value,
+										  );
+										  wallet.signAmino(account.address, signDoc).then(resp => {
+											  let output = "// Input: \n";
+											  output += data.value + "\n\n";
+											  output += "// Signed output: \n"
+											  output += JSON.stringify(resp.signature, null, 4);
+											editor.insertSnippet(new vscode.SnippetString(output));
+										  })
+									  });
+								})
 							})
-						})
+						}
 						break;
 					}
 			}
@@ -73,3 +98,34 @@ export class SignProvider implements vscode.WebviewViewProvider {
 	}
 
 }
+
+export function makeADR36AminoSignDoc(
+	signer: string,
+	data: string | Uint8Array,
+  ): StdSignDoc {
+	if (typeof data === 'string') {
+	  data = Buffer.from(data).toString('base64');
+	} else {
+	  data = Buffer.from(data).toString('base64');
+	}
+  
+	return {
+	  chain_id: '',
+	  account_number: '0',
+	  sequence: '0',
+	  fee: {
+		gas: '0',
+		amount: [],
+	  },
+	  msgs: [
+		{
+		  type: 'sign/MsgSignData',
+		  value: {
+			signer,
+			data,
+		  },
+		},
+	  ],
+	  memo: '',
+	};
+  }

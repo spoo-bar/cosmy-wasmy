@@ -3,13 +3,13 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Account } from './models/Account';
-import { AccountDataProvider } from './AccountDataProvider';
-import { ContractDataProvider } from './ContractDataProvider';
+import { AccountDataProvider } from './views/AccountDataProvider';
+import { ContractDataProvider } from './views/ContractDataProvider';
 import { Contract, ContractData } from './models/Contract';
 import { ExtData } from './models/ExtData';
-import { SignProvider } from './SignProvider';
-import { QueryProvider } from './QueryProvider';
-import { TxProvider } from './TxProvider';
+import { SignProvider } from './views/SignProvider';
+import { QueryProvider } from './views/QueryProvider';
+import { TxProvider } from './views/TxProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -140,7 +140,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerSelectAccountCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.selectAccount', (account: Account) => {
-			vscode.window.showInformationMessage(account.mnemonic);
+			ExtData.SetSelectedAccount(account);
 		});
 		context.subscriptions.push(disposable);
 	}
