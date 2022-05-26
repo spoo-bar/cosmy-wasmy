@@ -7,6 +7,7 @@ import { AccountDataProvider } from './AccountDataProvider';
 import { ContractDataProvider } from './ContractDataProvider';
 import { Contract, ContractData } from './models/Contract';
 import { ExtData } from './models/ExtData';
+import { SignProvider } from './SignProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -24,6 +25,9 @@ export function activate(context: vscode.ExtensionContext) {
 	const contracts = Contract.GetContracts(context.globalState);
 	const contractViewProvider = new ContractDataProvider(contracts);
 	vscode.window.registerTreeDataProvider('contract', contractViewProvider);
+
+	const signingViewProvider = new SignProvider(context.extensionUri);
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider("sign", signingViewProvider));
 
 	registerCommands();
 

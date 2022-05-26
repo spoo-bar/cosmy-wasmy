@@ -38,7 +38,6 @@ export class ExtData {
 
 	public static ResetExtensionData(context: vscode.Memento) {
 		context.update(ExtData.storeKey, undefined);
-		context.update("cosmy-wasmy", undefined);
 	}
 
 	private static SaveExtensionData(context: vscode.Memento, data: ExtData) {
