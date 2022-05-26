@@ -26,7 +26,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
-				case 'sign-text':
+				case 'exec-text':
 					{
 						const account = ExtData.GetSelectedAccount();
 						if(!account) {
@@ -91,7 +91,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text"></textarea>
-				<button id="sign-button">Sign</button>
+				<button id="exec-button">Sign</button>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;

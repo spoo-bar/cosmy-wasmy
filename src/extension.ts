@@ -168,7 +168,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerSelectContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.selectContract', (contract: Contract) => {
-			vscode.window.showInformationMessage(contract.label);
+			ExtData.SetSelectedContract(contract);
 		});
 		context.subscriptions.push(disposable);
 	}

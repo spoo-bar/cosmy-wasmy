@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import { ExtData } from '../models/ExtData';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -23,14 +25,40 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
-				case 'sign-text':
+				case 'exec-text':
 					{
-						vscode.workspace.openTextDocument().then(doc => {
-							vscode.window.showTextDocument(doc).then(editor => {
-								editor.insertSnippet(new vscode.SnippetString(data.value));
+						const account = ExtData.GetSelectedAccount();
+						if(!account) {
+							vscode.window.showErrorMessage("No account selected");
+						}
+						const contract = ExtData.GetSelectedContract();
+						if(!contract) {
+							vscode.window.showErrorMessage("No contract selected");
+						}
+						else {
+							vscode.workspace.openTextDocument({
+								language: "jsonc"
+							}).then(doc => {
+								vscode.window.showTextDocument(doc).then(editor => {
+									CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi").then(client => {
+										const query = JSON.parse(data.value);
+										client.queryContractSmart(contract.contractAddress, query).then(resp => {
+											let output = "// Input: \n";
+											output += JSON.stringify(query, null, 4) + "\n\n";
+											output += "// Query Result \n\n";
+											output += JSON.stringify(resp, null, 4);
+											editor.insertSnippet(new vscode.SnippetString(output));
+										}).catch(err => {
+											let output = "// Input: \n";
+											output += data.value + "\n\n";
+											output += "// ⚠️ Query failed \n\n";
+											output += err;
+											editor.insertSnippet(new vscode.SnippetString(output));
+										})
+									})
+								})
 							})
-						})
-						break;
+						}
 					}
 			}
 		});
@@ -66,7 +94,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text"></textarea>
-				<button id="query-button">Query</button>
+				<button id="exec-button">Query</button>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;

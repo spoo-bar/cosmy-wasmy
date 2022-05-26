@@ -5,10 +5,10 @@
 (function () {
     const vscode = acquireVsCodeApi();
 
-    document.querySelector('#sign-button').addEventListener('click', () => {
+    document.querySelector('#exec-button').addEventListener('click', () => {
         const input = document.getElementById('input-text').value;
         console.log(input);
-        vscode.postMessage({ type: 'sign-text', value: input });
+        vscode.postMessage({ type: 'exec-text', value: input });
     });
 
 }());
