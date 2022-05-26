@@ -1,4 +1,13 @@
 import * as vscode from 'vscode';
+import {
+	CosmWasmClient,
+	SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
+import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
+import { ExtData } from '../models/ExtData';
+import { ChainConfig } from '../models/ChainConfig';
+import { sign } from 'crypto';
+import { GasPrice } from '@cosmjs/stargate';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -6,7 +15,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 
-	
+
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
 	) { }
@@ -23,11 +32,45 @@ export class TxProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
-				case 'sign-text':
+				case 'exec-text':
 					{
-						vscode.workspace.openTextDocument().then(doc => {
+						const account = ExtData.GetSelectedAccount();
+						if (!account) {
+							vscode.window.showErrorMessage("No account selected");
+						}
+						const contract = ExtData.GetSelectedContract();
+						if (!contract) {
+							vscode.window.showErrorMessage("No contract selected");
+						}
+
+						vscode.workspace.openTextDocument(
+							{ language: "jsonc" }
+						).then(doc => {
 							vscode.window.showTextDocument(doc).then(editor => {
-								editor.insertSnippet(new vscode.SnippetString(data.value));
+								DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+									prefix: ChainConfig.GetWorkspaceChainConfig().addressPrefix,
+								}).then(signer => {
+									SigningCosmWasmClient.connectWithSigner(
+										ChainConfig.GetWorkspaceChainConfig().rpcEndpoint, 
+										signer, {
+											gasPrice: GasPrice.fromString("0.025ujunox")
+										}).then(client => {
+										const req = JSON.parse(data.value);
+										client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
+											let output = "// Input: \n";
+											output += JSON.stringify(req, null, 4) + "\n\n";
+											output += "// Tx Result \n\n";
+											output += JSON.stringify(res, null, 4);
+											editor.insertSnippet(new vscode.SnippetString(output));
+										}).catch(err => {
+											let output = "// Input: \n";
+											output += data.value + "\n\n";
+											output += "// ⚠️ Query failed \n\n";
+											output += err;
+											editor.insertSnippet(new vscode.SnippetString(output));
+										});
+									})
+								});
 							})
 						})
 						break;
@@ -66,7 +109,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text"></textarea>
-				<button id="tx-button">Execute</button>
+				<button id="exec-button">Execute</button>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
