@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { ExtData } from './ExtData';
+import { ChainConfig } from './ChainConfig';
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -21,7 +22,7 @@ export class Account extends vscode.TreeItem {
 		const accountData = this.getAccountsBasic(context);
 		accountData.forEach(async (account) => {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: "juno",
+				prefix: ChainConfig.GetWorkspaceChainConfig().addressPrefix,
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;

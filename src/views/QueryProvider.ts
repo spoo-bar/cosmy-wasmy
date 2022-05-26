@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
 import { ExtData } from '../models/ExtData';
+import { ChainConfig } from '../models/ChainConfig';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -40,7 +41,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 								language: "jsonc"
 							}).then(doc => {
 								vscode.window.showTextDocument(doc).then(editor => {
-									CosmWasmClient.connect("https://rpc.uni.juno.deuslabs.fi").then(client => {
+									CosmWasmClient.connect(ChainConfig.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
 										const query = JSON.parse(data.value);
 										client.queryContractSmart(contract.contractAddress, query).then(resp => {
 											let output = "// Input: \n";

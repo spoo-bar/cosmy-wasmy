@@ -76,6 +76,31 @@
         "title": "Cosmy Wasmy: Reset Data"
       }
     ],
+    "configuration": [
+      {
+        "title": "Cosmy Wasmy",
+        "properties": {
+          "chainName": {
+            "type": "string",
+            "markdownDescription": "User friendly name for this chain cofiguration",
+            "scope": "resource",
+            "order": 0
+          },
+          "addressPrefix": {
+            "type": "string",
+            "markdownDescription": "Chain address prefix `juno`",
+            "scope": "resource",
+            "order": 1
+          },
+          "rpcEndpoint": {
+            "type": "string",
+            "markdownDescription": "RPC endpoint",
+            "scope": "resource",
+            "order": 2
+          }
+        }
+      }
+    ],
     "menus": {
       "view/title": [
         {

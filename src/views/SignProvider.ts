@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import { StdSignDoc  } from "@cosmjs/amino";
 import { ExtData } from '../models/ExtData';
+import { ChainConfig } from '../models/ChainConfig';
 
 
 export class SignProvider implements vscode.WebviewViewProvider {
@@ -38,7 +39,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 							}).then(doc => {
 								vscode.window.showTextDocument(doc).then(editor => {
 									Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
-										prefix: "juno",
+										prefix: ChainConfig.GetWorkspaceChainConfig().addressPrefix,
 									  }).then(wallet => {
 										const signDoc = makeADR36AminoSignDoc(
 											account.address,
