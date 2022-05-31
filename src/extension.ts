@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Account } from './models/Account';
 import { AccountDataProvider } from './views/AccountDataProvider';
-import { ContractDataProvider } from './ContractDataProvider';
+import { ContractDataProvider } from './views/ContractDataProvider';
 import { Contract } from './models/Contract';
 import { CosmwasmAPI } from "./models/CosmwasmAPI";
 import { ExtData } from './models/ExtData';
@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const accounts = Account.getAccounts(context.globalState)
+	const accounts = Account.GetAccounts(context.globalState)
 	const accountViewProvider = new AccountDataProvider(accounts);
 	vscode.window.registerTreeDataProvider('account', accountViewProvider);
 
@@ -86,8 +86,10 @@ export function activate(context: vscode.ExtensionContext) {
 							if (rr == "Generate seed phrase for me (Recommended)") {
 								DirectSecp256k1HdWallet.generate(24).then(wallet => {
 									const account = new Account(accountLabel, wallet.mnemonic)
-									Account.addAccount(context.globalState, account);
+									Account.AddAccount(context.globalState, account);
 									vscode.window.showInformationMessage("added new account" + account.label);
+									const accounts = ExtData.GetExtensionData(context.globalState).accounts;
+									accountViewProvider.refresh(accounts);
 								});
 							}
 							if (rr == "I have a seed phrase") {
@@ -97,8 +99,10 @@ export function activate(context: vscode.ExtensionContext) {
 								}).then(mnemonic => {
 									if (mnemonic) {
 										const account = new Account(accountLabel, mnemonic)
-										Account.addAccount(context.globalState, account);
+										Account.AddAccount(context.globalState, account);
 										vscode.window.showInformationMessage("added new account" + account.label);
+										const accounts = Account.GetAccounts(context.globalState);
+										accountViewProvider.refresh(accounts);
 									}
 								})
 							}
@@ -114,9 +118,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerCopyAccountAddressCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyAddress', (item: Account | Contract) => {
-			if((item as Account).address){
+			if ((item as Account).address) {
 				vscode.window.showInformationMessage("copied addr " + (item as Account).address);
-			} 
+			}
 			else if ((item as Contract).contractAddress) {
 				vscode.window.showInformationMessage("copied contract addr " + (item as Contract).contractAddress);
 			}
@@ -164,8 +168,7 @@ export function activate(context: vscode.ExtensionContext) {
 						Contract.AddContract(context.globalState, contract);
 						vscode.window.showInformationMessage("added new contract" + contract.contractAddress);
 						const contracts = Contract.GetContracts(context.globalState);
-						contractViewProvider.contracts = contracts;
-						contractViewProvider.refresh(null);
+						contractViewProvider.refresh(contracts);
 					})
 				}
 			});
@@ -190,6 +193,6 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 }
 
-	// this method is called when your extension is deactivated
-	export function deactivate() { }
+// this method is called when your extension is deactivated
+export function deactivate() { }
 

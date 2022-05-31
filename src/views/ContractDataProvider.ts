@@ -1,29 +1,26 @@
 import * as vscode from 'vscode';
-import { Contract } from './models/Contract';
+import { Contract } from '../models/Contract';
 
 
 export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 	
-	private changeEvent = new vscode.EventEmitter<void>();
+	private contracts: Contract[];
 
-		private _onDidChangeTreeData: vscode.EventEmitter<void | Contract | Contract[] | null | undefined> = new vscode.EventEmitter<void | Contract | Contract[] | null | undefined>();
-		/**
+	/**
 	 *
 	 */
 	constructor(contracts: Contract[]) {
 		this.contracts = contracts;
 	}
+
+	private _onDidChangeTreeData: vscode.EventEmitter<void | Contract | Contract[] | null | undefined> = new vscode.EventEmitter<void | Contract | Contract[] | null | undefined>();
+	readonly onDidChangeTreeData: vscode.Event<void | Contract | Contract[] | null | undefined> = this._onDidChangeTreeData.event;
 	
-	public contracts: Contract[];
-
-	public get onDidChangeTreeData(): vscode.Event<void> {
-        return this.changeEvent.event;
-    }
-
-    refresh(data: void | Contract | Contract[] | null | undefined): void {
-		vscode.window.showInformationMessage("refreshing")
-        this._onDidChangeTreeData.fire(data);
-    }
+	
+	refresh(contracts: Contract[]): void {
+		this.contracts = contracts;
+		this._onDidChangeTreeData.fire(undefined);
+	}
 
 	getTreeItem(element: Contract): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		return element;

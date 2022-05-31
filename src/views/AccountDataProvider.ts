@@ -13,7 +13,15 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 		this.accounts = accounts;
 	}
 
-	onDidChangeTreeData?: vscode.Event<void | Account | Account[] | null | undefined> | undefined;
+	
+	private _onDidChangeTreeData: vscode.EventEmitter<void | Account | Account[] | null | undefined> = new vscode.EventEmitter<void | Account | Account[] | null | undefined>();
+	readonly onDidChangeTreeData: vscode.Event<void | Account | Account[] | null | undefined> = this._onDidChangeTreeData.event;
+	
+	
+	refresh(accounts: Account[]): void {
+		this.accounts = accounts;
+		this._onDidChangeTreeData.fire(undefined);
+	}
 
 	getTreeItem(element: Account): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		return element;

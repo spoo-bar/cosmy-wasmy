@@ -18,8 +18,8 @@ export class Account extends vscode.TreeItem {
 		this.address = "";
 	}
 
-	public static getAccounts(context: vscode.Memento): Account[] {
-		const accountData = this.getAccountsBasic(context);
+	public static GetAccounts(context: vscode.Memento): Account[] {
+		const accountData = this.GetAccountsBasic(context);
 		accountData.forEach(async (account) => {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
@@ -30,12 +30,12 @@ export class Account extends vscode.TreeItem {
 		return accountData;
 	}
 
-	public static getAccountsBasic(context: vscode.Memento): Account[] {
+	public static GetAccountsBasic(context: vscode.Memento): Account[] {
 		return ExtData.GetExtensionData(context).accounts;
 	}
 
-	public static addAccount(context: vscode.Memento, account: Account) {
-		const accounts = this.getAccountsBasic(context);
+	public static AddAccount(context: vscode.Memento, account: Account) {
+		const accounts = this.GetAccountsBasic(context);
 		accounts.push(account);
 		ExtData.SaveAccounts(context, accounts);
 	}
