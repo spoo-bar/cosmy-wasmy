@@ -130,7 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function registerCopyMnemonicCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: Account) => {
-			if(item.mnemonic) {
+			if (item.mnemonic) {
 				clipboard.write(item.mnemonic).then(() => {
 					vscode.window.showInformationMessage("Copied to clipboard: " + item.mnemonic);
 				});
@@ -148,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
 				title: "Are you sure you want to delete the account " + item.label + " ?",
 				placeHolder: "Are you sure you want to delete the account " + item.label + " ?",
 			}).then(resp => {
-				if(resp && resp.toLowerCase() === "yes") {
+				if (resp && resp.toLowerCase() === "yes") {
 					Account.DeleteAccount(context.globalState, item);
 					var accounts = Account.GetAccounts(context.globalState);
 					accountViewProvider.refresh(accounts);
@@ -173,13 +173,27 @@ export function activate(context: vscode.ExtensionContext) {
 				placeHolder: "Cosmwasm contract address"
 			}).then(contractAddr => {
 				if (contractAddr) {
-					if(!Contract.ContractAddressExists(context.globalState, contractAddr)) {
-						CosmwasmAPI.GetContract(contractAddr).then(contract => {
-							Contract.AddContract(context.globalState, contract);
-							vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
-							const contracts = Contract.GetContracts(context.globalState);
-							contractViewProvider.refresh(contracts);
-						})
+					if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
+						vscode.window.withProgress({
+							location: vscode.ProgressLocation.Notification,
+							title: "Fetching the details for the contract - " + contractAddr,
+							cancellable: false
+						}, (progress, token) => {
+							token.onCancellationRequested(() => { });
+							progress.report({ message: ''});
+							return new Promise((resolve, reject) => {
+								CosmwasmAPI.GetContract(contractAddr).then(contract => {
+									Contract.AddContract(context.globalState, contract);
+									vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
+									const contracts = Contract.GetContracts(context.globalState);
+									contractViewProvider.refresh(contracts);
+									resolve(contract);
+								}).catch(err => {
+									vscode.window.showErrorMessage("Could not import contract: " + contractAddr + " - " + err);
+									reject(err)
+								})
+							});
+						});
 					}
 					else {
 						vscode.window.showErrorMessage("Contract has already been imported: " + contractAddr);
@@ -197,14 +211,13 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposable);
 	}
 
-	
 	function registerDeleteContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteContract', (item: Contract) => {
 			vscode.window.showQuickPick(["Yes", "No"], {
 				title: "Are you sure you want to delete the contract " + item.label + " ?",
 				placeHolder: "Are you sure you want to delete the contract " + item.label + " ?",
 			}).then(resp => {
-				if(resp && resp.toLowerCase() === "yes") {
+				if (resp && resp.toLowerCase() === "yes") {
 					Contract.DeleteContract(context.globalState, item)
 					var contracts = Contract.GetContracts(context.globalState);
 					contractViewProvider.refresh(contracts);
@@ -221,7 +234,7 @@ export function activate(context: vscode.ExtensionContext) {
 				title: "Are you sure you want to delete all data?",
 				placeHolder: "Are you sure you want to delete all data?"
 			}).then(resp => {
-				if(resp && resp.toLowerCase() === "yes") {
+				if (resp && resp.toLowerCase() === "yes") {
 					ExtData.ResetExtensionData(context.globalState);
 					vscode.window.showInformationMessage('All cosmy wasmy data was reset!');
 					var data = ExtData.GetExtensionData(context.globalState);
@@ -232,7 +245,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 
 		context.subscriptions.push(disposable);
-	} 
+	}
 }
 
 // this method is called when your extension is deactivated
