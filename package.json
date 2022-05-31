@@ -16,10 +16,6 @@
   "contributes": {
     "commands": [
       {
-        "command": "cosmy-wasmy.helloWorld",
-        "title": "Hello World"
-      },
-      {
         "command": "cosmy-wasmy.addAccount",
         "title": "Add Account",
         "icon": {
@@ -242,6 +238,7 @@
     "@cosmjs/amino": "^0.28.4",
     "@cosmjs/cosmwasm-stargate": "^0.28.4",
     "@cosmjs/launchpad": "^0.27.1",
-    "@cosmjs/proto-signing": "^0.28.4"
+    "@cosmjs/proto-signing": "^0.28.4",
+    "clipboardy": "^3.0.0"
   }
 }

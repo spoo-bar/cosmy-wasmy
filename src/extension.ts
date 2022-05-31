@@ -12,6 +12,7 @@ import { SignProvider } from './views/SignProvider';
 import { QueryProvider } from './views/QueryProvider';
 import { TxProvider } from './views/TxProvider';
 import { Workspace } from './models/Workspace';
+import clipboard from 'clipboardy';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -30,7 +31,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const accountViewProvider = new AccountDataProvider(accounts);
 	vscode.window.registerTreeDataProvider('account', accountViewProvider);
 
-
 	const contracts = Contract.GetContracts(context.globalState);
 	const contractViewProvider = new ContractDataProvider(contracts);
 	vscode.window.registerTreeDataProvider('contract', contractViewProvider);
@@ -47,7 +47,6 @@ export function activate(context: vscode.ExtensionContext) {
 	registerCommands();
 
 	function registerCommands() {
-		registerHelloWorldCmd();
 		registerAddAccountCmd();
 		registerCopyAccountAddressCmd();
 		registerCopyMnemonicCmd();
@@ -55,96 +54,107 @@ export function activate(context: vscode.ExtensionContext) {
 		registerSelectAccountCmd();
 		registerAddContractCmd();
 		registerSelectContractCmd();
+		registerDeleteContractCmd();
 		registerResetDataCmd();
 	}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	function registerHelloWorldCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.helloWorld', () => {
-			// The code you place here will be executed every time your command is executed
-			// Display a message box to the user
-			vscode.window.showInformationMessage('Hello World from cosmy wasmy!');
-		});
-
-		context.subscriptions.push(disposable);
-	}
 
 	function registerAddAccountCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
 			vscode.window.showInputBox({
 				title: "Account Label",
-				value: "test 2",
+				value: "testAccount",
 			}).then(accountLabel => {
-				// todo : check if resp already used
 				if (accountLabel) {
-					const options = ["Generate seed phrase for me (Recommended)", "I have a seed phrase"];
-					vscode.window.showQuickPick(options).then(rr => {
-						if (rr) {
-							//todo : reload webview aftir new account
-							if (rr == "Generate seed phrase for me (Recommended)") {
-								DirectSecp256k1HdWallet.generate(24).then(wallet => {
-									const account = new Account(accountLabel, wallet.mnemonic)
-									Account.AddAccount(context.globalState, account);
-									vscode.window.showInformationMessage("added new account" + account.label);
-									const accounts = ExtData.GetExtensionData(context.globalState).accounts;
-									accountViewProvider.refresh(accounts);
-								});
+					if (!Account.AccountLabelExists(context.globalState, accountLabel)) {
+						const options = ["Generate seed phrase for me (Recommended)", "I have a seed phrase"];
+						vscode.window.showQuickPick(options).then(rr => {
+							if (rr) {
+								if (rr == "Generate seed phrase for me (Recommended)") {
+									DirectSecp256k1HdWallet.generate(24).then(wallet => {
+										const account = new Account(accountLabel, wallet.mnemonic)
+										saveNewAccount(account);
+									});
+								}
+								if (rr == "I have a seed phrase") {
+									vscode.window.showInputBox({
+										title: "Account Mnemonic",
+										placeHolder: "Ensure this is not your main account seed phrase. This info is stored in plain text in vscode."
+									}).then(mnemonic => {
+										if (mnemonic) {
+											const account = new Account(accountLabel, mnemonic)
+											saveNewAccount(account);
+										}
+									})
+								}
 							}
-							if (rr == "I have a seed phrase") {
-								vscode.window.showInputBox({
-									title: "Account Mnemonic",
-									placeHolder: "Ensure this is not your main account seed phrase. This info is stored in plain text in vscode."
-								}).then(mnemonic => {
-									if (mnemonic) {
-										const account = new Account(accountLabel, mnemonic)
-										Account.AddAccount(context.globalState, account);
-										vscode.window.showInformationMessage("added new account" + account.label);
-										const accounts = Account.GetAccounts(context.globalState);
-										accountViewProvider.refresh(accounts);
-									}
-								})
-							}
-
-						}
-					});
+						});
+					}
+					else {
+						vscode.window.showErrorMessage("Account label \"" + accountLabel + "\" is already taken. Choose a new one.");
+					}
 				}
 			})
 		});
 
 		context.subscriptions.push(disposable);
+
+		function saveNewAccount(account: Account) {
+			Account.AddAccount(context.globalState, account);
+			vscode.window.showInformationMessage("Added new account: " + account.label);
+			const accounts = Account.GetAccounts(context.globalState);
+			accountViewProvider.refresh(accounts);
+		}
 	}
 
 	function registerCopyAccountAddressCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyAddress', (item: Account | Contract) => {
+			let address = "";
 			if ((item as Account).address) {
-				vscode.window.showInformationMessage("copied addr " + (item as Account).address);
+				address = (item as Account).address;
 			}
 			else if ((item as Contract).contractAddress) {
-				vscode.window.showInformationMessage("copied contract addr " + (item as Contract).contractAddress);
+				address = (item as Contract).contractAddress;
 			}
-
+			if (address) {
+				clipboard.write(address).then(() => {
+					vscode.window.showInformationMessage("Copied to clipboard: " + address);
+				});
+			}
+			else {
+				vscode.window.showErrorMessage("Could not copy to clipboard.");
+			}
 		});
 		context.subscriptions.push(disposable);
 	}
 
 	function registerCopyMnemonicCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: vscode.TreeItem) => {
-			if (item.description) {
-				vscode.window.showInformationMessage("Copying mnemonic"); //todo
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: Account) => {
+			if(item.mnemonic) {
+				clipboard.write(item.mnemonic).then(() => {
+					vscode.window.showInformationMessage("Copied to clipboard: " + item.mnemonic);
+				});
 			}
-
+			else {
+				vscode.window.showErrorMessage("Could not copy to clipboard.");
+			}
 		});
 		context.subscriptions.push(disposable);
 	}
 
 	function registerDeleteAddressCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteAccount', (item: vscode.TreeItem) => {
-			if (item.description) {
-				vscode.window.showInformationMessage("Deleting account"); //todo
-			}
-
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteAccount', (item: Account) => {
+			vscode.window.showQuickPick(["Yes", "No"], {
+				title: "Are you sure you want to delete the account " + item.label + " ?",
+				placeHolder: "Are you sure you want to delete the account " + item.label + " ?",
+			}).then(resp => {
+				if(resp && resp.toLowerCase() === "yes") {
+					Account.DeleteAccount(context.globalState, item);
+					var accounts = Account.GetAccounts(context.globalState);
+					accountViewProvider.refresh(accounts);
+					vscode.window.showInformationMessage("Deleted account: " + item.label);
+				}
+			})
 		});
 		context.subscriptions.push(disposable);
 	}
@@ -162,14 +172,18 @@ export function activate(context: vscode.ExtensionContext) {
 				title: "Contract Address",
 				placeHolder: "Cosmwasm contract address"
 			}).then(contractAddr => {
-				// todo : check if resp already used
 				if (contractAddr) {
-					CosmwasmAPI.GetContract(contractAddr).then(contract => {
-						Contract.AddContract(context.globalState, contract);
-						vscode.window.showInformationMessage("added new contract" + contract.contractAddress);
-						const contracts = Contract.GetContracts(context.globalState);
-						contractViewProvider.refresh(contracts);
-					})
+					if(!Contract.ContractAddressExists(context.globalState, contractAddr)) {
+						CosmwasmAPI.GetContract(contractAddr).then(contract => {
+							Contract.AddContract(context.globalState, contract);
+							vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
+							const contracts = Contract.GetContracts(context.globalState);
+							contractViewProvider.refresh(contracts);
+						})
+					}
+					else {
+						vscode.window.showErrorMessage("Contract has already been imported: " + contractAddr);
+					}
 				}
 			});
 		});
@@ -183,14 +197,42 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposable);
 	}
 
+	
+	function registerDeleteContractCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteContract', (item: Contract) => {
+			vscode.window.showQuickPick(["Yes", "No"], {
+				title: "Are you sure you want to delete the contract " + item.label + " ?",
+				placeHolder: "Are you sure you want to delete the contract " + item.label + " ?",
+			}).then(resp => {
+				if(resp && resp.toLowerCase() === "yes") {
+					Contract.DeleteContract(context.globalState, item)
+					var contracts = Contract.GetContracts(context.globalState);
+					contractViewProvider.refresh(contracts);
+					vscode.window.showInformationMessage("Deleted contract: " + item.label);
+				}
+			})
+		});
+		context.subscriptions.push(disposable);
+	}
+
 	function registerResetDataCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.resetData', () => {
-			ExtData.ResetExtensionData(context.globalState);
-			vscode.window.showInformationMessage('All cosmy wasmy data was reset!');
+			vscode.window.showQuickPick(["Yes", "No"], {
+				title: "Are you sure you want to delete all data?",
+				placeHolder: "Are you sure you want to delete all data?"
+			}).then(resp => {
+				if(resp && resp.toLowerCase() === "yes") {
+					ExtData.ResetExtensionData(context.globalState);
+					vscode.window.showInformationMessage('All cosmy wasmy data was reset!');
+					var data = ExtData.GetExtensionData(context.globalState);
+					accountViewProvider.refresh(data.accounts);
+					contractViewProvider.refresh(data.contracts);
+				}
+			})
 		});
 
 		context.subscriptions.push(disposable);
-	}
+	} 
 }
 
 // this method is called when your extension is deactivated

@@ -28,6 +28,16 @@ export class Contract extends vscode.TreeItem {
 		contracts.push(contract);
 		ExtData.SaveContracts(context, contracts);
     }
+
+    public static DeleteContract(context: vscode.Memento, contract: Contract) {
+        let contracts = this.GetContracts(context).filter(c => c.contractAddress != contract.contractAddress);
+		ExtData.SaveContracts(context, contracts);
+    }
+
+    public static ContractAddressExists(context: vscode.Memento, contractAddr: string): boolean {
+		const contracts = this.GetContracts(context);
+		return contracts.some(c => c.contractAddress === contractAddr);
+	}
 }
 
 

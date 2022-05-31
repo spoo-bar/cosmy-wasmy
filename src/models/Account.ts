@@ -39,4 +39,14 @@ export class Account extends vscode.TreeItem {
 		accounts.push(account);
 		ExtData.SaveAccounts(context, accounts);
 	}
+
+    public static DeleteAccount(context: vscode.Memento, account: Account) {
+        let accounts = this.GetAccounts(context).filter(a => a.label != account.label);
+		ExtData.SaveAccounts(context, accounts);
+    }
+
+	public static AccountLabelExists(context: vscode.Memento, accountLabel: string): boolean {
+		const accounts = this.GetAccounts(context);
+		return accounts.some(a => a.label === accountLabel);
+	}
 }
