@@ -23,8 +23,8 @@
         "command": "cosmy-wasmy.addAccount",
         "title": "Add Account",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/add.svg",
+          "dark": "media/icons/dark/add.svg"
         }
       },
       {
@@ -32,8 +32,8 @@
         "title": "Copy Address",
         "enablement": "viewItem == account || viewItem == contract",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/address.svg",
+          "dark": "media/icons/dark/address.svg"
         }
       },
       {
@@ -41,8 +41,8 @@
         "title": "Copy Mnemonic",
         "enablement": "viewItem == account",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/mnemonic.svg",
+          "dark": "media/icons/dark/mnemonic.svg"
         }
       },
       {
@@ -50,16 +50,16 @@
         "title": "Delete Account",
         "enablement": "viewItem == account",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/delete.svg",
+          "dark": "media/icons/dark/delete.svg"
         }
       },
       {
         "command": "cosmy-wasmy.addContract",
         "title": "Add Contract",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/add.svg",
+          "dark": "media/icons/dark/add.svg"
         }
       },
       {
@@ -67,8 +67,8 @@
         "title": "Delete Contract",
         "enablement": "viewItem == contract",
         "icon": {
-          "light": "media/icon.svg",
-          "dark": "media/icon.svg"
+          "light": "media/icons/light/delete.svg",
+          "dark": "media/icons/dark/delete.svg"
         }
       },
       {
