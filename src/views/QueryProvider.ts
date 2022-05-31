@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-import { ExtData } from '../models/ExtData';
 import { Workspace } from '../models/Workspace';
 
 
@@ -28,43 +27,74 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const account = Workspace.GetSelectedAccount();
-						if(!account) {
-							vscode.window.showErrorMessage("No account selected");
-						}
 						const contract = Workspace.GetSelectedContract();
 						if(!contract) {
 							vscode.window.showErrorMessage("No contract selected");
 						}
-						//todo progress bar
 						else {
-							CosmWasmClient.connect(Workspace.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
-								const query = JSON.parse(data.value);
-								// todo check json parse fail
-								client.queryContractSmart(contract.contractAddress, query).then(resp => {
-									let output = "// Input: \n";
-									output += JSON.stringify(query, null, 4) + "\n\n";
-									output += "// Query Result \n\n";
-									output += JSON.stringify(resp, null, 4);									
-									vscode.workspace.openTextDocument({
-										language: "jsonc"
-									}).then(doc => {
-										vscode.window.showTextDocument(doc).then(editor => {
-											editor.insertSnippet(new vscode.SnippetString(output));
+							try {
+								JSON.parse(data.value);
+							} catch {
+								vscode.window.showErrorMessage("The input is not valid JSON");
+								return;
+							}
+							const query = JSON.parse(data.value);
+
+							vscode.window.withProgress({
+								location: {
+									viewId: "query"
+								},
+								title: "Querying the contract - " + contract.label,
+								cancellable: false
+							}, (progress, token) => {
+								token.onCancellationRequested(() => { });
+								progress.report({ message: ''});
+								return new Promise((resolve, reject) => {
+
+									CosmWasmClient.connect(Workspace.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
+
+										client.queryContractSmart(contract.contractAddress, query).then(resp => {
+											let output = "// Input: \n";
+											output += JSON.stringify(query, null, 4) + "\n\n";
+											output += "// Query Result \n\n";
+											output += JSON.stringify(resp, null, 4);									
+											vscode.workspace.openTextDocument({
+												language: "jsonc"
+											}).then(doc => {
+												vscode.window.showTextDocument(doc).then(editor => {
+													editor.insertSnippet(new vscode.SnippetString(output));
+													resolve(output);
+												})
+											})
+
+										}).catch(err => {
+											let output = "// Input: \n";
+											output += data.value + "\n\n";
+											output += "// ⚠️ Query failed \n\n";
+											output += err;
+											vscode.workspace.openTextDocument().then(doc => {
+												vscode.window.showTextDocument(doc).then(editor => {
+													editor.insertSnippet(new vscode.SnippetString(output));
+												})
+											})
+											reject(output);
 										})
-									})
-								}).catch(err => {
-									let output = "// Input: \n";
-									output += data.value + "\n\n";
-									output += "// ⚠️ Query failed \n\n";
-									output += err;
-									vscode.workspace.openTextDocument().then(doc => {
-										vscode.window.showTextDocument(doc).then(editor => {
-											editor.insertSnippet(new vscode.SnippetString(output));
+									}).catch(err => {
+										let output = "// Input: \n";
+										output += data.value + "\n\n";
+										output += "// ⚠️ Query failed \n\n";
+										output += err;
+										vscode.workspace.openTextDocument().then(doc => {
+											vscode.window.showTextDocument(doc).then(editor => {
+												editor.insertSnippet(new vscode.SnippetString(output));
+											})
 										})
-									})
-								})
-							})
+										reject(output);
+									});
+
+
+								});
+							});	
 						}
 					}
 			}
