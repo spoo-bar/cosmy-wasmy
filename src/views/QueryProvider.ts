@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import {CosmWasmClient} from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Workspace } from '../models/Workspace';
 
 
@@ -8,7 +8,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 
 	private _view?: vscode.WebviewView;
 
-	
+
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
 	) { }
@@ -28,7 +28,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 				case 'exec-text':
 					{
 						const contract = Workspace.GetSelectedContract();
-						if(!contract) {
+						if (!contract) {
 							vscode.window.showErrorMessage("No contract selected");
 						}
 						else {
@@ -48,7 +48,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 								cancellable: false
 							}, (progress, token) => {
 								token.onCancellationRequested(() => { });
-								progress.report({ message: ''});
+								progress.report({ message: '' });
 								return new Promise((resolve, reject) => {
 
 									CosmWasmClient.connect(Workspace.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
@@ -57,48 +57,43 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 											let output = "// Input: \n";
 											output += JSON.stringify(query, null, 4) + "\n\n";
 											output += "// Query Result \n\n";
-											output += JSON.stringify(resp, null, 4);									
-											vscode.workspace.openTextDocument({
-												language: "jsonc"
-											}).then(doc => {
-												vscode.window.showTextDocument(doc).then(editor => {
-													editor.insertSnippet(new vscode.SnippetString(output));
-													resolve(output);
-												})
-											})
-
+											output += JSON.stringify(resp, null, 4);
+											outputResponse(output);
+											resolve(output);
 										}).catch(err => {
-											let output = "// Input: \n";
-											output += data.value + "\n\n";
-											output += "// ⚠️ Query failed \n\n";
-											output += err;
-											vscode.workspace.openTextDocument().then(doc => {
-												vscode.window.showTextDocument(doc).then(editor => {
-													editor.insertSnippet(new vscode.SnippetString(output));
-												})
-											})
+											let output = getErrorOutput(data, err);
+											outputResponse(output);
 											reject(output);
 										})
 									}).catch(err => {
-										let output = "// Input: \n";
-										output += data.value + "\n\n";
-										output += "// ⚠️ Query failed \n\n";
-										output += err;
-										vscode.workspace.openTextDocument().then(doc => {
-											vscode.window.showTextDocument(doc).then(editor => {
-												editor.insertSnippet(new vscode.SnippetString(output));
-											})
-										})
+										let output = getErrorOutput(data, err);
+										outputResponse(output);
 										reject(output);
 									});
-
-
 								});
-							});	
+							});
 						}
 					}
 			}
 		});
+
+		function getErrorOutput(data: any, err: any): string {
+			let output = "// Input: \n";
+			output += data.value + "\n\n";
+			output += "// ⚠️ Query failed \n\n";
+			output += err;
+			return output;
+		}
+
+		function outputResponse(output: string) {
+			vscode.workspace.openTextDocument({
+				language: "jsonc"
+			}).then(doc => {
+				vscode.window.showTextDocument(doc).then(editor => {
+					editor.insertSnippet(new vscode.SnippetString(output));
+				});
+			});
+		}
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
@@ -110,8 +105,6 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 
-		// Use a nonce to only allow a specific script to be run.
-		const nonce = "qwfpb";
 
 		return `<!DOCTYPE html>
 			<html lang="en">
@@ -121,7 +114,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" style-src ${webview.cspSource};">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
@@ -132,7 +125,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text"></textarea>
 				<button id="exec-button">Query</button>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<script src="${scriptUri}"></script>
 			</body>
 			</html>`;
 	}
