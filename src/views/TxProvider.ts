@@ -9,19 +9,12 @@ import { Workspace } from '../models/Workspace';
 
 export class TxProvider implements vscode.WebviewViewProvider {
 
-
-	private _view?: vscode.WebviewView;
-
-
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
 	) { }
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
-		this._view = webviewView;
-
 		webviewView.webview.options = {
-			// Allow scripts in the webview
 			enableScripts: true,
 		};
 
@@ -31,49 +24,90 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const account = Workspace.GetSelectedAccount();
-						if (!account) {
-							vscode.window.showErrorMessage("No account selected");
-						}
-						const contract = Workspace.GetSelectedContract();
-						if (!contract) {
-							vscode.window.showErrorMessage("No contract selected");
-						}
-
-						vscode.workspace.openTextDocument(
-							{ language: "jsonc" }
-						).then(doc => {
-							vscode.window.showTextDocument(doc).then(editor => {
-								DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-									prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-								}).then(signer => {
-									SigningCosmWasmClient.connectWithSigner(
-										Workspace.GetWorkspaceChainConfig().rpcEndpoint, 
-										signer, {
-											gasPrice: GasPrice.fromString("0.025ujunox")
-										}).then(client => {
-										const req = JSON.parse(data.value);
-										client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
-											let output = "// Input: \n";
-											output += JSON.stringify(req, null, 4) + "\n\n";
-											output += "// Tx Result \n\n";
-											output += JSON.stringify(res, null, 4);
-											editor.insertSnippet(new vscode.SnippetString(output));
-										}).catch(err => {
-											let output = "// Input: \n";
-											output += data.value + "\n\n";
-											output += "// ⚠️ Query failed \n\n";
-											output += err;
-											editor.insertSnippet(new vscode.SnippetString(output));
-										});
-									})
-								});
-							})
-						})
+						executeTx(data);
 						break;
 					}
 			}
 		});
+
+		function executeTx(data: any) {
+			const account = Workspace.GetSelectedAccount();
+			if (!account) {
+				vscode.window.showErrorMessage("No account selected");
+			}
+			const contract = Workspace.GetSelectedContract();
+			if (!contract) {
+				vscode.window.showErrorMessage("No contract selected");
+			}
+			try {
+				JSON.parse(data.value);
+			} catch {
+				vscode.window.showErrorMessage("The input is not valid JSON");
+				return;
+			}
+			const req = JSON.parse(data.value);
+
+			vscode.window.withProgress({
+				location: {
+					viewId: "execute"
+				},
+				title: "Querying the contract - " + contract.label,
+				cancellable: false
+			}, (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				return new Promise((resolve, reject) => {
+					DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+						prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+					}).then(signer => {
+						SigningCosmWasmClient.connectWithSigner(
+							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
+							signer, {
+							gasPrice: GasPrice.fromString("0.025ujunox")
+						}).then(client => {
+							client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
+								let output = "// Input: \n";
+								output += JSON.stringify(req, null, 4) + "\n\n";
+								output += "// Tx Result \n\n";
+								output += JSON.stringify(res, null, 4);
+								outputResponse(output);
+								resolve(output);
+							}).catch(err => {
+								let output = getErrorOutput(data, err);
+								outputResponse(output);
+								reject(output);
+							})
+						}).catch(err => {
+							let output = getErrorOutput(data, err);
+							outputResponse(output);
+							reject(output);
+						})
+					}).catch(err => {
+						let output = getErrorOutput(data, err);
+						outputResponse(output);
+						reject(output);
+					})
+				})
+			});
+		}
+
+		function getErrorOutput(data: any, err: any): string {
+			let output = "// Input: \n";
+			output += data.value + "\n\n";
+			output += "// ⚠️ Tx failed \n\n";
+			output += err;
+			return output;
+		}
+
+		function outputResponse(output: string) {
+			vscode.workspace.openTextDocument({
+				language: "jsonc"
+			}).then(doc => {
+				vscode.window.showTextDocument(doc).then(editor => {
+					editor.insertSnippet(new vscode.SnippetString(output));
+				});
+			});
+		}
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
