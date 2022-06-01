@@ -142,5 +142,4 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			</body>
 			</html>`;
 	}
-
 }
