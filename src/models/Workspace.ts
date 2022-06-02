@@ -32,12 +32,13 @@ export class Workspace {
             if (!configName) {
                 return configs[0];
             }
-            const selectedChain = configs.filter(c => c.configName.toLowerCase() === configName.toLowerCase());
-            if (!selectedChain || selectedChain.length === 0) {
+            const selectedChains = configs.filter(c => c.configName.toLowerCase() === configName.toLowerCase());
+            if (!selectedChains || selectedChains.length === 0) {
                 throw new Error("Settings has Chain Config Name as " + configName + ". No chain config with that name was found in Chains setting.");
             }
-            selectedChain[0].Validate();
-            return selectedChain[0];
+            const selecetdChain = selectedChains[0];
+            //selecetdChain.Validate();
+            return selecetdChain;
         }
         throw new Error("Chain settings have not been configured. Please set them up in File > Preferences > Settings > Cosmy Wasmy.");
     }

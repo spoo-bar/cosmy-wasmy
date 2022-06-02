@@ -68,6 +68,10 @@
         }
       },
       {
+        "command": "cosmy-wasmy.reloadConfig",
+        "title": "Cosmy Wasmy: Reload Chain Config"
+      },
+      {
         "command": "cosmy-wasmy.resetData",
         "title": "Cosmy Wasmy: Reset Data"
       }
@@ -179,18 +183,6 @@
           "visibility": "visible"
         },
         {
-          "id": "initiate",
-          "name": "Initiate",
-          "type": "tree",
-          "visibility": "collapsed"
-        },
-        {
-          "id": "migrate",
-          "name": "Migrate",
-          "type": "tree",
-          "visibility": "collapsed"
-        },
-        {
           "id": "query",
           "name": "Query",
           "type": "webview",
@@ -227,14 +219,6 @@
       {
         "view": "contract",
         "contents": "⚠️ Looks like there are no contracts are import. \n [Import a contract](command:cosmy-wasmy.addContract)"
-      },
-      {
-        "view": "initiate",
-        "contents": "❌ Feature not yet implemented 🥺"
-      },
-      {
-        "view": "migrate",
-        "contents": "❌ Feature not yet implemented 🥺"
       }
     ]
   },

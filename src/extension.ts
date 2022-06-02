@@ -19,12 +19,12 @@ import { Constants } from './constants';
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+	let chainSelected = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
+	chainSelected.tooltip = "Selected Chain Config";
+	chainSelected.command = "cosmy-wasmy.reloadConfig";
+
 	try {
-		const config = Workspace.GetWorkspaceChainConfig();
-		let chainSelected = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-		chainSelected.tooltip = "Currently selected chain config";
-		chainSelected.text = "$(plug)" + config.configName;
-		chainSelected.show();
+		loadChainConfig();
 		
 	}
 	catch(error: any) {
@@ -51,6 +51,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	registerCommands();
 
+	function loadChainConfig() {
+		const config = Workspace.GetWorkspaceChainConfig();
+		chainSelected.text = "$(plug)" + config.configName;
+		chainSelected.show();
+	}
+
 	function registerCommands() {
 		registerAddAccountCmd();
 		registerCopyAccountAddressCmd();
@@ -61,6 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
 		registerSelectContractCmd();
 		registerDeleteContractCmd();
 		registerResetDataCmd();
+		registerReloadConfigCmd();
 	}
 
 
@@ -247,6 +254,22 @@ export function activate(context: vscode.ExtensionContext) {
 					contractViewProvider.refresh(data.contracts);
 				}
 			})
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerReloadConfigCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', () => {
+			try {
+				loadChainConfig();
+				vscode.window.showInformationMessage("Selected chain config has been reloaded.");
+				const accounts = Account.GetAccounts(context.globalState);
+				accountViewProvider.refresh(accounts);
+			}
+			catch(error: any) {
+				vscode.window.showErrorMessage(error.message);
+			}
 		});
 
 		context.subscriptions.push(disposable);
