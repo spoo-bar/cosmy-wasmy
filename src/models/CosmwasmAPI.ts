@@ -9,6 +9,7 @@ export class CosmwasmAPI {
         let client = await CosmWasmClient.connect(rpcEndpoint);
         const contractInfo = await client.getContract(contractAddress);
         let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator);
+        client.disconnect();
         return contract;
     }
 }

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Workspace } from '../models/Workspace';
+import { Constants } from '../constants';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -42,7 +43,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 
 							vscode.window.withProgress({
 								location: {
-									viewId: "query"
+									viewId: Constants.VIEWS_QUERY
 								},
 								title: "Querying the contract - " + contract.label,
 								cancellable: false

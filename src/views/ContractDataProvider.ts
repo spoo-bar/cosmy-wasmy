@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Constants } from '../constants';
 import { Contract } from '../models/Contract';
 
 
@@ -36,7 +37,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 						contract.label = contract.codeId.toString() + ": " + contract.label;
 						contract.description = contract.contractAddress;
 						contract.tooltip = "Creator: " + contract.creator;
-						contract.contextValue = "contract";
+						contract.contextValue = Constants.VIEWS_CONTRACT;
 						contract.command = {
 							title: "Select Contract",
 							command: "cosmy-wasmy.selectContract",

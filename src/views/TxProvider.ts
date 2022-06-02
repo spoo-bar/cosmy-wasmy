@@ -5,6 +5,7 @@ import {
 import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../models/Workspace';
+import { Constants } from '../constants';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -49,7 +50,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 
 			vscode.window.withProgress({
 				location: {
-					viewId: "execute"
+					viewId: Constants.VIEWS_EXECUTE
 				},
 				title: "Querying the contract - " + contract.label,
 				cancellable: false

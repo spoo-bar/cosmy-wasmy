@@ -76,23 +76,54 @@
       {
         "title": "Cosmy Wasmy",
         "properties": {
-          "chainName": {
+          "chainConfigName": {
             "type": "string",
-            "markdownDescription": "User friendly name for this chain cofiguration",
+            "markdownDescription": "",
             "scope": "resource",
-            "order": 0
+            "order": 0,
+            "default": "Juno UNI-3 testnet"
           },
-          "addressPrefix": {
-            "type": "string",
-            "markdownDescription": "Chain address prefix `juno`",
-            "scope": "resource",
-            "order": 1
-          },
-          "rpcEndpoint": {
-            "type": "string",
-            "markdownDescription": "RPC endpoint",
-            "scope": "resource",
-            "order": 2
+          "chains": {
+            "type": "array",
+            "markdownDescription": "Chains info",
+            "scope": "application",
+            "order": 1,
+            "minItems": 1,
+            "editPresentation": "multilineText",
+            "items": {
+              "type": "object",
+              "title": "Chain Info",
+              "properties": {
+                "configName": {
+                  "type": "string",
+                  "description": "User friendly name for the saved network config. Used to select the chain to be used in the workspace."
+                },
+                "chainId": {
+                  "type": "string",
+                  "description": "Chain ID"
+                },
+                "addressPrefix": {
+                  "type": "string",
+                  "description": "Prefix used by the chain"
+                },
+                "rpcEndpoint": {
+                  "type": "string",
+                  "description": "RPC address and port where the chain RPC server listens on"
+                },
+                "defaultGasPrice": {
+                  "type": "string",
+                  "description": "default amount of gas to be used as the gas limit for a transaction."
+                }
+              },
+              "required": ["configName","chainId", "addressPrefix", "rpcEndpoint", "defaultGasPrice"]
+            },
+            "default": [{
+              "configName": "Juno UNI-3 testnet",
+              "chainId": "uni-2",
+              "addressPrefix": "juno",
+              "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
+              "defaultGasPrice": "0.025ujunox"
+            }]
           }
         }
       }

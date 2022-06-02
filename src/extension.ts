@@ -13,36 +13,41 @@ import { QueryProvider } from './views/QueryProvider';
 import { TxProvider } from './views/TxProvider';
 import { Workspace } from './models/Workspace';
 import clipboard from 'clipboardy';
+import { Constants } from './constants';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "cosmy-wasmy" is now active!');
-
-	const config = Workspace.GetWorkspaceChainConfig();
-	if (!config || !config.chainName || !config.addressPrefix || !config.rpcEndpoint) {
+	try {
+		const config = Workspace.GetWorkspaceChainConfig();
+		let chainSelected = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+		chainSelected.tooltip = "Currently selected chain config";
+		chainSelected.text = "$(plug)" + config.configName;
+		chainSelected.show();
+		
+	}
+	catch(error: any) {
+		vscode.window.showErrorMessage(error.message);
 		return;
 	}
 
 	const accounts = Account.GetAccounts(context.globalState)
 	const accountViewProvider = new AccountDataProvider(accounts);
-	vscode.window.registerTreeDataProvider('account', accountViewProvider);
+	vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, accountViewProvider);
 
 	const contracts = Contract.GetContracts(context.globalState);
 	const contractViewProvider = new ContractDataProvider(contracts);
-	vscode.window.registerTreeDataProvider('contract', contractViewProvider);
+	vscode.window.registerTreeDataProvider(Constants.VIEWS_CONTRACT, contractViewProvider);
 
 	const signingViewProvider = new SignProvider(context.extensionUri);
-	context.subscriptions.push(vscode.window.registerWebviewViewProvider("sign", signingViewProvider));
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_SIGN, signingViewProvider));
 
 	const queryViewProvider = new QueryProvider(context.extensionUri);
-	context.subscriptions.push(vscode.window.registerWebviewViewProvider("query", queryViewProvider));
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_QUERY, queryViewProvider));
 
 	const txViewProvider = new TxProvider(context.extensionUri);
-	context.subscriptions.push(vscode.window.registerWebviewViewProvider("execute", txViewProvider));
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_EXECUTE, txViewProvider));
 
 	registerCommands();
 

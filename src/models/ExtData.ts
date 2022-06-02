@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
+import { Constants } from '../constants';
 import { Account } from './Account';
 import { Contract } from './Contract';
 
 export class ExtData {
 	accounts: Account[];
 	contracts: Contract[];
-
-	private static readonly storeKey = "cosmy-wasmy";
 
 	/**
 	 *
@@ -17,7 +16,7 @@ export class ExtData {
 	}
 
 	public static GetExtensionData(context: vscode.Memento): ExtData {
-		const extData = context.get<string>(ExtData.storeKey);
+		const extData = context.get<string>(Constants.STORE_KEY);
 		if (extData) {
 			return JSON.parse(extData);
 		}
@@ -37,10 +36,10 @@ export class ExtData {
 	}
 
 	public static ResetExtensionData(context: vscode.Memento) {
-		context.update(ExtData.storeKey, undefined);
+		context.update(Constants.STORE_KEY, undefined);
 	}
 
 	private static SaveExtensionData(context: vscode.Memento, data: ExtData) {
-		context.update(ExtData.storeKey, JSON.stringify(data));
+		context.update(Constants.STORE_KEY, JSON.stringify(data));
 	}
 }
