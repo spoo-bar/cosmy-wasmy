@@ -30,7 +30,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 					{
 						const contract = Workspace.GetSelectedContract();
 						if (!contract) {
-							vscode.window.showErrorMessage("No contract selected");
+							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
 						}
 						else {
 							try {

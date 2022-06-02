@@ -2,8 +2,8 @@ export class Constants {
 
     public static readonly STORE_KEY = "cosmy-wasmy";
 
-    public static readonly CONFIGURATION_CHAIN_CONFIG_NAME = "chainConfigName";
-    public static readonly CONFIGURATION_CHAINS = "chains";
+    public static readonly CONFIGURATION_CHAIN_CONFIG_NAME = "cosmywasmy.chainConfigName";
+    public static readonly CONFIGURATION_CHAINS = "cosmywasmy.chains";
     
     public static readonly VIEWS_ACCOUNT = "account";
     public static readonly VIEWS_CONTRACT = "contract";

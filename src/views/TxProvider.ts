@@ -34,11 +34,11 @@ export class TxProvider implements vscode.WebviewViewProvider {
 		function executeTx(data: any) {
 			const account = Workspace.GetSelectedAccount();
 			if (!account) {
-				vscode.window.showErrorMessage("No account selected");
+				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
 			}
 			const contract = Workspace.GetSelectedContract();
 			if (!contract) {
-				vscode.window.showErrorMessage("No contract selected");
+				vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
 			}
 			try {
 				JSON.parse(data.value);
@@ -64,7 +64,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 						SigningCosmWasmClient.connectWithSigner(
 							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
 							signer, {
-							gasPrice: GasPrice.fromString("0.025ujunox")
+							gasPrice: GasPrice.fromString(Workspace.GetWorkspaceChainConfig().defaultGasPrice)
 						}).then(client => {
 							client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
 								let output = "// Input: \n";

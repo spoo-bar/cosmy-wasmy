@@ -1,70 +1,102 @@
-# cosmy-wasmy README
+# cosmy-wasmy 
 
-This is the README for your extension "cosmy-wasmy". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+This extension allows you to interact with Cosmwasm contracts on local, testnet or mainnet chains
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+The version of vscode should be above `^1.67.0`
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+**Juno uni-3 testnet** config is preset by default. Any other chain has to be manualaly added.
 
-For example:
+You can set up the extension settings here 
+> File > Preferences > Settings > Cosmy Wasmy
 
 This extension contributes the following settings:
+* `cosmywasmy.chainConfigName`: This setting is used to select which of the given Chain configs is to be used in this workspace. Default : _Juno UNI-3 testnet_ 
+* `cosmywasmy.chains`: This settings stores an array of JSON objects which contans the Chain config detalis. Default : Includes _Juno UNI-3 testnet settings_.
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+    This setting can be expanded to include any localnet or testnet or any mainnet(not recommended) chains.
+
+    The structure of the expected setting:
+    ```json
+    [
+        {
+            "configName": "Juno UNI-3 testnet", // This need to match exactly the `cosmywasmy.chainConfigName` when the chain config needs to be selected
+            "chainId": "uni-3", // The localnet/testnet Chain ID
+            "addressPrefix": "juno", // Used to derive account address
+            "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi", // Used for query and tx exec of smart contracts
+            "defaultGasPrice": "0.025ujunox" // Gas price set for the smart contract tx execution. must include amount as well as appropriate denom
+        }
+    ]
+    ```
+
+## Features
+
+### Account
+![feature Account](images/account.gif)
+
+Create new wallets with user-given seed phrase or an auto-generated seed phrase.
+The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`.
+
+Once an account has been created, you can
+1. Copy address (derived from prefix from the settings)
+2. Copy mnemonic
+3. Delete the account from vscode
+
+### Contract 
+
+![feature Account](images/contract.gif)
+
+Import smart contracts from the chain by their contract address.
+
+Once a contract has been imported, you can
+1. Copy contract address
+2. Delete the contract from vscode
+
+### Query
+
+![feature Account](images/query.gif)
+
+Input the request query data and select the smart contract from the above view to query and the response/err will open on a new doc on the screen
+
+### Execute
+
+![feature Account](images/execute.gif)
+
+Input the request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will open on a new doc on the screen
+
+### Sign
+
+![feature Account](images/sign.gif)
+
+Input the text which needs to be signed and select the wallet account in the view above and the signature/err will open on a new doc on the screen
+
+### Misc
+
+1. Selected Chain
+
+![feature Account](images/status.png)
+
+The currently selected chain is shown in the statur bar below.
+In case, you need to change the network env, go to settings and change `cosmywasmy.chainConfigName` and then click on this status bar item to reload the config.
+
+2. Reset Data
+
+![feature Account](images/reset.png)
+
+Go to the Command Palette (Windows: Ctrl+Shft+P, MacOS: 🤷🏻‍♀️, Linux: 🤷🏻‍♀️) and type `Reset Data`. This will erase all extension related information from vscode
+
+
+## Warnings
+
+*  The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+* When the Query, Execute, Sign views are collapsed and reopened again, the view component elements get wrong alignments.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Find release notes in [CHANGELOG](CHANGELOG.md)

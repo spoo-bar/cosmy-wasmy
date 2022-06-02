@@ -32,7 +32,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 	private sign(data: any) {
 		const account = Workspace.GetSelectedAccount();
 		if (!account) {
-			vscode.window.showErrorMessage("No account selected");
+			vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
 		}
 		else {
 			Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
@@ -89,7 +89,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 		}
 	
 		return {
-			chain_id: '',
+			chain_id: Workspace.GetWorkspaceChainConfig().chainId,
 			account_number: '0',
 			sequence: '0',
 			fee: {

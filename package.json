@@ -2,12 +2,23 @@
   "name": "cosmy-wasmy",
   "displayName": "cosmy wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm contracts",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "preview": true,
+	"publisher": "Spoorthi",
+	"icon": "https://github.com/spoo-bar/cosmy-wasmy/blob/34773010ad2b749f16704a7957343c0da0fffdea/media/icon.png",
+	"license": "SEE LICENSE IN LICENSE",
+	"repository": "https://github.com/spoo-bar/cosmy-wasmy",
   "engines": {
     "vscode": "^1.67.0"
   },
   "categories": [
-    "Other"
+    "Testing"
+  ],
+  "keywords": [
+    "Cosmos",
+    "Cosmwasm",
+    "Juno",
+    "Smart Contract"
   ],
   "activationEvents": [
     "*"
@@ -80,16 +91,16 @@
       {
         "title": "Cosmy Wasmy",
         "properties": {
-          "chainConfigName": {
+          "cosmywasmy.chainConfigName": {
             "type": "string",
-            "markdownDescription": "",
+            "markdownDescription": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
             "scope": "resource",
             "order": 0,
             "default": "Juno UNI-3 testnet"
           },
-          "chains": {
+          "cosmywasmy.chains": {
             "type": "array",
-            "markdownDescription": "Chains info",
+            "markdownDescription": "List of chain configs",
             "scope": "application",
             "order": 1,
             "minItems": 1,
@@ -100,7 +111,7 @@
               "properties": {
                 "configName": {
                   "type": "string",
-                  "description": "User friendly name for the saved network config. Used to select the chain to be used in the workspace."
+                  "description": "User friendly name for the saved network config. Use as input to `cosmywasmy.chainConfigName` to select this config to be used in the workspace."
                 },
                 "chainId": {
                   "type": "string",
@@ -123,7 +134,7 @@
             },
             "default": [{
               "configName": "Juno UNI-3 testnet",
-              "chainId": "uni-2",
+              "chainId": "uni-3",
               "addressPrefix": "juno",
               "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
               "defaultGasPrice": "0.025ujunox"
