@@ -27,7 +27,8 @@ This extension contributes the following settings:
             "chainId": "uni-3", // The localnet/testnet Chain ID
             "addressPrefix": "juno", // Used to derive account address
             "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi", // Used for query and tx exec of smart contracts
-            "defaultGasPrice": "0.025ujunox" // Gas price set for the smart contract tx execution. must include amount as well as appropriate denom
+            "defaultGasPrice": "0.025", // Gas price set for the smart contract tx execution
+            "chainDenom": "ujunox" // the micro denom used to pay for gas and to track account balance
         }
     ]
     ```
