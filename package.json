@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "preview": true,
 	"publisher": "Spoorthi",
-	"icon": "https://github.com/spoo-bar/cosmy-wasmy/blob/34773010ad2b749f16704a7957343c0da0fffdea/media/icon.png",
+	"icon": "media/icon.png",
 	"license": "SEE LICENSE IN LICENSE",
 	"repository": "https://github.com/spoo-bar/cosmy-wasmy",
   "engines": {
@@ -128,6 +128,10 @@
                 "defaultGasPrice": {
                   "type": "string",
                   "description": "default amount of gas to be used as the gas limit for a transaction."
+                },
+                "faucetEndpoint": {
+                  "type":"string",
+                  "description": "Faucet address and port to request funds"
                 }
               },
               "required": ["configName","chainId", "addressPrefix", "rpcEndpoint", "defaultGasPrice"]
@@ -138,6 +142,13 @@
               "addressPrefix": "juno",
               "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
               "defaultGasPrice": "0.025ujunox"
+            }, {
+              "configName": "Localnet - Juno",
+              "chainId": "testing",
+              "addressPrefix": "juno",
+              "rpcEndpoint": "http://localhost:26657",
+              "defaultGasPrice": "0.025ujunox",
+              "faucetEndpoint": "http://localhost:8000"
             }]
           }
         }

@@ -47,7 +47,7 @@ Once an account has been created, you can
 
 ### Contract 
 
-![feature Account](images/contract.gif)
+![feature Contract](images/contract.gif)
 
 Import smart contracts from the chain by their contract address.
 
@@ -57,19 +57,19 @@ Once a contract has been imported, you can
 
 ### Query
 
-![feature Account](images/query.gif)
+![feature Query](images/query.gif)
 
 Input the request query data and select the smart contract from the above view to query and the response/err will open on a new doc on the screen
 
 ### Execute
 
-![feature Account](images/execute.gif)
+![feature Execute](images/execute.gif)
 
 Input the request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will open on a new doc on the screen
 
 ### Sign
 
-![feature Account](images/sign.gif)
+![feature Sign](images/sign.gif)
 
 Input the text which needs to be signed and select the wallet account in the view above and the signature/err will open on a new doc on the screen
 
@@ -77,14 +77,14 @@ Input the text which needs to be signed and select the wallet account in the vie
 
 1. Selected Chain
 
-![feature Account](images/status.png)
+![feature Selected Chain](images/status.png)
 
 The currently selected chain is shown in the statur bar below.
 In case, you need to change the network env, go to settings and change `cosmywasmy.chainConfigName` and then click on this status bar item to reload the config.
 
 2. Reset Data
 
-![feature Account](images/reset.png)
+![feature Reset Data](images/reset.png)
 
 Go to the Command Palette (Windows: Ctrl+Shft+P, MacOS: 🤷🏻‍♀️, Linux: 🤷🏻‍♀️) and type `Reset Data`. This will erase all extension related information from vscode
 
