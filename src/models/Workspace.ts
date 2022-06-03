@@ -55,6 +55,7 @@ class ChainConfig {
     addressPrefix!: string;
     rpcEndpoint!: string;
     defaultGasPrice!: string;
+    chainDenom!: string;
 
     public Validate() {
         if (!this) {
@@ -77,6 +78,9 @@ class ChainConfig {
         }
         if (!this.defaultGasPrice || this.defaultGasPrice === " ") {
             throw new Error("Default Gas Price is empty");
+        }
+        if (!this.chainDenom || this.chainDenom === " ") {
+            throw new Error("Chain denom is empty");
         }
         return;
     }

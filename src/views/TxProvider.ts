@@ -61,10 +61,11 @@ export class TxProvider implements vscode.WebviewViewProvider {
 					DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 						prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
 					}).then(signer => {
+						let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
 						SigningCosmWasmClient.connectWithSigner(
 							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
 							signer, {
-							gasPrice: GasPrice.fromString(Workspace.GetWorkspaceChainConfig().defaultGasPrice)
+							gasPrice: GasPrice.fromString(gasPrice)
 						}).then(client => {
 							client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
 								let output = "// Input: \n";

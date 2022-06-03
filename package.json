@@ -129,25 +129,31 @@
                   "type": "string",
                   "description": "default amount of gas to be used as the gas limit for a transaction."
                 },
+                "chainDenom": {
+                  "type": "string",
+                  "description": "the micro denom used to pay for gas and to track account balance"
+                },
                 "faucetEndpoint": {
                   "type":"string",
                   "description": "Faucet address and port to request funds"
                 }
               },
-              "required": ["configName","chainId", "addressPrefix", "rpcEndpoint", "defaultGasPrice"]
+              "required": ["configName","chainId", "addressPrefix", "rpcEndpoint", "defaultGasPrice", "chainDenom"]
             },
             "default": [{
               "configName": "Juno UNI-3 testnet",
               "chainId": "uni-3",
               "addressPrefix": "juno",
               "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
-              "defaultGasPrice": "0.025ujunox"
+              "defaultGasPrice": "0.025",
+              "chainDenom": "ujunox"
             }, {
               "configName": "Localnet - Juno",
               "chainId": "testing",
               "addressPrefix": "juno",
               "rpcEndpoint": "http://localhost:26657",
-              "defaultGasPrice": "0.025ujunox",
+              "defaultGasPrice": "0.025",
+              "chainDenom": "ujunox",
               "faucetEndpoint": "http://localhost:8000"
             }]
           }
