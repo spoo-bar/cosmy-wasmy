@@ -25,7 +25,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Showing account funds in the account view
-- 
+- Adding request funds feature
 
 
 ## [v0.1.1] - 03 June 2022

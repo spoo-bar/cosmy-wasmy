@@ -60,6 +60,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	function registerCommands() {
 		registerAddAccountCmd();
+		registerRequestFundsCmd();
 		registerCopyAccountAddressCmd();
 		registerCopyMnemonicCmd();
 		registerDeleteAddressCmd();
@@ -118,6 +119,15 @@ export async function activate(context: vscode.ExtensionContext) {
 			const accounts = await Account.GetAccounts(context.globalState);
 			accountViewProvider.refresh(accounts);
 		}
+	}
+
+	function registerRequestFundsCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.requestFunds', (item: Account) => {
+			if (item.address) {
+				vscode.window.showErrorMessage("Requesting funds from faucet");
+			}
+		});
+		context.subscriptions.push(disposable);
 	}
 
 	function registerCopyAccountAddressCmd() {

@@ -4,10 +4,10 @@
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
   "version": "0.1.1",
   "preview": true,
-	"publisher": "Spoorthi",
-	"icon": "media/icon.png",
-	"license": "SEE LICENSE IN LICENSE",
-	"repository": "https://github.com/spoo-bar/cosmy-wasmy",
+  "publisher": "Spoorthi",
+  "icon": "media/icon.png",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": "https://github.com/spoo-bar/cosmy-wasmy",
   "engines": {
     "vscode": "^1.67.0"
   },
@@ -21,7 +21,11 @@
     "Smart Contract"
   ],
   "activationEvents": [
-    "*"
+    "onView:account",
+    "onView:contract",
+    "onView:query",
+    "onView:execute",
+    "onView:sign"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -32,6 +36,15 @@
         "icon": {
           "light": "media/icons/light/add.svg",
           "dark": "media/icons/dark/add.svg"
+        }
+      },
+      {
+        "command": "cosmy-wasmy.requestFunds",
+        "title": "Request Funds",
+        "enablement": "viewItem == account",
+        "icon": {
+          "light": "media/icons/light/fund.svg",
+          "dark": "media/icons/dark/fund.svg"
         }
       },
       {
@@ -134,28 +147,38 @@
                   "description": "the micro denom used to pay for gas and to track account balance"
                 },
                 "faucetEndpoint": {
-                  "type":"string",
+                  "type": "string",
                   "description": "Faucet address and port to request funds"
                 }
               },
-              "required": ["configName","chainId", "addressPrefix", "rpcEndpoint", "defaultGasPrice", "chainDenom"]
+              "required": [
+                "configName",
+                "chainId",
+                "addressPrefix",
+                "rpcEndpoint",
+                "defaultGasPrice",
+                "chainDenom"
+              ]
             },
-            "default": [{
-              "configName": "Juno UNI-3 testnet",
-              "chainId": "uni-3",
-              "addressPrefix": "juno",
-              "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
-              "defaultGasPrice": "0.025",
-              "chainDenom": "ujunox"
-            }, {
-              "configName": "Localnet - Juno",
-              "chainId": "testing",
-              "addressPrefix": "juno",
-              "rpcEndpoint": "http://localhost:26657",
-              "defaultGasPrice": "0.025",
-              "chainDenom": "ujunox",
-              "faucetEndpoint": "http://localhost:8000"
-            }]
+            "default": [
+              {
+                "configName": "Juno UNI-3 testnet",
+                "chainId": "uni-3",
+                "addressPrefix": "juno",
+                "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "ujunox"
+              },
+              {
+                "configName": "Localnet - Juno",
+                "chainId": "testing",
+                "addressPrefix": "juno",
+                "rpcEndpoint": "http://localhost:26657",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "ujunox",
+                "faucetEndpoint": "http://localhost:8000"
+              }
+            ]
           }
         }
       }
@@ -174,6 +197,11 @@
         }
       ],
       "view/item/context": [
+        {
+          "command": "cosmy-wasmy.requestFunds",
+          "when": "view == account",
+          "group": "inline"
+        },
         {
           "command": "cosmy-wasmy.copyAddress",
           "when": "view == account || view == contract",
@@ -280,6 +308,7 @@
   "dependencies": {
     "@cosmjs/amino": "^0.28.4",
     "@cosmjs/cosmwasm-stargate": "^0.28.4",
+    "@cosmjs/faucet-client": "^0.28.4",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.28.4",
     "clipboardy": "^3.0.0"
