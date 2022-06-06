@@ -5,11 +5,35 @@ import { Workspace } from "./Workspace";
 
 export class CosmwasmAPI {
     public static async GetContract(contractAddress: string): Promise<Contract> {
-        const rpcEndpoint = Workspace.GetWorkspaceChainConfig().rpcEndpoint;
-        let client = await CosmWasmClient.connect(rpcEndpoint);
+        let client = Cosmwasm.Client;
         const contractInfo = await client.getContract(contractAddress);
         let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator);
-        client.disconnect();
         return contract;
+    }
+
+    public static GetBalance(address: string) {
+
+    }
+}
+
+export class Cosmwasm {
+    private static _instance: CosmWasmClient;
+
+    private constructor() { }
+
+    public static CreateClientAsync = async () => {
+        new Cosmwasm();
+        if (!this._instance) {
+            await Cosmwasm.createCosmwasmClient();
+        }
+    };
+
+    private static async createCosmwasmClient() {
+        const rpcEndpoint = Workspace.GetWorkspaceChainConfig().rpcEndpoint;
+        Cosmwasm._instance = await CosmWasmClient.connect(rpcEndpoint);
+    }
+
+    public static get Client() {
+        return this._instance;
     }
 }

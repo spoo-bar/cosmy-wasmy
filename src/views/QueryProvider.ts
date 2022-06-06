@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Workspace } from '../models/Workspace';
 import { Constants } from '../constants';
+import { Cosmwasm } from '../models/CosmwasmAPI';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -51,26 +52,18 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 								token.onCancellationRequested(() => { });
 								progress.report({ message: '' });
 								return new Promise((resolve, reject) => {
-
-									CosmWasmClient.connect(Workspace.GetWorkspaceChainConfig().rpcEndpoint).then(client => {
-
-										client.queryContractSmart(contract.contractAddress, query).then(resp => {
-											let output = "// Input: \n";
-											output += JSON.stringify(query, null, 4) + "\n\n";
-											output += "// Query Result \n\n";
-											output += JSON.stringify(resp, null, 4);
-											outputResponse(output);
-											resolve(output);
-										}).catch(err => {
-											let output = getErrorOutput(data, err);
-											outputResponse(output);
-											reject(output);
-										})
+									Cosmwasm.Client.queryContractSmart(contract.contractAddress, query).then(resp => {
+										let output = "// Input: \n";
+										output += JSON.stringify(query, null, 4) + "\n\n";
+										output += "// Query Result \n\n";
+										output += JSON.stringify(resp, null, 4);
+										outputResponse(output);
+										resolve(output);
 									}).catch(err => {
 										let output = getErrorOutput(data, err);
 										outputResponse(output);
 										reject(output);
-									});
+									})
 								});
 							});
 						}

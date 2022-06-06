@@ -6,7 +6,7 @@ import { Account } from './models/Account';
 import { AccountDataProvider } from './views/AccountDataProvider';
 import { ContractDataProvider } from './views/ContractDataProvider';
 import { Contract } from './models/Contract';
-import { CosmwasmAPI } from "./models/CosmwasmAPI";
+import { Cosmwasm, CosmwasmAPI } from "./models/CosmwasmAPI";
 import { ExtData } from './models/ExtData';
 import { SignProvider } from './views/SignProvider';
 import { QueryProvider } from './views/QueryProvider';
@@ -25,6 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	try {
 		loadChainConfig();
+		Cosmwasm.CreateClientAsync();
 		
 	}
 	catch(error: any) {
@@ -277,5 +278,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() { 
+	Cosmwasm.Client.disconnect();
+}
 
