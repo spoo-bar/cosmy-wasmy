@@ -1,4 +1,5 @@
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from './Contract';
 import { Workspace } from "./Workspace";
 
@@ -16,6 +17,13 @@ export class CosmwasmAPI {
         let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
         let balance = await client.getBalance(address, denom);
         return balance.amount;
+    }
+
+    public static async RequestFunds(address: string) {
+        const faucetEndpoint = Workspace.GetWorkspaceChainConfig().faucetEndpoint;
+        let faucet = new FaucetClient(faucetEndpoint);
+        let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
+        await faucet.credit(address, denom);
     }
 }
 

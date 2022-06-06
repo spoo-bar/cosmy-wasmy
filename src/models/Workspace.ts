@@ -56,6 +56,7 @@ class ChainConfig {
     rpcEndpoint!: string;
     defaultGasPrice!: string;
     chainDenom!: string;
+    faucetEndpoint!: string;
 
     public Validate() {
         if (!this) {
