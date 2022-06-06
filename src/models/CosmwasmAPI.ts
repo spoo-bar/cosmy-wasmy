@@ -11,8 +11,11 @@ export class CosmwasmAPI {
         return contract;
     }
 
-    public static GetBalance(address: string) {
-
+    public static async GetBalance(address: string): Promise<string> {
+        let client = Cosmwasm.Client;
+        let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
+        let balance = await client.getBalance(address, denom);
+        return balance.amount;
     }
 }
 

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
+import { Workspace } from '../models/Workspace';
 
 
 export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
@@ -26,8 +27,8 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 
 	getTreeItem(account: Account): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		account.id = account.label;
-		account.description = account.address;
-		account.tooltip = account.mnemonic;
+		account.description = account.balance + Workspace.GetWorkspaceChainConfig().chainDenom;
+		account.tooltip = account.address;
 		account.contextValue = Constants.VIEWS_ACCOUNT;
 		account.command = {
 			title: "Select Account",

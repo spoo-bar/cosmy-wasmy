@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { ExtData } from './ExtData';
 import { Workspace } from './Workspace';
+import { CosmwasmAPI } from './CosmwasmAPI';
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -20,15 +21,16 @@ export class Account extends vscode.TreeItem {
 		this.balance = "";
 	}
 
-	public static GetAccounts(context: vscode.Memento): Account[] {
+	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
-		accountData.forEach(async (account) => {
+		for(let account of accountData) {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;
-		});
+			account.balance = await CosmwasmAPI.GetBalance(account.address);
+		}
 		return accountData;
 	}
 

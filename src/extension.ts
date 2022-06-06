@@ -17,7 +17,7 @@ import { Constants } from './constants';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
 	let chainSelected = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
 	chainSelected.tooltip = "Selected Chain Config";
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	try {
 		loadChainConfig();
-		Cosmwasm.CreateClientAsync();
+		await Cosmwasm.CreateClientAsync();
 		
 	}
 	catch(error: any) {
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const accounts = Account.GetAccounts(context.globalState)
+	const accounts = await Account.GetAccounts(context.globalState)
 	const accountViewProvider = new AccountDataProvider(accounts);
 	vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, accountViewProvider);
 
@@ -112,10 +112,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 		context.subscriptions.push(disposable);
 
-		function saveNewAccount(account: Account) {
+		async function saveNewAccount(account: Account) {
 			Account.AddAccount(context.globalState, account);
 			vscode.window.showInformationMessage("Added new account: " + account.label);
-			const accounts = Account.GetAccounts(context.globalState);
+			const accounts = await Account.GetAccounts(context.globalState);
 			accountViewProvider.refresh(accounts);
 		}
 	}
@@ -160,10 +160,10 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showQuickPick(["Yes", "No"], {
 				title: "Are you sure you want to delete the account " + item.label + " ?",
 				placeHolder: "Are you sure you want to delete the account " + item.label + " ?",
-			}).then(resp => {
+			}).then(async resp => {
 				if (resp && resp.toLowerCase() === "yes") {
 					Account.DeleteAccount(context.globalState, item);
-					var accounts = Account.GetAccounts(context.globalState);
+					var accounts = await Account.GetAccounts(context.globalState);
 					accountViewProvider.refresh(accounts);
 					vscode.window.showInformationMessage("Deleted account: " + item.label);
 				}
@@ -261,11 +261,11 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	function registerReloadConfigCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', () => {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
 			try {
 				loadChainConfig();
 				vscode.window.showInformationMessage("Selected chain config has been reloaded.");
-				const accounts = Account.GetAccounts(context.globalState);
+				const accounts = await Account.GetAccounts(context.globalState);
 				accountViewProvider.refresh(accounts);
 			}
 			catch(error: any) {

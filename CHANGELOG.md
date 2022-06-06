@@ -20,6 +20,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- Showing account funds in the account view
+- 
+
+
 ## [v0.1.1] - 03 June 2022
 
 ### Changed
