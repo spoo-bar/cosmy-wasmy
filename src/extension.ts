@@ -124,30 +124,34 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerRequestFundsCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.requestFunds', async (item: Account) => {
 			if (item.address) {
-				vscode.window.withProgress({
-					location: {
-						viewId: Constants.VIEWS_ACCOUNT
-					},
-					title: "Requesting funds from faucet",
-					cancellable: false
-				}, (progress, token) => {
-					token.onCancellationRequested(() => { });
-					progress.report({ message: '' });
-					return new Promise(async (resolve, reject) => {
-						try {
-							await CosmwasmAPI.RequestFunds(item.address);
-							vscode.window.showInformationMessage("Funds updated! 🤑🤑");
-							var accounts = await Account.GetAccounts(context.globalState);
-							accountViewProvider.refresh(accounts);
-							resolve(undefined);
-						}
-						catch(err: any) {
-							vscode.window.showErrorMessage("Woopsie! Could not add funds 😿 - " + err);
-							reject(err);
-						}
-					});
-				});
-
+				if(Workspace.GetWorkspaceChainConfig().faucetEndpoint) {
+					vscode.window.withProgress({
+						location: {
+							viewId: Constants.VIEWS_ACCOUNT
+						},
+						title: "Requesting funds from faucet",
+						cancellable: false
+					}, (progress, token) => {
+						token.onCancellationRequested(() => { });
+						progress.report({ message: '' });
+						return new Promise(async (resolve, reject) => {
+							try {
+								await CosmwasmAPI.RequestFunds(item.address);
+								vscode.window.showInformationMessage("Funds updated! 🤑🤑");
+								var accounts = await Account.GetAccounts(context.globalState);
+								accountViewProvider.refresh(accounts);
+								resolve(undefined);
+							}
+							catch(err: any) {
+								vscode.window.showErrorMessage("Woopsie! Could not add funds 😿 - " + err);
+								reject(err);
+							}
+						});
+					});	
+				}
+				else {
+					vscode.window.showErrorMessage("Faucet endpoint has not been set in the chain config settings");
+				}
 			}
 		});
 		context.subscriptions.push(disposable);
