@@ -205,22 +205,22 @@
         {
           "command": "cosmy-wasmy.copyAddress",
           "when": "view == account || view == contract",
-          "group": "inline"
+          "group": "z_cutcopypaste"
         },
         {
           "command": "cosmy-wasmy.copyMnemonic",
           "when": "view == account",
-          "group": "inline"
+          "group": "z_cutcopypaste"
         },
         {
           "command": "cosmy-wasmy.deleteAccount",
           "when": "view == account",
-          "group": "inline"
+          "group": "z_delete"
         },
         {
           "command": "cosmy-wasmy.deleteContract",
           "when": "view == contract",
-          "group": "inline"
+          "group": "z_delete"
         }
       ]
     },

@@ -27,6 +27,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Showing account funds in the account view
 - Adding request funds feature
 
+### Changed
+
+- The inline commands moved to context menu for accounts and contracts items
+
 
 ## [v0.1.1] - 03 June 2022
 
