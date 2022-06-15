@@ -8,16 +8,16 @@ The version of vscode should be above `^1.67.0`
 
 ## Extension Settings
 
-**Juno uni-3 testnet** config is preset by default. Any other chain has to be manually added.
+**[Juno uni-3 testnet](https://testnet.ping.pub/juno)** config and **[Juno Localnet](https://github.com/CosmosContracts/juno/pkgs/container/juno)** config is preset by default. Any other chain can be manually added.
 
 You can set up the extension settings here 
 > File > Preferences > Settings > Cosmy Wasmy
 
 This extension contributes the following settings:
 * `cosmywasmy.chainConfigName`: This setting is used to select which of the given Chain configs is to be used in this workspace. Default: _Juno UNI-3 testnet_ 
-* `cosmywasmy.chains`: This settings stores an array of JSON objects which contans the Chain config detalis. Default: Includes _Juno UNI-3 testnet settings_.
+* `cosmywasmy.chains`: This settings stores an array of JSON objects which contans the Chain config details. Default: Includes _Juno UNI-3 testnet_ and _Juno Localnet docker_ settings.
 
-    This setting can be expanded to include any localnet or testnet chains.(Mainnet not recommended)
+    This setting can be expanded to include any localnet or testnet chains. (Mainnet not recommended)
 
     The structure of the expected setting:
     ```json
