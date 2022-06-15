@@ -22,6 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let chainSelected = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
 	chainSelected.tooltip = "Selected Chain Config";
 	chainSelected.command = "cosmy-wasmy.reloadConfig";
+	refreshExtensionContext();
 
 	try {
 		loadChainConfig();
@@ -56,6 +57,17 @@ export async function activate(context: vscode.ExtensionContext) {
 		const config = Workspace.GetWorkspaceChainConfig();
 		chainSelected.text = "$(plug)" + config.configName;
 		chainSelected.show();
+		refreshExtensionContext();
+	}
+
+	function refreshExtensionContext() {
+		const config = Workspace.GetWorkspaceChainConfig();
+		if (config.faucetEndpoint) {
+			vscode.commands.executeCommand('setContext', 'showRequestFunds', true);
+		}
+		else {
+			vscode.commands.executeCommand('setContext', 'showRequestFunds', false);
+		}
 	}
 
 	function registerCommands() {
@@ -71,7 +83,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerResetDataCmd();
 		registerReloadConfigCmd();
 	}
-
 
 	function registerAddAccountCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
