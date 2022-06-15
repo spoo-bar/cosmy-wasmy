@@ -36,19 +36,21 @@ This extension contributes the following settings:
 ## Features
 
 ### Account
-![feature Account](images/account.gif)
+![feature Account](images/account2.gif)
 
 Create new wallets with user-given seed phrase or an auto-generated seed phrase.
 The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`.
 
 Once an account has been created, you can
-1. Copy address (derived from prefix from the settings)
-2. Copy mnemonic
-3. Delete the account from vscode
+
+1. Request funds from faucet (if it has been setup)
+2. Copy address (derived from prefix from the settings)
+3. Copy mnemonic
+4. Delete the account from vscode
 
 ### Contract 
 
-![feature Contract](images/contract.gif)
+![feature Contract](images/contract2.gif)
 
 Import smart contracts from the chain by their contract address.
 
@@ -58,19 +60,19 @@ Once a contract has been imported, you can
 
 ### Query
 
-![feature Query](images/query.gif)
+![feature Query](images/query2.gif)
 
 Input the request query data and select the smart contract from the above view to query and the response/err will open on a new doc on the screen
 
 ### Execute
 
-![feature Execute](images/execute.gif)
+![feature Execute](images/execute2.gif)
 
 Input the request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will open on a new doc on the screen
 
 ### Sign
 
-![feature Sign](images/sign.gif)
+![feature Sign](images/sign2.gif)
 
 Input the text which needs to be signed and select the wallet account in the view above and the signature/err will open on a new doc on the screen
 
