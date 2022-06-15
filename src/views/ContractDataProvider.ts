@@ -24,7 +24,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 	}
 
 	getTreeItem(contract: Contract): vscode.TreeItem | Thenable<vscode.TreeItem> {
-		contract.id = contract.codeId.toString();
+		contract.id = contract.contractAddress.toString();
 		contract.label = contract.codeId.toString() + ": " + contract.label;
 		contract.description = contract.contractAddress;
 		contract.tooltip = "Creator: " + contract.creator;
