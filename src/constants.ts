@@ -11,6 +11,7 @@ export class Constants {
     public static readonly VIEWS_QUERY = "query";
     public static readonly VIEWS_EXECUTE = "execute";
     public static readonly VIEWS_SIGN = "sign";
+    public static readonly VIEWS_MIGRATE = "migrate";
     
     public static readonly STATUSBAR_ID_SELECTED_CONFIG = "selectedConfig";
     

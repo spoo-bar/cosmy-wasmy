@@ -23,6 +23,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Added
 
 - Implemented [#3](https://github.com/spoo-bar/cosmy-wasmy/issues/3) & [#4](https://github.com/spoo-bar/cosmy-wasmy/issues/4) - The smart contracts in the Contract view can now be sorted alphabetically, or with CodeID, or in imported order
+- Added Migrate view to migrate smart contracts
 
 ### Changed
 

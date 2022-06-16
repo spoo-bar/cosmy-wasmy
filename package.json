@@ -264,6 +264,12 @@
           "name": "Sign",
           "type": "webview",
           "visibility": "visible"
+        },
+        {
+          "id": "migrate",
+          "name": "Migrate",
+          "type": "webview",
+          "visibility": "collapsed"
         }
       ]
     },

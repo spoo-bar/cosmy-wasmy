@@ -14,6 +14,7 @@ import { TxProvider } from './views/TxProvider';
 import { Workspace } from './models/Workspace';
 import clipboard from 'clipboardy';
 import { Constants } from './constants';
+import { MigrateViewProvider } from './views/MigrateViewProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -50,6 +51,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const txViewProvider = new TxProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_EXECUTE, txViewProvider));
+
+	const migrateViewProvider = new MigrateViewProvider(context.extensionUri);
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
+
 
 	registerCommands();
 
