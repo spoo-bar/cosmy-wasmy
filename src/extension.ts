@@ -16,6 +16,7 @@ import clipboard from 'clipboardy';
 import { Constants } from './constants';
 import { MigrateViewProvider } from './views/MigrateViewProvider';
 import { CosmwasmTerminal } from './views/CosmwasmTerminal';
+import { InitializeViewProvider } from './views/InitializeViewProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -55,6 +56,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const migrateViewProvider = new MigrateViewProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
+	
+	const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
+	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
 	let terminal = new CosmwasmTerminal(context);
 	registerCommands();

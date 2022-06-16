@@ -121,7 +121,7 @@
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Cosmy Wasmy: Upload contract to chain"
+        "title": "Cosmy Wasmy: Upload contract"
       }
     ],
     "configuration": [
@@ -298,6 +298,12 @@
         {
           "id": "migrate",
           "name": "Migrate",
+          "type": "webview",
+          "visibility": "collapsed"
+        },
+        {
+          "id": "intialize",
+          "name": "Initialize",
           "type": "webview",
           "visibility": "collapsed"
         }
