@@ -34,9 +34,7 @@ export class Cosmwasm {
 
     public static CreateClientAsync = async () => {
         new Cosmwasm();
-        if (!this._instance) {
-            await Cosmwasm.createCosmwasmClient();
-        }
+        await Cosmwasm.createCosmwasmClient();
     };
 
     private static async createCosmwasmClient() {

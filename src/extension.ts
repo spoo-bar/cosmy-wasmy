@@ -63,6 +63,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const config = Workspace.GetWorkspaceChainConfig();
 		chainSelected.text = "$(plug)" + config.configName;
 		chainSelected.show();
+		Cosmwasm.CreateClientAsync();
 		refreshExtensionContext();
 	}
 
@@ -379,7 +380,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerUploadContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.upload', (item: vscode.Uri) => {
 			if(item) {
-				vscode.window.showErrorMessage("Not yet implemented! But this will upload the following contract to chain : " + item.fsPath);
+				Contract.Upload(item)
 			}
 			else {
 				vscode.window.showOpenDialog({
@@ -392,7 +393,10 @@ export async function activate(context: vscode.ExtensionContext) {
 						'Cosmwasm Contract': ['wasm']
 					}
 				}).then(doc => {
-					vscode.window.showErrorMessage("Not yet implemented! But this will upload the following contract to chain : " + doc);
+					if(doc && doc.length > 0) {
+						const wasmFile = doc[0];
+						Contract.Upload(wasmFile);
+					}
 				})
 			}
 		});

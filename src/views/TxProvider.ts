@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
-import {
-	SigningCosmWasmClient,
-} from "@cosmjs/cosmwasm-stargate";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../models/Workspace';
