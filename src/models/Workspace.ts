@@ -45,7 +45,7 @@ export class Workspace {
 
     public static GetContractSortOrder(): ContractSortOrder {
         const config = vscode.workspace.getConfiguration().get<ContractSortOrder>(Constants.CONFIGURATION_CONTRACT_SORT_ORDER, ContractSortOrder.None);
-        return config
+        return config;
     }
 
     private static GetChainConfigs(): ChainConfig[] | undefined {
@@ -54,7 +54,7 @@ export class Workspace {
     }
 }
 
-enum ContractSortOrder {
+export enum ContractSortOrder {
     Alphabetical, 
     CodeId,
     None

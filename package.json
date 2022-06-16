@@ -283,7 +283,7 @@
       },
       {
         "view": "contract",
-        "contents": "⚠️ Looks like there are no contracts are import. \n [Import a contract](command:cosmy-wasmy.addContract)"
+        "contents": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)"
       }
     ]
   },
