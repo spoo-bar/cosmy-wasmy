@@ -4,6 +4,7 @@ export class Constants {
 
     public static readonly CONFIGURATION_CHAIN_CONFIG_NAME = "cosmywasmy.chainConfigName";
     public static readonly CONFIGURATION_CHAINS = "cosmywasmy.chains";
+    public static readonly CONFIGURATION_CONTRACT_SORT_ORDER = "cosmywasmy.contractSortOrder";
     
     public static readonly VIEWS_ACCOUNT = "account";
     public static readonly VIEWS_CONTRACT = "contract";

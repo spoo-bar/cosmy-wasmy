@@ -43,10 +43,21 @@ export class Workspace {
         throw new Error("Chain settings have not been configured. Please set them up in File > Preferences > Settings > Cosmy Wasmy.");
     }
 
+    public static GetContractSortOrder(): ContractSortOrder {
+        const config = vscode.workspace.getConfiguration().get<ContractSortOrder>(Constants.CONFIGURATION_CONTRACT_SORT_ORDER, ContractSortOrder.None);
+        return config
+    }
+
     private static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
     }
+}
+
+enum ContractSortOrder {
+    Alphabetical, 
+    CodeId,
+    None
 }
 
 class ChainConfig {

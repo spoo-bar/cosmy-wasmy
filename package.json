@@ -179,6 +179,15 @@
                 "faucetEndpoint": "http://localhost:8000"
               }
             ]
+          },
+          "cosmywasmy.contractSortOrder": {
+            "type": "string",
+            "enum": ["Alphabetical", "CodeId", "None"],
+            "enumDescriptions": ["Sort the Smart Contracts alphabetically by their label", "Sort the Smart Contracts by the Code ID", "No explicit sorting - Maintains the order the contracts were imported in"],
+            "order": 2,
+            "default": "None",
+            "description": "Controls the sorting order of the Smart COntracts in the Contract view",
+            "scope": "resource"
           }
         }
       }
