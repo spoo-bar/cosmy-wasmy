@@ -15,6 +15,7 @@ import { Workspace } from './models/Workspace';
 import clipboard from 'clipboardy';
 import { Constants } from './constants';
 import { MigrateViewProvider } from './views/MigrateViewProvider';
+import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -55,7 +56,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const migrateViewProvider = new MigrateViewProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
 
-
+	let terminal = new CosmwasmTerminal(context);
 	registerCommands();
 
 	function loadChainConfig() {
@@ -87,6 +88,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerDeleteContractCmd();
 		registerResetDataCmd();
 		registerReloadConfigCmd();
+		registerBuildCmd();
+		registerRunUnitTestsCmd();
+		registerOptimizeContractCmd();
+		registerGenerateSchemaCmd();
+		registerSetUpDevEnvCmd();
+		registerUploadContractCmd();
 	}
 
 	function registerAddAccountCmd() {
@@ -328,6 +335,71 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		context.subscriptions.push(disposable);
 	}
+
+	function registerBuildCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.build', async () => {
+			terminal.build();
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerRunUnitTestsCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.runUnitTests', async () => {
+			terminal.unitTests();
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerOptimizeContractCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.optimizeContract', async () => {
+			terminal.optimize();
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerGenerateSchemaCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.generateSchema', async () => {
+			terminal.schema();
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerSetUpDevEnvCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.setupDevEnv', async () => {
+			terminal.setupDevEnv();
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+	function registerUploadContractCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.upload', (item: vscode.Uri) => {
+			if(item) {
+				vscode.window.showErrorMessage("Not yet implemented! But this will upload the following contract to chain : " + item.fsPath);
+			}
+			else {
+				vscode.window.showOpenDialog({
+					canSelectFiles: true,
+					canSelectFolders: false,
+					canSelectMany: false,
+					title: "title",
+					openLabel: "label",
+					filters: {
+						'Cosmwasm Contract': ['wasm']
+					}
+				}).then(doc => {
+					vscode.window.showErrorMessage("Not yet implemented! But this will upload the following contract to chain : " + doc);
+				})
+			}
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
 }
 
 // this method is called when your extension is deactivated

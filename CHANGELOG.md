@@ -24,6 +24,13 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 - Implemented [#3](https://github.com/spoo-bar/cosmy-wasmy/issues/3) & [#4](https://github.com/spoo-bar/cosmy-wasmy/issues/4) - The smart contracts in the Contract view can now be sorted alphabetically, or with CodeID, or in imported order
 - Added Migrate view to migrate smart contracts
+- Added commands for the following :
+    - `cosmy-wasmy.setupDevEnv` - Setup dev environment and install all dependencies
+    - `cosmy-wasmy.build` - Build the project
+    - `cosmy-wasmy.runUnitTests` - Run unit tests
+    - `cosmy-wasmy.optimizeContract` - Run contract optimizer using the docker image (Needs docker running)
+    - `cosmy-wasmy.generateSchema` - Generate json-schema using the rust schema files 
+    - `cosmy-wasmy.upload` - Upload wasm file to chain
 
 ### Changed
 

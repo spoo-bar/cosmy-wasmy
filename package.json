@@ -98,6 +98,30 @@
       {
         "command": "cosmy-wasmy.resetData",
         "title": "Cosmy Wasmy: Reset Data"
+      },
+      {
+        "command": "cosmy-wasmy.build",
+        "title": "Cosmy Wasmy: Build"
+      },
+      {
+        "command": "cosmy-wasmy.runUnitTests",
+        "title": "Cosmy Wasmy: Run Unit Tests"
+      },
+      {
+        "command": "cosmy-wasmy.optimizeContract",
+        "title": "Cosmy Wasmy: Optimize Contract"
+      },
+      {
+        "command": "cosmy-wasmy.generateSchema",
+        "title": "Cosmy Wasmy: Generate Schema"
+      },
+      {
+        "command": "cosmy-wasmy.setupDevEnv",
+        "title": "Cosmy Wasmy: Setup Dev Environment"
+      },
+      {
+        "command": "cosmy-wasmy.upload",
+        "title": "Cosmy Wasmy: Upload contract to chain"
       }
     ],
     "configuration": [
@@ -193,6 +217,12 @@
       }
     ],
     "menus": {
+      "explorer/context": [
+        {
+          "command": "cosmy-wasmy.upload",
+          "when": "resourceExtname == .wasm"
+        }
+      ],
       "view/title": [
         {
           "command": "cosmy-wasmy.addAccount",
