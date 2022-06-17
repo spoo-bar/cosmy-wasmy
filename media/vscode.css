@@ -50,15 +50,16 @@ button {
 	padding: var(--input-padding-vertical) var(--input-padding-horizontal);
 	width: 100%;
 	text-align: center;
-	outline: 1px solid transparent;
-	outline-offset: 2px !important;
 	color: var(--vscode-button-foreground);
-	background: var(--vscode-button-background);
+	background: var(--vscode-button-background);;
 }
 
 button:hover {
 	cursor: pointer;
 	background: var(--vscode-button-hoverBackground);
+	border-color: var(--vscode-button-border);
+	border-width: 1px; 
+	border-style: solid;
 }
 
 button:focus {
@@ -86,7 +87,15 @@ textarea {
 	background-color: var(--vscode-input-background);
 }
 
+input:hover,
+textarea:hover {
+	border-color: var(--vscode-inputOption-activeBorder);
+	border-width: 1px;
+	border-style: solid;
+}
+
 input::placeholder,
 textarea::placeholder {
 	color: var(--vscode-input-placeholderForeground);
+	opacity: 0.5;
 }

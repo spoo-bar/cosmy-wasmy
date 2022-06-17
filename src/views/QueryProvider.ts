@@ -117,7 +117,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 				<title>Query Page</title>
 			</head>
 			<body>
-				<textarea id="input-text"></textarea>
+				<textarea id="input-text" placeholder="{'get_count':{}}"></textarea>
 				<button id="exec-button">Query</button>
 				<script src="${scriptUri}"></script>
 			</body>

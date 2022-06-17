@@ -136,7 +136,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 				<title>Sign Page</title>
 			</head>
 			<body>
-				<textarea id="input-text"></textarea>
+				<textarea id="input-text" placeholder="{'cosmy':'wasmy'}"></textarea>
 				<button id="exec-button">Sign</button>
 				<script src="${scriptUri}"></script>
 			</body>

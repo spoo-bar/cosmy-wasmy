@@ -136,7 +136,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 				<title>Tx Page</title>
 			</head>
 			<body>
-				<textarea id="input-text"></textarea>
+				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
 				<button id="exec-button">Execute</button>
 				<script src="${scriptUri}"></script>
 			</body>

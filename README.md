@@ -96,9 +96,6 @@ Go to the Command Palette (Windows: Ctrl+Shft+P, MacOS: 🤷🏻‍♀️, Linux
 
 *  The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`
 
-## Known Issues
-
-* UI issue - When the Query, Execute, Sign views are collapsed and reopened again, the view component elements get wrong alignments.
 
 ## Release Notes
 
