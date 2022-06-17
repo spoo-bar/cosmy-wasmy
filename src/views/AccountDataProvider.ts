@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
 
 
 export class AccountDataProvider implements vscode.TreeDataProvider<Account> {

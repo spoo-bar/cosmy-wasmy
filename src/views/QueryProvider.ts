@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
-import { Cosmwasm } from '../models/CosmwasmAPI';
+import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -51,41 +52,18 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 							return new Promise(async (resolve, reject) => {
 								try {
 									let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
-									let output = "// Input: \n";
-									output += JSON.stringify(query, null, 4) + "\n\n";
-									output += "// Query Result \n\n";
-									output += JSON.stringify(resp, null, 4);
-									outputResponse(output);
-									resolve(output);
+									ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
+									resolve(undefined);
 								}
 								catch (err: any) {
-									let output = getErrorOutput(data, err);
-									outputResponse(output);
-									reject(output);
+									ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
+									reject(undefined);
 								}
 							});
 						});
 					}
 			}
 		});
-
-		function getErrorOutput(data: any, err: any): string {
-			let output = "// Input: \n";
-			output += data.value + "\n\n";
-			output += "// ⚠️ Query failed \n\n";
-			output += err;
-			return output;
-		}
-
-		function outputResponse(output: string) {
-			vscode.workspace.openTextDocument({
-				language: "jsonc"
-			}).then(doc => {
-				vscode.window.showTextDocument(doc).then(editor => {
-					editor.insertSnippet(new vscode.SnippetString(output));
-				});
-			});
-		}
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {

@@ -2,9 +2,10 @@ import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {
@@ -60,25 +61,19 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 token.onCancellationRequested(() => { });
                 progress.report({ message: '' });
                 return new Promise(async (resolve, reject) => {
+                    
+                    let codeId = data.value.codeid;
+                    let label = data.value.label;
 
                     try {
-                        let codeId = data.value.codeid;
-                        let label = data.value.label;
                         let res = await instantiateContract(account, codeId, req, label);
-                        let output = "// Input: \n";
-                        output += "Code ID: " + codeId + "\n\n";
-                        output += "Label: " + label + "\n\n";
-                        output += JSON.stringify(req, null, 4) + "\n\n";
-                        output += "// Initialize Contract Result \n\n";
-                        output += JSON.stringify(res, null, 4);
-                        outputResponse(output);
-                        resolve(output);
+                        ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
+                        resolve(undefined);
 
                     }
                     catch (err: any) {
-                        let output = getErrorOutput(data, err);
-                        outputResponse(output);
-                        reject(output);
+                        ResponseHandler.OutputError(JSON.stringify(data.value, null, 4), err, "Initialize");
+                        reject(undefined);
                     }
                 })
             });
@@ -98,24 +93,6 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 admin: account.address,
             });
             return res;
-        }
-
-        function getErrorOutput(data: any, err: any): string {
-            let output = "// Input: \n";
-            output += data.value + "\n\n";
-            output += "// ⚠️ Initialization failed \n\n";
-            output += err;
-            return output;
-        }
-
-        function outputResponse(output: string) {
-            vscode.workspace.openTextDocument({
-                language: "jsonc"
-            }).then(doc => {
-                vscode.window.showTextDocument(doc).then(editor => {
-                    editor.insertSnippet(new vscode.SnippetString(output));
-                });
-            });
         }
     }
 

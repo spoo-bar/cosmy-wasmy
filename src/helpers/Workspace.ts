@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Account } from './Account';
-import { Contract } from './Contract';
+import { Account } from '../models/Account';
+import { Contract } from '../models/Contract';
 
 
 export class Workspace {
@@ -48,10 +48,20 @@ export class Workspace {
         return config;
     }
 
+    public static GetCosmwasmResponseView(): CosmwasmResponseView {
+        const config = vscode.workspace.getConfiguration().get<CosmwasmResponseView>(Constants.CONFIGURATION_COSMWASM_RESPONSE_VIEW, CosmwasmResponseView.NewFile);
+        return config;
+    }
+
     private static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
     }
+}
+
+export enum CosmwasmResponseView {
+    NewFile = "NewFile", 
+    Terminal = "Terminal"
 }
 
 export enum ContractSortOrder {

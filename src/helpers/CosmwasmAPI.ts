@@ -1,6 +1,6 @@
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { FaucetClient } from "@cosmjs/faucet-client";
-import { Contract } from './Contract';
+import { Contract } from '../models/Contract';
 import { Workspace } from "./Workspace";
 
 

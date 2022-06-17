@@ -2,10 +2,11 @@ import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -60,18 +61,13 @@ export class TxProvider implements vscode.WebviewViewProvider {
 				return new Promise(async (resolve, reject) => {
 
 					try {
-						let res = await executeContractMsg(account, contract, req);
-						let output = "// Input: \n";
-						output += JSON.stringify(req, null, 4) + "\n\n";
-						output += "// Tx Result \n\n";
-						output += JSON.stringify(res, null, 4);
-						outputResponse(output);
-						resolve(output);
+						let response = await executeContractMsg(account, contract, req);
+						ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx")
+						resolve(undefined);
 					}
 					catch (err: any) {
-						let output = getErrorOutput(data, err);
-						outputResponse(output);
-						reject(output);
+						ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx")
+						reject(undefined);
 					}
 				})
 			});
@@ -87,26 +83,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 				signer, {
 				gasPrice: GasPrice.fromString(gasPrice)
 			});
-			let res = await client.execute(account.address, contract.contractAddress, req, "auto");
-			return res;
-		}
-
-		function getErrorOutput(data: any, err: any): string {
-			let output = "// Input: \n";
-			output += data.value + "\n\n";
-			output += "// ⚠️ Tx failed \n\n";
-			output += err;
-			return output;
-		}
-
-		function outputResponse(output: string) {
-			vscode.workspace.openTextDocument({
-				language: "jsonc"
-			}).then(doc => {
-				vscode.window.showTextDocument(doc).then(editor => {
-					editor.insertSnippet(new vscode.SnippetString(output));
-				});
-			});
+			return await client.execute(account.address, contract.contractAddress, req, "auto");
 		}
 	}
 

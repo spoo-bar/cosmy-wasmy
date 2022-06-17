@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {
@@ -65,37 +66,14 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 							gasPrice: GasPrice.fromString(gasPrice)
 						});
 						let res = await client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto");
-						let output = "// Input: \n";
-						output += JSON.stringify(req, null, 4) + "\n\n";
-						output += "// Migrate Result \n\n";
-						output += JSON.stringify(res, null, 4);
-						outputResponse(output);
-						resolve(output);
+						ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(res, null, 4), "Migrate");
+						resolve(undefined);
 					}
 					catch (err: any) {
-						let output = getErrorOutput(data, err);
-						outputResponse(output);
-						reject(output);
+						ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Migrate");
+						reject(undefined);
 					}
 				})
-			});
-		}
-
-		function getErrorOutput(data: any, err: any): string {
-			let output = "// Input: \n";
-			output += data.value + "\n\n";
-			output += "// ⚠️ Migrate failed \n\n";
-			output += err;
-			return output;
-		}
-
-		function outputResponse(output: string) {
-			vscode.workspace.openTextDocument({
-				language: "jsonc"
-			}).then(doc => {
-				vscode.window.showTextDocument(doc).then(editor => {
-					editor.insertSnippet(new vscode.SnippetString(output));
-				});
 			});
 		}
 	}

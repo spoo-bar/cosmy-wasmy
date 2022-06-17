@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { ExtData } from './ExtData';
-import { Workspace } from './Workspace';
-import { CosmwasmAPI } from './CosmwasmAPI';
+import { ExtData } from '../helpers/ExtData';
+import { Workspace } from '../helpers/Workspace';
+import { CosmwasmAPI } from '../helpers/CosmwasmAPI';
 
 export class Account extends vscode.TreeItem {
 	label: string;

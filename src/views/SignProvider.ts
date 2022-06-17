@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import { StdSignDoc } from "@cosmjs/amino";
-import { Workspace } from '../models/Workspace';
+import { Workspace } from '../helpers/Workspace';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class SignProvider implements vscode.WebviewViewProvider {
@@ -39,46 +40,16 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			let wallet = await Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
 			});
-			const signDoc = this.makeSignDoc(
-				account.address,
-				data.value,
-			);
-			let resp = await wallet.signAmino(account.address, signDoc)
-			let output = "// Input: \n";
-			output += data.value + "\n\n";
-			output += "// Signed output: \n"
-			output += JSON.stringify(resp.signature, null, 4);
-			this.outputResponse(output);
+			const signDoc = this.makeSignDoc(account.address, data.value);
+			let response = await wallet.signAmino(account.address, signDoc)
+			ResponseHandler.OutputSuccess(data.value, JSON.stringify(response.signature, null, 4), "Signing")
 		}
 		catch (err: any) {
-			let output = this.getErrorOutput(data, err);
-			this.outputResponse(output);
+			ResponseHandler.OutputError(data.value, err, "Signing");
 		}
 	}
 
-
-	private getErrorOutput(data: any, err: any): string {
-		let output = "// Input: \n";
-		output += data.value + "\n\n";
-		output += "// ⚠️ Signing failed \n\n";
-		output += err;
-		return output;
-	}
-
-	private outputResponse(output: string) {
-		vscode.workspace.openTextDocument({
-			language: "jsonc"
-		}).then(doc => {
-			vscode.window.showTextDocument(doc).then(editor => {
-				editor.insertSnippet(new vscode.SnippetString(output));
-			});
-		});
-	}
-
-	private makeSignDoc(
-		signer: string,
-		data: string | Uint8Array,
-	): StdSignDoc {
+	private makeSignDoc(signer: string, data: string | Uint8Array): StdSignDoc {
 		if (typeof data === 'string') {
 			data = Buffer.from(data).toString('base64');
 		} else {
@@ -87,19 +58,12 @@ export class SignProvider implements vscode.WebviewViewProvider {
 
 		return {
 			chain_id: Workspace.GetWorkspaceChainConfig().chainId,
-			account_number: '0',
-			sequence: '0',
-			fee: {
-				gas: '0',
-				amount: [],
-			},
+			account_number: '0', sequence: '0',
+			fee: { gas: '0', amount: [] },
 			msgs: [
 				{
 					type: 'sign/MsgSignData',
-					value: {
-						signer,
-						data,
-					},
+					value: { signer, data },
 				},
 			],
 			memo: '',

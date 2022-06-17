@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Contract } from '../models/Contract';
-import { ContractSortOrder, Workspace } from '../models/Workspace';
+import { ContractSortOrder, Workspace } from '../helpers/Workspace';
 
 
 export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {

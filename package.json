@@ -210,7 +210,16 @@
             "enumDescriptions": ["Sort the Smart Contracts alphabetically by their label", "Sort the Smart Contracts by the Code ID", "No explicit sorting - Maintains the order the contracts were imported in"],
             "order": 2,
             "default": "None",
-            "description": "Controls the sorting order of the Smart COntracts in the Contract view",
+            "description": "Controls the sorting order of the Smart Contracts in the Contract view",
+            "scope": "resource"
+          },
+          "cosmywasmy.cosmwasmResponseView": {
+            "type": "string",
+            "enum": ["NewFile", "Terminal"],
+            "enumDescriptions": ["Open a new dummy doc with response", "A seperate terminal by Cosmy Wasmy"],
+            "order": 3,
+            "default": "NewFile",
+            "description": "Controls where the smart contract interactions should be displayed",
             "scope": "resource"
           }
         }
