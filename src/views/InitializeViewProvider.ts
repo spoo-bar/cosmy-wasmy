@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../models/Workspace';
 import { Constants } from '../constants';
@@ -53,9 +53,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
             const req = JSON.parse(data.value.input);
 
             vscode.window.withProgress({
-                location: {
-                    viewId: Constants.VIEWS_INITIALIZE
-                },
+                location: { viewId: Constants.VIEWS_INITIALIZE },
                 title: "Initializing the contract",
                 cancellable: false
             }, (progress, token) => {
@@ -68,8 +66,8 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                         let label = data.value.label;
                         let res = await instantiateContract(account, codeId, req, label);
                         let output = "// Input: \n";
-                        output += "Code ID: "+ codeId + "\n\n";
-                        output += "Label: "+ label + "\n\n";
+                        output += "Code ID: " + codeId + "\n\n";
+                        output += "Label: " + label + "\n\n";
                         output += JSON.stringify(req, null, 4) + "\n\n";
                         output += "// Initialize Contract Result \n\n";
                         output += JSON.stringify(res, null, 4);
@@ -122,7 +120,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
-        // Do the same for the stylesheet.
+
         const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
         const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
         const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));

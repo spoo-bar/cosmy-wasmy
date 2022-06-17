@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../models/Workspace';
 import { Constants } from '../constants';
+import { Account } from '../models/Account';
+import { Contract } from '../models/Contract';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -33,10 +35,12 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			const account = Workspace.GetSelectedAccount();
 			if (!account) {
 				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+				return;
 			}
 			const contract = Workspace.GetSelectedContract();
 			if (!contract) {
 				vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+				return;
 			}
 			try {
 				JSON.parse(data.value);
@@ -47,48 +51,44 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			const req = JSON.parse(data.value);
 
 			vscode.window.withProgress({
-				location: {
-					viewId: Constants.VIEWS_EXECUTE
-				},
-				title: "Querying the contract - " + contract.label,
+				location: { viewId: Constants.VIEWS_EXECUTE },
+				title: "Executing msg on the contract - " + contract.label,
 				cancellable: false
 			}, (progress, token) => {
 				token.onCancellationRequested(() => { });
 				progress.report({ message: '' });
-				return new Promise((resolve, reject) => {
-					DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-						prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-					}).then(signer => {
-						let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
-						SigningCosmWasmClient.connectWithSigner(
-							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
-							signer, {
-							gasPrice: GasPrice.fromString(gasPrice)
-						}).then(client => {
-							client.execute(account.address, contract.contractAddress, req, "auto").then(res => {
-								let output = "// Input: \n";
-								output += JSON.stringify(req, null, 4) + "\n\n";
-								output += "// Tx Result \n\n";
-								output += JSON.stringify(res, null, 4);
-								outputResponse(output);
-								resolve(output);
-							}).catch(err => {
-								let output = getErrorOutput(data, err);
-								outputResponse(output);
-								reject(output);
-							})
-						}).catch(err => {
-							let output = getErrorOutput(data, err);
-							outputResponse(output);
-							reject(output);
-						})
-					}).catch(err => {
+				return new Promise(async (resolve, reject) => {
+
+					try {
+						let res = await executeContractMsg(account, contract, req);
+						let output = "// Input: \n";
+						output += JSON.stringify(req, null, 4) + "\n\n";
+						output += "// Tx Result \n\n";
+						output += JSON.stringify(res, null, 4);
+						outputResponse(output);
+						resolve(output);
+					}
+					catch (err: any) {
 						let output = getErrorOutput(data, err);
 						outputResponse(output);
 						reject(output);
-					})
+					}
 				})
 			});
+		}
+
+		async function executeContractMsg(account: Account, contract: Contract, req: any) {
+			let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+			});
+			let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
+			let client = await SigningCosmWasmClient.connectWithSigner(
+				Workspace.GetWorkspaceChainConfig().rpcEndpoint,
+				signer, {
+				gasPrice: GasPrice.fromString(gasPrice)
+			});
+			let res = await client.execute(account.address, contract.contractAddress, req, "auto");
+			return res;
 		}
 
 		function getErrorOutput(data: any, err: any): string {
@@ -111,10 +111,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
-		// Do the same for the stylesheet.
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
@@ -138,7 +135,15 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
 				<button id="exec-button">Execute</button>
-				<script src="${scriptUri}"></script>
+				<script>
+					(function () {
+						const vscode = acquireVsCodeApi();
+						document.querySelector('#exec-button').addEventListener('click', () => {
+							const input = document.getElementById('input-text').value;
+							vscode.postMessage({ type: 'exec-text', value: input });
+						});
+					}());
+				</script>
 			</body>
 			</html>`;
 	}

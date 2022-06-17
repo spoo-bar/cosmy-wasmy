@@ -29,33 +29,30 @@ export class SignProvider implements vscode.WebviewViewProvider {
 		});
 	}
 
-	private sign(data: any) {
+	private async sign(data: any) {
 		const account = Workspace.GetSelectedAccount();
 		if (!account) {
 			vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+			return;
 		}
-		else {
-			Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
+		try {
+			let wallet = await Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-			}).then(wallet => {
-				const signDoc = this.makeSignDoc(
-					account.address,
-					data.value,
-				);
-				wallet.signAmino(account.address, signDoc).then(resp => {
-					let output = "// Input: \n";
-					output += data.value + "\n\n";
-					output += "// Signed output: \n"
-					output += JSON.stringify(resp.signature, null, 4);
-					this.outputResponse(output);
-				}).catch(err => {
-					let output = this.getErrorOutput(data, err);
-					this.outputResponse(output);
-				})
-			}).catch(err => {
-				let output = this.getErrorOutput(data, err);
-				this.outputResponse(output);
 			});
+			const signDoc = this.makeSignDoc(
+				account.address,
+				data.value,
+			);
+			let resp = await wallet.signAmino(account.address, signDoc)
+			let output = "// Input: \n";
+			output += data.value + "\n\n";
+			output += "// Signed output: \n"
+			output += JSON.stringify(resp.signature, null, 4);
+			this.outputResponse(output);
+		}
+		catch (err: any) {
+			let output = this.getErrorOutput(data, err);
+			this.outputResponse(output);
 		}
 	}
 
@@ -87,7 +84,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 		} else {
 			data = Buffer.from(data).toString('base64');
 		}
-	
+
 		return {
 			chain_id: Workspace.GetWorkspaceChainConfig().chainId,
 			account_number: '0',
@@ -110,14 +107,10 @@ export class SignProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
-		// Do the same for the stylesheet.
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
-
 
 		return `<!DOCTYPE html>
 			<html lang="en">
@@ -138,7 +131,15 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text" placeholder="{'cosmy':'wasmy'}"></textarea>
 				<button id="exec-button">Sign</button>
-				<script src="${scriptUri}"></script>
+				<script>
+					(function () {
+						const vscode = acquireVsCodeApi();
+						document.querySelector('#exec-button').addEventListener('click', () => {
+							const input = document.getElementById('input-text').value;
+							vscode.postMessage({ type: 'exec-text', value: input });
+						});
+					}());
+				</script>
 			</body>
 			</html>`;
 	}

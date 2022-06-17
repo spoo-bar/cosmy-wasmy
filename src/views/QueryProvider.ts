@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Workspace } from '../models/Workspace';
 import { Constants } from '../constants';
 import { Cosmwasm } from '../models/CosmwasmAPI';
@@ -32,41 +31,40 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 						const contract = Workspace.GetSelectedContract();
 						if (!contract) {
 							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+							return;
 						}
-						else {
-							try {
-								JSON.parse(data.value);
-							} catch {
-								vscode.window.showErrorMessage("The input is not valid JSON");
-								return;
-							}
-							const query = JSON.parse(data.value);
+						try {
+							JSON.parse(data.value);
+						} catch {
+							vscode.window.showErrorMessage("The input is not valid JSON");
+							return;
+						}
+						const query = JSON.parse(data.value);
 
-							vscode.window.withProgress({
-								location: {
-									viewId: Constants.VIEWS_QUERY
-								},
-								title: "Querying the contract - " + contract.label,
-								cancellable: false
-							}, (progress, token) => {
-								token.onCancellationRequested(() => { });
-								progress.report({ message: '' });
-								return new Promise((resolve, reject) => {
-									Cosmwasm.Client.queryContractSmart(contract.contractAddress, query).then(resp => {
-										let output = "// Input: \n";
-										output += JSON.stringify(query, null, 4) + "\n\n";
-										output += "// Query Result \n\n";
-										output += JSON.stringify(resp, null, 4);
-										outputResponse(output);
-										resolve(output);
-									}).catch(err => {
-										let output = getErrorOutput(data, err);
-										outputResponse(output);
-										reject(output);
-									})
-								});
+						vscode.window.withProgress({
+							location: { viewId: Constants.VIEWS_QUERY },
+							title: "Querying the contract - " + contract.label,
+							cancellable: false
+						}, (progress, token) => {
+							token.onCancellationRequested(() => { });
+							progress.report({ message: '' });
+							return new Promise(async (resolve, reject) => {
+								try {
+									let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
+									let output = "// Input: \n";
+									output += JSON.stringify(query, null, 4) + "\n\n";
+									output += "// Query Result \n\n";
+									output += JSON.stringify(resp, null, 4);
+									outputResponse(output);
+									resolve(output);
+								}
+								catch (err: any) {
+									let output = getErrorOutput(data, err);
+									outputResponse(output);
+									reject(output);
+								}
 							});
-						}
+						});
 					}
 			}
 		});
@@ -91,14 +89,10 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
-		// Do the same for the stylesheet.
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
-
 
 		return `<!DOCTYPE html>
 			<html lang="en">
@@ -119,7 +113,15 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text" placeholder="{'get_count':{}}"></textarea>
 				<button id="exec-button">Query</button>
-				<script src="${scriptUri}"></script>
+				<script>
+				(function () {
+					const vscode = acquireVsCodeApi();
+					document.querySelector('#exec-button').addEventListener('click', () => {
+						const input = document.getElementById('input-text').value;
+						vscode.postMessage({ type: 'exec-text', value: input });
+					});
+				}());
+				</script>
 			</body>
 			</html>`;
 	}

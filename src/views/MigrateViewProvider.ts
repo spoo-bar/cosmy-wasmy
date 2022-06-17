@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet, OfflineSigner } from "@cosmjs/proto-signing";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../models/Workspace';
 import { Constants } from '../constants';
@@ -47,46 +47,36 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 			const req = JSON.parse(data.value);
 
 			vscode.window.withProgress({
-				location: {
-					viewId: Constants.VIEWS_MIGRATE
-				},
+				location: { viewId: Constants.VIEWS_MIGRATE },
 				title: "Migrating the contract - " + contract.label,
 				cancellable: false
 			}, (progress, token) => {
 				token.onCancellationRequested(() => { });
 				progress.report({ message: '' });
-				return new Promise((resolve, reject) => {
-					DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-						prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-					}).then(signer => {
+				return new Promise(async (resolve, reject) => {
+					try {
+						let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+							prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+						});
 						let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
-						SigningCosmWasmClient.connectWithSigner(
+						let client = await SigningCosmWasmClient.connectWithSigner(
 							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
 							signer, {
 							gasPrice: GasPrice.fromString(gasPrice)
-						}).then(client => {
-							client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto").then(res => {
-								let output = "// Input: \n";
-								output += JSON.stringify(req, null, 4) + "\n\n";
-								output += "// Migrate Result \n\n";
-								output += JSON.stringify(res, null, 4);
-								outputResponse(output);
-								resolve(output);
-							}).catch(err => {
-								let output = getErrorOutput(data, err);
-								outputResponse(output);
-								reject(output);
-							})
-						}).catch(err => {
-							let output = getErrorOutput(data, err);
-							outputResponse(output);
-							reject(output);
-						})
-					}).catch(err => {
+						});
+						let res = await client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto");
+						let output = "// Input: \n";
+						output += JSON.stringify(req, null, 4) + "\n\n";
+						output += "// Migrate Result \n\n";
+						output += JSON.stringify(res, null, 4);
+						outputResponse(output);
+						resolve(output);
+					}
+					catch (err: any) {
 						let output = getErrorOutput(data, err);
 						outputResponse(output);
 						reject(output);
-					})
+					}
 				})
 			});
 		}
@@ -111,10 +101,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
-		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
-		// Do the same for the stylesheet.
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
@@ -138,7 +125,15 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text" placeholder="{'payout':{}}"></textarea>
 				<button id="exec-button">Migrate</button>
-				<script src="${scriptUri}"></script>
+				<script>
+					(function () {
+						const vscode = acquireVsCodeApi();
+						document.querySelector('#exec-button').addEventListener('click', () => {
+							const input = document.getElementById('input-text').value;
+							vscode.postMessage({ type: 'exec-text', value: input });
+						});
+					}());
+				</script>
 			</body>
 			</html>`;
 	}
