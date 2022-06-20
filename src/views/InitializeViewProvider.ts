@@ -6,6 +6,7 @@ import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { ResponseHandler } from '../helpers/ResponseHandler';
+import { Cosmwasm } from '../helpers/CosmwasmAPI';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {
@@ -80,15 +81,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
         }
 
         async function instantiateContract(account: Account, codeId: any, req: any, label: any) {
-            let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-                prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-            });
-            let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
-            let client = await SigningCosmWasmClient.connectWithSigner(
-                Workspace.GetWorkspaceChainConfig().rpcEndpoint,
-                signer, {
-                gasPrice: GasPrice.fromString(gasPrice)
-            });
+            let client = await Cosmwasm.GetSigningClient();
             let res = await client.instantiate(account.address, codeId, req, label, "auto", {
                 admin: account.address,
             });

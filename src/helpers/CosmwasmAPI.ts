@@ -1,4 +1,7 @@
 import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../models/Contract';
 import { Workspace } from "./Workspace";
@@ -44,5 +47,19 @@ export class Cosmwasm {
 
     public static get Client() {
         return this._instance;
+    }
+
+    public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
+        const account = Workspace.GetSelectedAccount();
+        let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+            prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+        });
+        let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
+        let client = await SigningCosmWasmClient.connectWithSigner(
+            Workspace.GetWorkspaceChainConfig().rpcEndpoint,
+            signer, {
+            gasPrice: GasPrice.fromString(gasPrice)
+        });
+        return client;
     }
 }

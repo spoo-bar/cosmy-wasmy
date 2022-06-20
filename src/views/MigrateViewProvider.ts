@@ -5,6 +5,7 @@ import { GasPrice } from '@cosmjs/stargate';
 import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { ResponseHandler } from '../helpers/ResponseHandler';
+import { Cosmwasm } from '../helpers/CosmwasmAPI';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {
@@ -56,15 +57,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 				progress.report({ message: '' });
 				return new Promise(async (resolve, reject) => {
 					try {
-						let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-							prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-						});
-						let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
-						let client = await SigningCosmWasmClient.connectWithSigner(
-							Workspace.GetWorkspaceChainConfig().rpcEndpoint,
-							signer, {
-							gasPrice: GasPrice.fromString(gasPrice)
-						});
+						let client = await Cosmwasm.GetSigningClient();
 						let res = await client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto");
 						ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(res, null, 4), "Migrate");
 						resolve(undefined);

@@ -4,6 +4,8 @@ import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Workspace } from '../helpers/Workspace';
 import { GasPrice } from '@cosmjs/stargate';
+import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { ResponseHandler } from '../helpers/ResponseHandler';
 
 
 export class Contract extends vscode.TreeItem {
@@ -60,48 +62,17 @@ export class Contract extends vscode.TreeItem {
             progress.report({ message: '' });
             return new Promise(async (resolve, reject) => {
                 try {
-                    let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-                        prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
-                    });
-                    let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
-                    let client = await SigningCosmWasmClient.connectWithSigner(
-                        Workspace.GetWorkspaceChainConfig().rpcEndpoint,
-                        signer, {
-                            gasPrice: GasPrice.fromString(gasPrice)
-                    });
+                    let client = await Cosmwasm.GetSigningClient();
                     let res = await client.upload(account.address, file, "auto");
-                    let output = "// Wasm file path: \n";
-                    output += wasmFile.fsPath + "\n\n";
-                    output += "// Upload Result \n\n";
-                    output += JSON.stringify(res, null, 4);
-                    outputResponse(output);
-                    resolve(output);
+                    ResponseHandler.OutputSuccess(wasmFile.fsPath, JSON.stringify(res, null, 4), "Smart Contract Upload");
+                    resolve(undefined);
                 }
                 catch (err: any) {
-                    let output = getErrorOutput(wasmFile, err);
-                    outputResponse(output);
-                    reject(output);
+                    ResponseHandler.OutputError(wasmFile.fsPath, err, "Smart Contract Upload");
+                    reject(undefined);
                 }
             })
         });
-
-        function getErrorOutput(wasmFile: vscode.Uri, err: any): string {
-            let output = "// Wasm file path: \n";
-            output += wasmFile.fsPath + "\n\n";
-            output += "// ⚠️ Upload failed \n\n";
-            output += err;
-            return output;
-        }
-
-        function outputResponse(output: string) {
-            vscode.workspace.openTextDocument({
-                language: "jsonc"
-            }).then(doc => {
-                vscode.window.showTextDocument(doc).then(editor => {
-                    editor.insertSnippet(new vscode.SnippetString(output));
-                });
-            });
-        }
     }
 }
 
