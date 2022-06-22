@@ -1,9 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtData } from '../helpers/ExtData';
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Workspace } from '../helpers/Workspace';
-import { GasPrice } from '@cosmjs/stargate';
 import { Cosmwasm } from '../helpers/CosmwasmAPI';
 import { ResponseHandler } from '../helpers/ResponseHandler';
 

@@ -1,0 +1,56 @@
+{
+	"Admin check": {
+		"prefix": "admin",
+		"body": [
+			"let admin = ADMIN.load(deps.storage)?;",
+			"if Some(sender) != admin {",
+            "   return Err(ContractError::Unauthorized {});",
+            "}",
+            "// ... insert logic here ..."
+		],
+		"description": "Checks if the sender is the admin of the Cosmwasm smart contract"
+	},
+    "New Query Function": {
+		"prefix": "query",
+		"body": [
+			"fn query_$1(deps: Deps) -> StdResult<$2Response> {",
+			"   let state = STATE.load(deps.storage)?;",
+            "   // ... insert logic here ...",
+            "   Ok($2Response { })",
+            "}"
+		],
+		"description": "Creates a new empty function for a Cosmwasm smart contract query"
+	},
+    "New Msg Function": {
+        "prefix": "msg",
+        "body": [
+            "pub fn try_$1(deps: DepsMut, info: MessageInfo) -> Result<Response, ContractError> {",
+            "   STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {",
+            "       if info.sender != state.owner {",
+            "           return Err(ContractError::Unauthorized {});",
+            "       }",
+            "       // ... insert logic here ...",
+            "       Ok(state)",
+            "   })?;",
+            "   Ok(Response::new().add_attribute(\"method\", \"try_$1\"))",
+            "}"
+        ],
+        "description": "Creates a new empty function for a Cosmwasm smart contract msg"
+    },
+    "New Tx Function": {
+        "prefix": "tx",
+        "body": [
+            "pub fn try_$1(deps: DepsMut, info: MessageInfo) -> Result<Response, ContractError> {",
+            "   STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {",
+            "       if info.sender != state.owner {",
+            "           return Err(ContractError::Unauthorized {});",
+            "       }",
+            "       // ... insert logic here ...",
+            "       Ok(state)",
+            "   })?;",
+            "   Ok(Response::new().add_attribute(\"method\", \"try_$1\"))",
+            "}"
+        ],
+        "description": "Creates a new empty function for a Cosmwasm smart contract msg"
+    }
+}

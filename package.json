@@ -295,6 +295,12 @@
         }
       ]
     },
+    "snippets": [
+      {
+        "language": "rust",
+        "path": "./snippets.json"
+      }
+    ],
     "views": {
       "cosmy-wasmy": [
         {

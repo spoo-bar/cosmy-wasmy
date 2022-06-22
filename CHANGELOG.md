@@ -24,7 +24,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 - Implemented [#3](https://github.com/spoo-bar/cosmy-wasmy/issues/3) & [#4](https://github.com/spoo-bar/cosmy-wasmy/issues/4) - The smart contracts in the Contract view can now be sorted alphabetically, or with CodeID, or in imported order
 - Added Migrate view to migrate smart contracts
-- Added Initialize view initialize smart contracts
+- Added Initialize view to initialize smart contracts
 - Added commands for the following (with keybindings):
     - __cosmy-wasmy.setupDevEnv__ - Setup dev environment and install all dependencies
     - __cosmy-wasmy.build__ - Build the project - `ctrl+shift+b`
@@ -34,6 +34,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
     - __cosmy-wasmy.upload__ - Upload wasm file to chain - `ctrl+shift+u`
 - Added placeholder text for all the webviews (query, execute, sign)
 - Implemented [#7](https://github.com/spoo-bar/cosmy-wasmy/issues/7) - Added setting so user can choose to output the tx and query responses to the output channel or to new file
+- Added snippets to easily add new query and msg functions, and to check if the sender is the smart contract admin.
 
 ### Changed
 
