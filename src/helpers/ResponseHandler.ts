@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { CosmwasmTerminal } from '../views/CosmwasmTerminal';
 import { CosmwasmResponseView, Workspace } from './Workspace';
 
 export class ResponseHandler {
@@ -42,6 +43,6 @@ export class ResponseHandler {
     }
 
     private static outputToTerminal(outputText: string) {
-
+        CosmwasmTerminal.output("\n\n"+ outputText);
     }
 }

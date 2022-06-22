@@ -49,7 +49,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
 
-	let terminal = new CosmwasmTerminal(context);
+	let terminal = new CosmwasmTerminal();
 	registerCommands();
 
 	function loadChainConfig() {

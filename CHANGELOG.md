@@ -33,12 +33,14 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
     - __cosmy-wasmy.generateSchema__ - Generate json-schema using the rust schema files - `ctrl+shift+g`
     - __cosmy-wasmy.upload__ - Upload wasm file to chain - `ctrl+shift+u`
 - Added placeholder text for all the webviews (query, execute, sign)
+- Implemented [#7](https://github.com/spoo-bar/cosmy-wasmy/issues/7) - Added setting so user can choose to output the tx and query responses to the output channel or to new file
 
 ### Changed
 
 - Implemented [#2](https://github.com/spoo-bar/cosmy-wasmy/issues/2) - Show faucet icon for account only when faucet has been set up for that chain in the settings
 - Improved extension startup time by using delayed API calls - could still be refactored more
 - Extension used to be activated when the extension view was opened. Now it also gets activated when the language id is rust. (So that project can be built and contracts uploaded without having to activate extension by opening side view) 
+- Changed default query/tx response view. Used to open in a new file by default. Now the default setting is to send it to output channel.
 
 ### Fixed
 

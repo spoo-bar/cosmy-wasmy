@@ -217,9 +217,9 @@
           "cosmywasmy.cosmwasmResponseView": {
             "type": "string",
             "enum": ["NewFile", "Terminal"],
-            "enumDescriptions": ["Open a new dummy doc with response", "A seperate terminal by Cosmy Wasmy"],
+            "enumDescriptions": ["Open a new dummy doc with response", "A seperate output channel by Cosmy Wasmy in the Output view"],
             "order": 3,
-            "default": "NewFile",
+            "default": "Terminal",
             "description": "Controls where the smart contract interactions should be displayed",
             "scope": "resource"
           }

@@ -49,7 +49,7 @@ export class Workspace {
     }
 
     public static GetCosmwasmResponseView(): CosmwasmResponseView {
-        const config = vscode.workspace.getConfiguration().get<CosmwasmResponseView>(Constants.CONFIGURATION_COSMWASM_RESPONSE_VIEW, CosmwasmResponseView.NewFile);
+        const config = vscode.workspace.getConfiguration().get<CosmwasmResponseView>(Constants.CONFIGURATION_COSMWASM_RESPONSE_VIEW, CosmwasmResponseView.Terminal);
         return config;
     }
 
