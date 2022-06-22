@@ -226,6 +226,28 @@
         }
       }
     ],
+    "keybindings":[
+      {
+        "command": "cosmy-wasmy.build",
+        "key": "ctrl+shift+b"
+      },
+      {
+        "command": "cosmy-wasmy.runUnitTests",
+        "key": "ctrl+shift+t"
+      },
+      {
+        "command": "cosmy-wasmy.optimizeContract",
+        "key": "ctrl+shift+o"
+      },
+      {
+        "command": "cosmy-wasmy.generateSchema",
+        "key": "ctrl+shift+g"
+      },
+      {
+        "command": "cosmy-wasmy.upload",
+        "key": "ctrl+shift+u"
+      }
+    ],
     "menus": {
       "explorer/context": [
         {
