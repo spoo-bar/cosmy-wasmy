@@ -27,22 +27,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	chainSelected.command = "cosmy-wasmy.reloadConfig";
 	refreshExtensionContext();
 
-	try {
-		loadChainConfig();
-		await Cosmwasm.CreateClientAsync();
-
-	}
-	catch (error: any) {
-		vscode.window.showErrorMessage(error.message);
-		return;
-	}
-
-	const accounts = await Account.GetAccounts(context.globalState)
-	const accountViewProvider = new AccountDataProvider(accounts);
+	const accountViewProvider = new AccountDataProvider();
 	vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, accountViewProvider);
 
-	const contracts = Contract.GetContracts(context.globalState);
-	const contractViewProvider = new ContractDataProvider(contracts);
+	const contractViewProvider = new ContractDataProvider();
 	vscode.window.registerTreeDataProvider(Constants.VIEWS_CONTRACT, contractViewProvider);
 
 	const signingViewProvider = new SignProvider(context.extensionUri);
@@ -59,6 +47,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	
 	const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
+
 
 	let terminal = new CosmwasmTerminal(context);
 	registerCommands();
@@ -408,6 +397,18 @@ export async function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposable);
 	}
 
+	try {
+		loadChainConfig();
+		await Cosmwasm.CreateClientAsync();
+
+	}
+	catch (error: any) {
+		vscode.window.showErrorMessage(error.message);
+		return;
+	}
+	
+	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
+	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
 }
 
 // this method is called when your extension is deactivated

@@ -11,8 +11,8 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 	/**
 	 *
 	 */
-	constructor(accounts: Account[]) {
-		this.accounts = accounts;
+	constructor() {
+		this.accounts = [];
 	}
 
 

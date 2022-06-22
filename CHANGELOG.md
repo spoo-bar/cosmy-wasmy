@@ -37,6 +37,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Changed
 
 - Implemented [#2](https://github.com/spoo-bar/cosmy-wasmy/issues/2) - Show faucet icon for account only when faucet has been set up for that chain in the settings
+- Improved extension startup time by using delayed API calls - could still be refactored more
 
 ### Fixed
 

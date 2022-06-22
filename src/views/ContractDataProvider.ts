@@ -11,8 +11,8 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 	/**
 	 *
 	 */
-	constructor(contracts: Contract[]) {
-		this.contracts = contracts;
+	constructor() {
+		this.contracts = [];
 	}
 
 	private _onDidChangeTreeData: vscode.EventEmitter<void | Contract | Contract[] | null | undefined> = new vscode.EventEmitter<void | Contract | Contract[] | null | undefined>();
