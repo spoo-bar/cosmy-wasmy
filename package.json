@@ -25,7 +25,8 @@
     "onView:contract",
     "onView:query",
     "onView:execute",
-    "onView:sign"
+    "onView:sign",
+    "onLanguage:rust"
   ],
   "main": "./dist/extension.js",
   "contributes": {
