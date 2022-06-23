@@ -3,7 +3,7 @@
 		"prefix": "admin",
 		"body": [
 			"let admin = ADMIN.load(deps.storage)?;",
-			"if Some(sender) != admin {",
+			"if Some(info.sender) != admin {",
             "   return Err(ContractError::Unauthorized {});",
             "}",
             "// ... insert logic here ..."
