@@ -18,6 +18,24 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- Snippet to add tests
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+- `msg` snippet to create func for a msg . Can still use `tx` for same purpose
+
+### Fixed
+
+### Security 
+
 ## [v0.3.0] - 23 June 2022
 
 ### Added
