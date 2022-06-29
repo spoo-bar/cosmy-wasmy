@@ -23,6 +23,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Added
 
 - Snippet to add tests
+- Added command `cosmy-wasmy.history` - When enabled, the latest `cosmywasmy.maxQueryStored` number of queries are stored and are accessible in history view for easy re-execution. History opens in a new webview as a tab.
 
 ### Changed
 

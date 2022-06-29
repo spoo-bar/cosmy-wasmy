@@ -123,6 +123,10 @@
       {
         "command": "cosmy-wasmy.upload",
         "title": "Cosmy Wasmy: Upload contract"
+      },
+      {
+        "command": "cosmy-wasmy.history",
+        "title": "Cosmy Wasmy: Show Cosmwasm History"
       }
     ],
     "configuration": [
@@ -221,6 +225,13 @@
             "order": 3,
             "default": "Terminal",
             "description": "Controls where the smart contract interactions should be displayed",
+            "scope": "resource"
+          },
+          "cosmywasmy.maxQueryStored": {
+            "type": "number",
+            "markdownDescription": "Controls the number of queries kept in history for easy re-execution. Stores quries, tx, migrate, initialize. If set to `0` the feature is disabled and nothing is stored",
+            "order": 4,
+            "default": 20,
             "scope": "resource"
           }
         }

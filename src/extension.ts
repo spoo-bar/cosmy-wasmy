@@ -17,6 +17,7 @@ import { Constants } from './constants';
 import { MigrateViewProvider } from './views/MigrateViewProvider';
 import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 import { InitializeViewProvider } from './views/InitializeViewProvider';
+import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -44,7 +45,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const migrateViewProvider = new MigrateViewProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
-	
+
 	const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
@@ -88,6 +89,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerGenerateSchemaCmd();
 		registerSetUpDevEnvCmd();
 		registerUploadContractCmd();
+		registerQueryHistoryCmd();
 	}
 
 	function registerAddAccountCmd() {
@@ -141,7 +143,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerRequestFundsCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.requestFunds', async (item: Account) => {
 			if (item.address) {
-				if(Workspace.GetWorkspaceChainConfig().faucetEndpoint) {
+				if (Workspace.GetWorkspaceChainConfig().faucetEndpoint) {
 					vscode.window.withProgress({
 						location: {
 							viewId: Constants.VIEWS_ACCOUNT
@@ -159,12 +161,12 @@ export async function activate(context: vscode.ExtensionContext) {
 								accountViewProvider.refresh(accounts);
 								resolve(undefined);
 							}
-							catch(err: any) {
+							catch (err: any) {
 								vscode.window.showErrorMessage("Woopsie! Could not add funds 😿 - " + err);
 								reject(err);
 							}
 						});
-					});	
+					});
 				}
 				else {
 					vscode.window.showErrorMessage("Faucet endpoint has not been set in the chain config settings");
@@ -372,7 +374,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	function registerUploadContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.upload', (item: vscode.Uri) => {
-			if(item) {
+			if (item) {
 				Contract.Upload(item)
 			}
 			else {
@@ -386,7 +388,7 @@ export async function activate(context: vscode.ExtensionContext) {
 						'Cosmwasm Contract': ['wasm']
 					}
 				}).then(doc => {
-					if(doc && doc.length > 0) {
+					if (doc && doc.length > 0) {
 						const wasmFile = doc[0];
 						Contract.Upload(wasmFile);
 					}
@@ -394,6 +396,24 @@ export async function activate(context: vscode.ExtensionContext) {
 			}
 		});
 
+		context.subscriptions.push(disposable);
+	}
+
+	function registerQueryHistoryCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.history', () => {
+			if (Workspace.GetCosmwasmQueriesStored() == 0) {
+				vscode.window.showErrorMessage("Feature disabled: Cosmwasm Query History. In the settings, set `" + Constants.CONFIGURATION_QUERY_HISTORY + "` to a non-zero value.")
+			}
+			else {
+				const panel = vscode.window.createWebviewPanel(
+					'history', // Identifies the type of the webview. Used internally
+					'Cosmwasm History', // Title of the panel displayed to the user
+					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
+					{} // Webview options. More on these later.
+				);
+				panel.webview.html = CosmwasmHistoryView.getWebviewContent();
+			}
+		});
 		context.subscriptions.push(disposable);
 	}
 
@@ -406,7 +426,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.window.showErrorMessage(error.message);
 		return;
 	}
-	
+
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
 	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
 }

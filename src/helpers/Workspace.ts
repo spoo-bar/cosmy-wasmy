@@ -53,6 +53,11 @@ export class Workspace {
         return config;
     }
 
+    public static GetCosmwasmQueriesStored(): number {
+        const config = vscode.workspace.getConfiguration().get<number>(Constants.CONFIGURATION_QUERY_HISTORY, 0);
+        return config;
+    }
+
     private static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
