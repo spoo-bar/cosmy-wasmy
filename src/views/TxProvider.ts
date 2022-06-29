@@ -4,13 +4,15 @@ import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
 import { ResponseHandler } from '../helpers/ResponseHandler';
-import { Cosmwasm, CosmwasmAPI } from '../helpers/CosmwasmAPI';
+import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { HistoryHandler } from '../helpers/HistoryHandler';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
+		private readonly context: vscode.Memento,
 	) { }
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
@@ -24,57 +26,58 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						executeTx(data);
+						const account = Workspace.GetSelectedAccount();
+						if (!account) {
+							vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+							return;
+						}
+						const contract = Workspace.GetSelectedContract();
+						if (!contract) {
+							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+							return;
+						}
+						try {
+							JSON.parse(data.value);
+						} catch {
+							vscode.window.showErrorMessage("The input is not valid JSON");
+							return;
+						}
+						this.executeTx(data, contract, account);
 						break;
 					}
 			}
 		});
+	}
 
-		function executeTx(data: any) {
-			const account = Workspace.GetSelectedAccount();
-			if (!account) {
-				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
-				return;
-			}
-			const contract = Workspace.GetSelectedContract();
-			if (!contract) {
-				vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
-				return;
-			}
-			try {
-				JSON.parse(data.value);
-			} catch {
-				vscode.window.showErrorMessage("The input is not valid JSON");
-				return;
-			}
-			const req = JSON.parse(data.value);
+	private executeTx(data: any, contract: Contract, account: Account) {
+		const req = JSON.parse(data.value);
 
-			vscode.window.withProgress({
-				location: { viewId: Constants.VIEWS_EXECUTE },
-				title: "Executing msg on the contract - " + contract.label,
-				cancellable: false
-			}, (progress, token) => {
-				token.onCancellationRequested(() => { });
-				progress.report({ message: '' });
-				return new Promise(async (resolve, reject) => {
+		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_EXECUTE, data.value);
+		vscode.window.withProgress({
+			location: { viewId: Constants.VIEWS_EXECUTE },
+			title: "Executing msg on the contract - " + contract.label,
+			cancellable: false
+		}, (progress, token) => {
+			token.onCancellationRequested(() => { });
+			progress.report({ message: '' });
+			return new Promise(async (resolve, reject) => {
 
-					try {
-						let response = await executeContractMsg(account, contract, req);
-						ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx")
-						resolve(undefined);
-					}
-					catch (err: any) {
-						ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx")
-						reject(undefined);
-					}
-				})
+				try {
+					let response = await this.executeContractMsg(account, contract, req);
+					ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
+					resolve(undefined);
+				}
+				catch (err: any) {
+					ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+					reject(undefined);
+				}
 			});
-		}
+		});
+	}
 
-		async function executeContractMsg(account: Account, contract: Contract, req: any) {
-			let client = await Cosmwasm.GetSigningClient();
-			return await client.execute(account.address, contract.contractAddress, req, "auto");
-		}
+	private async executeContractMsg(account: Account, contract: Contract, req: any) {
+		let client = await Cosmwasm.GetSigningClient();
+		return await client.execute(account.address, contract.contractAddress, req, "auto");
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {

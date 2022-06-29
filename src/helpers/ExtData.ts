@@ -2,10 +2,12 @@ import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
+import { History } from './HistoryHandler';
 
 export class ExtData {
 	accounts: Account[];
 	contracts: Contract[];
+	history: History[];
 
 	/**
 	 *
@@ -13,6 +15,7 @@ export class ExtData {
 	constructor() {
 		this.accounts = [];
 		this.contracts = [];
+		this.history = [];
 	}
 
 	public static GetExtensionData(context: vscode.Memento): ExtData {
@@ -32,6 +35,12 @@ export class ExtData {
 	public static SaveContracts(context: vscode.Memento, contracts: Contract[]) {
 		let data = this.GetExtensionData(context);
 		data.contracts = contracts;
+		this.SaveExtensionData(context, data);
+	}
+
+	public static SaveHistory(context: vscode.Memento, history: History[]) {
+		let data = this.GetExtensionData(context);
+		data.history = history;
 		this.SaveExtensionData(context, data);
 	}
 

@@ -23,68 +23,67 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
             switch (data.type) {
                 case 'exec-text':
                     {
-                        executeMigrate(data);
+                        const account = Workspace.GetSelectedAccount();
+                        if (!account) {
+                            vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+                            return;
+                        }
+                        if (!data.value.codeid) {
+                            vscode.window.showErrorMessage("CodeId is not specified");
+                            return;
+                        }
+                        if (!data.value.label) {
+                            vscode.window.showErrorMessage("No label provided for the contract");
+                            return;
+                        }
+                        try {
+                            JSON.parse(data.value.input);
+                        } catch {
+                            vscode.window.showErrorMessage("The input is not valid JSON");
+                            return;
+                        }
+                        this.executeInitiate(data, account);
                         break;
                     }
             }
-        });
+        });        
+    }
 
-        function executeMigrate(data: any) {
-            const account = Workspace.GetSelectedAccount();
-            if (!account) {
-                vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
-                return;
-            }
-            if (!data.value.codeid) {
-                vscode.window.showErrorMessage("CodeId is not specified");
-                return;
-            }
-            if (!data.value.label) {
-                vscode.window.showErrorMessage("No label provided for the contract");
-                return;
-            }
-            try {
-                JSON.parse(data.value.input);
-            } catch {
-                vscode.window.showErrorMessage("The input is not valid JSON");
-                return;
-            }
-            const req = JSON.parse(data.value.input);
+    private executeInitiate(data: any, account: Account) {
+        const req = JSON.parse(data.value.input);
+        vscode.window.withProgress({
+            location: { viewId: Constants.VIEWS_INITIALIZE },
+            title: "Initializing the contract",
+            cancellable: false
+        }, (progress, token) => {
+            token.onCancellationRequested(() => { });
+            progress.report({ message: '' });
+            return new Promise(async (resolve, reject) => {
 
-            vscode.window.withProgress({
-                location: { viewId: Constants.VIEWS_INITIALIZE },
-                title: "Initializing the contract",
-                cancellable: false
-            }, (progress, token) => {
-                token.onCancellationRequested(() => { });
-                progress.report({ message: '' });
-                return new Promise(async (resolve, reject) => {
-                    
-                    let codeId = data.value.codeid;
-                    let label = data.value.label;
+                let codeId = data.value.codeid;
+                let label = data.value.label;
 
-                    try {
-                        let res = await instantiateContract(account, codeId, req, label);
-                        ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
-                        resolve(undefined);
+                try {
+                    let res = await this.instantiateContract(account, codeId, req, label);
+                    ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
+                    resolve(undefined);
 
-                    }
-                    catch (err: any) {
-                        ResponseHandler.OutputError(JSON.stringify(data.value, null, 4), err, "Initialize");
-                        reject(undefined);
-                    }
-                })
+                }
+                catch (err: any) {
+                    ResponseHandler.OutputError(JSON.stringify(data.value, null, 4), err, "Initialize");
+                    reject(undefined);
+                }
             });
-        }
+        });
+    }
 
-        async function instantiateContract(account: Account, codeId: any, req: any, label: any) {
+    private async instantiateContract(account: Account, codeId: any, req: any, label: any) {
             let client = await Cosmwasm.GetSigningClient();
             let res = await client.instantiate(account.address, codeId, req, label, "auto", {
                 admin: account.address,
             });
             return res;
         }
-    }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
 

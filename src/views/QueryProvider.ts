@@ -3,6 +3,8 @@ import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Cosmwasm } from '../helpers/CosmwasmAPI';
 import { ResponseHandler } from '../helpers/ResponseHandler';
+import { HistoryHandler } from '../helpers/HistoryHandler';
+import { Contract } from '../models/Contract';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
@@ -13,6 +15,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
+		private readonly context: vscode.Memento
 	) { }
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
@@ -40,29 +43,33 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 							vscode.window.showErrorMessage("The input is not valid JSON");
 							return;
 						}
-						const query = JSON.parse(data.value);
-
-						vscode.window.withProgress({
-							location: { viewId: Constants.VIEWS_QUERY },
-							title: "Querying the contract - " + contract.label,
-							cancellable: false
-						}, (progress, token) => {
-							token.onCancellationRequested(() => { });
-							progress.report({ message: '' });
-							return new Promise(async (resolve, reject) => {
-								try {
-									let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
-									ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
-									resolve(undefined);
-								}
-								catch (err: any) {
-									ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
-									reject(undefined);
-								}
-							});
-						});
+						this.execQuery(data, contract);
 					}
 			}
+		});
+	}
+
+	private execQuery(data: any, contract: Contract) {
+		const query = JSON.parse(data.value);
+		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_QUERY, data.value);
+		vscode.window.withProgress({
+			location: { viewId: Constants.VIEWS_QUERY },
+			title: "Querying the contract - " + contract.label,
+			cancellable: false
+		}, (progress, token) => {
+			token.onCancellationRequested(() => { });
+			progress.report({ message: '' });
+			return new Promise(async (resolve, reject) => {
+				try {
+					let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
+					ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
+					resolve(undefined);
+				}
+				catch (err: any) {
+					ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
+					reject(undefined);
+				}
+			});
 		});
 	}
 

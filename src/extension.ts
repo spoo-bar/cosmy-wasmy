@@ -37,13 +37,13 @@ export async function activate(context: vscode.ExtensionContext) {
 	const signingViewProvider = new SignProvider(context.extensionUri);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_SIGN, signingViewProvider));
 
-	const queryViewProvider = new QueryProvider(context.extensionUri);
+	const queryViewProvider = new QueryProvider(context.extensionUri, context.globalState);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_QUERY, queryViewProvider));
 
-	const txViewProvider = new TxProvider(context.extensionUri);
+	const txViewProvider = new TxProvider(context.extensionUri, context.globalState);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_EXECUTE, txViewProvider));
 
-	const migrateViewProvider = new MigrateViewProvider(context.extensionUri);
+	const migrateViewProvider = new MigrateViewProvider(context.extensionUri, context.globalState);
 	context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
 
 	const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
@@ -411,7 +411,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
 					{} // Webview options. More on these later.
 				);
-				panel.webview.html = CosmwasmHistoryView.getWebviewContent();
+				CosmwasmHistoryView.getWebviewContent(context.extensionUri, panel.webview);
 			}
 		});
 		context.subscriptions.push(disposable);

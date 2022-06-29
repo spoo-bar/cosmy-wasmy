@@ -3,12 +3,16 @@ import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { ResponseHandler } from '../helpers/ResponseHandler';
 import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { Account } from '../models/Account';
+import { Contract } from '../models/Contract';
+import { HistoryHandler } from '../helpers/HistoryHandler';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
+		private readonly context: vscode.Memento,
 	) { }
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
@@ -22,50 +26,51 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						executeMigrate(data);
+						const account = Workspace.GetSelectedAccount();
+						if (!account) {
+							vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+						}
+						const contract = Workspace.GetSelectedContract();
+						if (!contract) {
+							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+						}
+						try {
+							JSON.parse(data.value);
+						} catch {
+							vscode.window.showErrorMessage("The input is not valid JSON");
+							return;
+						}
+						this.executeMigrate(data, contract, account);
 						break;
 					}
 			}
 		});
+	}
 
-		function executeMigrate(data: any) {
-			const account = Workspace.GetSelectedAccount();
-			if (!account) {
-				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
-			}
-			const contract = Workspace.GetSelectedContract();
-			if (!contract) {
-				vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
-			}
-			try {
-				JSON.parse(data.value);
-			} catch {
-				vscode.window.showErrorMessage("The input is not valid JSON");
-				return;
-			}
-			const req = JSON.parse(data.value);
+	private executeMigrate(data: any, contract: Contract, account: Account) {
+		const req = JSON.parse(data.value);
 
-			vscode.window.withProgress({
-				location: { viewId: Constants.VIEWS_MIGRATE },
-				title: "Migrating the contract - " + contract.label,
-				cancellable: false
-			}, (progress, token) => {
-				token.onCancellationRequested(() => { });
-				progress.report({ message: '' });
-				return new Promise(async (resolve, reject) => {
-					try {
-						let client = await Cosmwasm.GetSigningClient();
-						let res = await client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto");
-						ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(res, null, 4), "Migrate");
-						resolve(undefined);
-					}
-					catch (err: any) {
-						ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Migrate");
-						reject(undefined);
-					}
-				})
+		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_MIGRATE, data.value);
+		vscode.window.withProgress({
+			location: { viewId: Constants.VIEWS_MIGRATE },
+			title: "Migrating the contract - " + contract.label,
+			cancellable: false
+		}, (progress, token) => {
+			token.onCancellationRequested(() => { });
+			progress.report({ message: '' });
+			return new Promise(async (resolve, reject) => {
+				try {
+					let client = await Cosmwasm.GetSigningClient();
+					let res = await client.migrate(account.address, contract.contractAddress, contract.codeId, req, "auto");
+					ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(res, null, 4), "Migrate");
+					resolve(undefined);
+				}
+				catch (err: any) {
+					ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Migrate");
+					reject(undefined);
+				}
 			});
-		}
+		});
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
