@@ -48,7 +48,7 @@ export class History {
     }
 }
 
-enum Action {
+export enum Action {
     Query,
     Tx,
     Migrate,

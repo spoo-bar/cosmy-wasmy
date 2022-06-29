@@ -18,6 +18,7 @@ import { MigrateViewProvider } from './views/MigrateViewProvider';
 import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 import { InitializeViewProvider } from './views/InitializeViewProvider';
 import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
+import { HistoryHandler } from './helpers/HistoryHandler';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -411,7 +412,9 @@ export async function activate(context: vscode.ExtensionContext) {
 					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
 					{} // Webview options. More on these later.
 				);
-				CosmwasmHistoryView.getWebviewContent(context.extensionUri, panel.webview);
+				let history = HistoryHandler.GetHistory(context.globalState);
+				const contracts = Contract.GetContracts(context.globalState);
+				CosmwasmHistoryView.getWebviewContent(context.extensionUri, panel.webview, history, contracts);
 			}
 		});
 		context.subscriptions.push(disposable);

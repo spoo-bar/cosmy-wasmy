@@ -1,101 +1,133 @@
-  
-:root {
-	--container-paddding: 20px;
-	--input-padding-vertical: 6px;
-	--input-padding-horizontal: 4px;
-	--input-margin-vertical: 4px;
-	--input-margin-horizontal: 0;
-}
+  :root {
+  	--container-paddding: 20px;
+  	--input-padding-vertical: 6px;
+  	--input-padding-horizontal: 4px;
+  	--input-margin-vertical: 4px;
+  	--input-margin-horizontal: 0;
+  }
 
-body {
-	padding: 0 var(--container-paddding);
-	color: var(--vscode-foreground);
-	font-size: var(--vscode-font-size);
-	font-weight: var(--vscode-font-weight);
-	font-family: var(--vscode-font-family);
-	background-color: var(--vscode-editor-background);
-}
+  body {
+  	padding: 0 var(--container-paddding);
+  	color: var(--vscode-foreground);
+  	font-size: var(--vscode-font-size);
+  	font-weight: var(--vscode-font-weight);
+  	font-family: var(--vscode-font-family);
+  	background-color: var(--vscode-editor-background);
+  }
 
-ol,
-ul {
-	padding-left: var(--container-paddding);
-}
+  ol,
+  ul {
+  	padding-left: var(--container-paddding);
+  }
 
-body > *,
-form > * {
-	margin-block-start: var(--input-margin-vertical);
-	margin-block-end: var(--input-margin-vertical);
-}
+  body>*,
+  form>* {
+  	margin-block-start: var(--input-margin-vertical);
+  	margin-block-end: var(--input-margin-vertical);
+  }
 
-*:focus {
-	outline-color: var(--vscode-focusBorder) !important;
-}
+  *:focus {
+  	outline-color: var(--vscode-focusBorder) !important;
+  }
 
-a {
-	color: var(--vscode-textLink-foreground);
-}
+  a {
+  	color: var(--vscode-textLink-foreground);
+  }
 
-a:hover,
-a:active {
-	color: var(--vscode-textLink-activeForeground);
-}
+  a:hover,
+  a:active {
+  	color: var(--vscode-textLink-activeForeground);
+  }
 
-code {
-	font-size: var(--vscode-editor-font-size);
-	font-family: var(--vscode-editor-font-family);
-}
+  code {
+  	font-size: var(--vscode-editor-font-size);
+  	font-family: var(--vscode-editor-font-family);
+  }
 
-button {
-	border: none;
-	padding: var(--input-padding-vertical) var(--input-padding-horizontal);
-	width: 100%;
-	text-align: center;
-	color: var(--vscode-button-foreground);
-	background: var(--vscode-button-background);;
-}
+  button {
+  	border: none;
+  	padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  	width: 100%;
+  	text-align: center;
+  	color: var(--vscode-button-foreground);
+  	background: var(--vscode-button-background);
+  	;
+  }
 
-button:hover {
-	cursor: pointer;
-	background: var(--vscode-button-hoverBackground);
-	border-color: var(--vscode-button-border);
-	border-width: 1px; 
-	border-style: solid;
-}
+  button:hover {
+  	cursor: pointer;
+  	background: var(--vscode-button-hoverBackground);
+  	border-color: var(--vscode-button-border);
+  	border-width: 1px;
+  	border-style: solid;
+  }
 
-button:focus {
-	outline-color: var(--vscode-focusBorder);
-}
+  button:focus {
+  	outline-color: var(--vscode-focusBorder);
+  }
 
-button.secondary {
-	color: var(--vscode-button-secondaryForeground);
-	background: var(--vscode-button-secondaryBackground);
-}
+  button.secondary {
+  	color: var(--vscode-button-secondaryForeground);
+  	background: var(--vscode-button-secondaryBackground);
+  }
 
-button.secondary:hover {
-	background: var(--vscode-button-secondaryHoverBackground);
-}
+  button.secondary:hover {
+  	background: var(--vscode-button-secondaryHoverBackground);
+  }
 
-input:not([type='checkbox']),
-textarea {
-	display: block;
-	width: 100%;
-	border: none;
-	font-family: var(--vscode-font-family);
-	padding: var(--input-padding-vertical) var(--input-padding-horizontal);
-	color: var(--vscode-input-foreground);
-	outline-color: var(--vscode-input-border);
-	background-color: var(--vscode-input-background);
-}
+  button.tertiary {
+  	background: transparent;
+  }
 
-input:hover,
-textarea:hover {
-	border-color: var(--vscode-inputOption-activeBorder);
-	border-width: 1px;
-	border-style: solid;
-}
+  button.tertiary:hover {
+  	background: var(--vscode-button-hoverBackground);
+  	border: none;
+  }
 
-input::placeholder,
-textarea::placeholder {
-	color: var(--vscode-input-placeholderForeground);
-	opacity: 0.5;
-}
+
+  input:not([type='checkbox']),
+  textarea {
+  	display: block;
+  	width: 100%;
+  	border: none;
+  	font-family: var(--vscode-font-family);
+  	padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  	color: var(--vscode-input-foreground);
+  	outline-color: var(--vscode-input-border);
+  	background-color: var(--vscode-input-background);
+  }
+
+  input:hover,
+  textarea:hover {
+  	border-color: var(--vscode-inputOption-activeBorder);
+  	border-width: 1px;
+  	border-style: solid;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+  	color: var(--vscode-input-placeholderForeground);
+  	opacity: 0.5;
+  }
+
+  table,
+  th,
+  td {
+  	color: var(--vscode-editor-foreground);
+  }
+
+
+  tr:hover {
+  	background-color: var(--vscode-list-hoverBackground);
+  	color: var(--vscode-list-hoverForeground);
+  }
+
+
+
+  td.line-num {
+  	color: var(--vscode-editorLineNumber-foreground);
+  }
+
+  span.error {
+  	color: var(--vscode-list-invalidItemForeground);
+  }

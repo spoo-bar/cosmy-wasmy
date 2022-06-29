@@ -2,3 +2,29 @@ body {
 	background-color: transparent;
 }
 
+table {
+	width: 100%;
+}
+
+table,
+th,
+td {
+	border: 1px solid;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+td {
+	text-align: center;
+}
+
+th,
+td {
+	padding: 10px;
+	text-align: left;
+}
+
+/*   
+  tr:nth-child(even) {background-color: #f2f2f2;} */
