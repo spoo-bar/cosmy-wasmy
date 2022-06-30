@@ -49,8 +49,6 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 
 	private executeMigrate(data: any, contract: Contract, account: Account) {
 		const req = JSON.parse(data.value);
-
-		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_MIGRATE, data.value);
 		vscode.window.withProgress({
 			location: { viewId: Constants.VIEWS_MIGRATE },
 			title: "Migrating the contract - " + contract.label,

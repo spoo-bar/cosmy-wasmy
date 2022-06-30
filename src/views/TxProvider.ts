@@ -3,7 +3,6 @@ import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
-import { ResponseHandler } from '../helpers/ResponseHandler';
 import { Cosmwasm } from '../helpers/CosmwasmAPI';
 import { HistoryHandler } from '../helpers/HistoryHandler';
 
@@ -61,23 +60,9 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			token.onCancellationRequested(() => { });
 			progress.report({ message: '' });
 			return new Promise(async (resolve, reject) => {
-
-				try {
-					let response = await this.executeContractMsg(account, contract, req);
-					ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
-					resolve(undefined);
-				}
-				catch (err: any) {
-					ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
-					reject(undefined);
-				}
+				await Cosmwasm.Execute(account, contract, req, resolve, reject);
 			});
 		});
-	}
-
-	private async executeContractMsg(account: Account, contract: Contract, req: any) {
-		let client = await Cosmwasm.GetSigningClient();
-		return await client.execute(account.address, contract.contractAddress, req, "auto");
 	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {

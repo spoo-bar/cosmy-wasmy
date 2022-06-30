@@ -410,11 +410,12 @@ export async function activate(context: vscode.ExtensionContext) {
 					'history', // Identifies the type of the webview. Used internally
 					'Cosmwasm History', // Title of the panel displayed to the user
 					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
-					{} // Webview options. More on these later.
+					{
+						enableScripts: true
+					} // Webview options. More on these later.
 				);
-				let history = HistoryHandler.GetHistory(context.globalState);
-				const contracts = Contract.GetContracts(context.globalState);
-				CosmwasmHistoryView.getWebviewContent(context.extensionUri, panel.webview, history, contracts);
+				let view = new CosmwasmHistoryView(context.globalState);
+				view.getWebviewContent(context.extensionUri, panel.webview);
 			}
 		});
 		context.subscriptions.push(disposable);

@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Cosmwasm } from '../helpers/CosmwasmAPI';
-import { ResponseHandler } from '../helpers/ResponseHandler';
 import { HistoryHandler } from '../helpers/HistoryHandler';
 import { Contract } from '../models/Contract';
 
@@ -60,15 +59,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			token.onCancellationRequested(() => { });
 			progress.report({ message: '' });
 			return new Promise(async (resolve, reject) => {
-				try {
-					let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
-					ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
-					resolve(undefined);
-				}
-				catch (err: any) {
-					ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
-					reject(undefined);
-				}
+				await Cosmwasm.Query(contract, query, resolve, reject);
 			});
 		});
 	}

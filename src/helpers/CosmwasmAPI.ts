@@ -5,6 +5,8 @@ import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../models/Contract';
 import { Workspace } from "./Workspace";
+import { ResponseHandler } from "./ResponseHandler";
+import { Account } from "../models/Account";
 
 
 export class CosmwasmAPI {
@@ -62,4 +64,29 @@ export class Cosmwasm {
         });
         return client;
     }
+
+    public static async Query(contract: Contract, query: any, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+		try {
+			let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
+			ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
+			resolve(undefined);
+		}
+		catch (err: any) {
+			ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
+			reject(undefined);
+		}
+	}
+
+    public static async Execute(account: Account, contract: Contract, req: any, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+		try {
+            let client = await Cosmwasm.GetSigningClient();
+			let response = await client.execute(account.address, contract.contractAddress, req, "auto");
+			ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
+			resolve(undefined);
+		}
+		catch (err: any) {
+			ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+			reject(undefined);
+		}
+	}
 }
