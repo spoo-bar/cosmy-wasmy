@@ -70,9 +70,9 @@ export enum CosmwasmResponseView {
 }
 
 export enum ContractSortOrder {
-    Alphabetical, 
-    CodeId,
-    None
+    Alphabetical = "Alphabetical", 
+    CodeId = "CodeId",
+    None = "None"
 }
 
 class ChainConfig {
