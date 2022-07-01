@@ -126,7 +126,11 @@
       },
       {
         "command": "cosmy-wasmy.history",
-        "title": "Cosmy Wasmy: Show Cosmwasm History"
+        "title": "Cosmy Wasmy: Show Cosmwasm History",
+        "icon": {
+          "light": "media/icons/light/history.svg",
+          "dark": "media/icons/dark/history.svg"
+        }
       }
     ],
     "configuration": [
@@ -275,6 +279,11 @@
         {
           "command": "cosmy-wasmy.addContract",
           "when": "view == contract",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.history",
+          "when": "view == query || view == execute",
           "group": "navigation"
         }
       ],
