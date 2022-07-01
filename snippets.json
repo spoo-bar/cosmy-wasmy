@@ -42,9 +42,19 @@
         "body": [
             "#[test]",
             "fn test_$1() {",
-            "   // ... insert logic here ...",
+            "   let mut deps = mock_dependencies(&[]);",
+            "   let env = mock_env();",
+            "   let info = mock_info(\"creator\", &coins(2, \"token\"));",
+            "   ",
+            "   // ... arrange ...",
+            "   let msg = $1Msg { };",
+            "   ",
+            "   // ... act ...",
+            "   let res = $1(deps.as_mut(), env, info, msg).unwrap();",
+            "   ",
+            "   // ... assert ...",
             "}"
         ],
-        "description": "Creates a new empty test function"
+        "description": "Creates a new empty test function in the Arrange-Act-Assert format"
     }
 }
