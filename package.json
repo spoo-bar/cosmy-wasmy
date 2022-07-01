@@ -233,9 +233,11 @@
           },
           "cosmywasmy.maxQueryStored": {
             "type": "number",
-            "markdownDescription": "Controls the number of queries kept in history for easy re-execution. Stores quries, tx, migrate, initialize. If set to `0` the feature is disabled and nothing is stored",
+            "markdownDescription": "Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored.",
             "order": 4,
             "default": 20,
+            "minimum": 0,
+            "maximum": 500,
             "scope": "resource"
           }
         }
