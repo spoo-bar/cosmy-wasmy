@@ -56,7 +56,7 @@ All the given keybindings can be customized
 | Upload Contract       | cosmy-wasmy.upload         | ctrl+shift+u | Uploads a wasm file to selected chain with selected account. <br /> Right clicking on a wasm file shows this command in the context menu or command can be invocated using Command Palette/Key Binding and file dialog opens to select a wasm file | 
 | Reload Chain Config   | cosmy-wasmy.reloadConfig   | | This reloads the currently active chain config. Use this when you switch between different networks within same workspace |
 | Reset Data            | cosmy-wasmy.resetData      | | Deletes all the extension stored data, like accounts and contracts. | 
-| Show Cosmwasm History | cosmy-wasmy.history | ctrl+shift+h | Shows latest queries and transactions and with saved inputs. Allows easy re-execution of same queries. The number of saved queries is configurable in the settings. | 
+| Show Cosmwasm History | cosmy-wasmy.history | ctrl+shift+a | Shows latest queries and transactions and with saved inputs. Allows easy re-execution of same queries. The number of saved queries is configurable in the settings. | 
 
 
 ## Features

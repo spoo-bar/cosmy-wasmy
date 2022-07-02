@@ -18,6 +18,15 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+
+## [v0.4.1] - 02 July 2022
+
+
+### Changed
+
+- Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Default key binding for `cosmy-wasmy.history` changed from `ctrl+shift+h` to `ctrl+shift+a`.
+
+
 ## [v0.4.0] - 02 July 2022
 
 ### Added
@@ -34,7 +43,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Custom sorting of the contract view was just straight up not working. Fixed now.
 - Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Initiation of contract was failing with "Input is not an integer" due to codeId not being parsed into number.
 
-### Security 
 
 ## [v0.3.0] - 23 June 2022
 
