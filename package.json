@@ -231,7 +231,7 @@
             "description": "Controls where the smart contract interactions should be displayed",
             "scope": "resource"
           },
-          "cosmywasmy.maxQueryStored": {
+          "cosmywasmy.maxHistoryStored": {
             "type": "number",
             "markdownDescription": "Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored.",
             "order": 4,
@@ -263,6 +263,10 @@
       {
         "command": "cosmy-wasmy.upload",
         "key": "ctrl+shift+u"
+      },
+      {
+        "command": "cosmy-wasmy.history",
+        "key": "ctrl+shift+h"
       }
     ],
     "menus": {

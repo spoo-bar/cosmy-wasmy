@@ -116,7 +116,7 @@ export class CosmwasmHistoryView {
     private getViewContent() {
         let content = "";
         if (Workspace.GetCosmwasmQueriesStored() < 1) {
-            content += `<p>The "cosmywasmy.maxQueryStored" setting is set to zero. Therefore, no query/tx is recorded. Enable that setting to keep history of recorded queries and txs to rerun them easily.</p>`
+            content += `<p>The "cosmywasmy.maxHistoryStored" setting is set to zero. Therefore, no query/tx is recorded. Enable that setting to keep history of recorded queries and txs to rerun them easily.</p>`
         }
         else if (this.history.length < 1) {
             content += "The history seems to be empty. Run some queries and txs to record history."

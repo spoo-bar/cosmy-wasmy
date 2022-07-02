@@ -54,7 +54,7 @@ export class Workspace {
     }
 
     public static GetCosmwasmQueriesStored(): number {
-        const config = vscode.workspace.getConfiguration().get<number>(Constants.CONFIGURATION_QUERY_HISTORY, 0);
+        const config = vscode.workspace.getConfiguration().get<number>(Constants.CONFIGURATION_HISTORY_STORED, 0);
         return config;
     }
 

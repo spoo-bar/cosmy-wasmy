@@ -403,7 +403,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerQueryHistoryCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.history', () => {
 			if (Workspace.GetCosmwasmQueriesStored() == 0) {
-				vscode.window.showErrorMessage("Feature disabled: Cosmwasm Query History. In the settings, set `" + Constants.CONFIGURATION_QUERY_HISTORY + "` to a non-zero value.")
+				vscode.window.showErrorMessage("Feature disabled: Cosmwasm Query History. In the settings, set `" + Constants.CONFIGURATION_HISTORY_STORED + "` to a non-zero value.")
 			}
 			else {
 				const panel = vscode.window.createWebviewPanel(
