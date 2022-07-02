@@ -60,7 +60,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
             progress.report({ message: '' });
             return new Promise(async (resolve, reject) => {
 
-                let codeId = data.value.codeid;
+                let codeId = Number(data.value.codeid);
                 let label = data.value.label;
 
                 try {
@@ -77,7 +77,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
         });
     }
 
-    private async instantiateContract(account: Account, codeId: any, req: any, label: any) {
+    private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any) {
             let client = await Cosmwasm.GetSigningClient();
             let res = await client.instantiate(account.address, codeId, req, label, "auto", {
                 admin: account.address,

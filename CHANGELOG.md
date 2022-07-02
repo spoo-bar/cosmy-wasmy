@@ -18,22 +18,21 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
-## [Unreleased]
+## [v0.4.0] - 03 July 2022
 
 ### Added
 
 - Snippet to add tests.
 - Added command `cosmy-wasmy.history` - When enabled, the latest `cosmywasmy.maxQueryStored` number of queries are stored and are accessible in history view for easy re-execution. History opens in a new webview as a tab. This command also has a menu icon on the query and execute views.
 
-### Changed
-
-### Deprecated
-
 ### Removed
 
 - `msg` snippet to create func for a msg removed. Can still use `tx` for same purpose.
 
 ### Fixed
+
+- Custom sorting of the contract view was just straight up not working. Fixed now.
+- Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Initiate of contract was failing with "Input is not an integer" due to codeId not being parsed into number.
 
 ### Security 
 
