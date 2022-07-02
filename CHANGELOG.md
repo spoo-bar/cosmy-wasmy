@@ -18,7 +18,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
-## [v0.4.0] - 03 July 2022
+## [v0.4.0] - 02 July 2022
 
 ### Added
 
@@ -32,7 +32,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Fixed
 
 - Custom sorting of the contract view was just straight up not working. Fixed now.
-- Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Initiate of contract was failing with "Input is not an integer" due to codeId not being parsed into number.
+- Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Initiation of contract was failing with "Input is not an integer" due to codeId not being parsed into number.
 
 ### Security 
 
