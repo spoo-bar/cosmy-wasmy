@@ -24,7 +24,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Changed
 
-- Fixed [#8](https://github.com/spoo-bar/cosmy-wasmy/issues/8) - Default key binding for `cosmy-wasmy.history` changed from `ctrl+shift+h` to `ctrl+shift+a`.
+- Fixed [#9](https://github.com/spoo-bar/cosmy-wasmy/issues/9) - Default key binding for `cosmy-wasmy.history` changed from `ctrl+shift+h` to `ctrl+shift+a`.
 
 
 ## [v0.4.0] - 02 July 2022
