@@ -431,6 +431,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
+	const rustLangExtension  = vscode.extensions.getExtension('rust-lang.rust-analyzer');
+	if (!rustLangExtension) {
+		vscode.window.showWarningMessage("We recommend to install the 'rust-analyzer' extention while working with Rust on vscode.")
+	}
+
+
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
 	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
 }

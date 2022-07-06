@@ -19,6 +19,13 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 -->
 
 
+## [Unreleased]
+
+### Added
+
+- Shows a warning when `rust-lang.rust-analyzer` extension is not installed
+
+
 ## [v0.4.1] - 02 July 2022
 
 
