@@ -237,41 +237,50 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	function registerAddContractCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', () => {
-			vscode.window.showInputBox({
-				title: "Contract Address",
-				placeHolder: "Cosmwasm contract address"
-			}).then(contractAddr => {
-				if (contractAddr) {
-					if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
-						vscode.window.withProgress({
-							location: vscode.ProgressLocation.Notification,
-							title: "Fetching the details for the contract - " + contractAddr,
-							cancellable: false
-						}, (progress, token) => {
-							token.onCancellationRequested(() => { });
-							progress.report({ message: '' });
-							return new Promise((resolve, reject) => {
-								CosmwasmAPI.GetContract(contractAddr).then(contract => {
-									Contract.AddContract(context.globalState, contract);
-									vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
-									const contracts = Contract.GetContracts(context.globalState);
-									contractViewProvider.refresh(contracts);
-									resolve(contract);
-								}).catch(err => {
-									vscode.window.showErrorMessage("Could not import contract: " + contractAddr + " - " + err);
-									reject(err)
-								})
-							});
-						});
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', (contractAddr: string) => {
+			if(contractAddr) {
+				importContract(contractAddr);
+			} 
+			else {
+				vscode.window.showInputBox({
+					title: "Contract Address",
+					placeHolder: "Cosmwasm contract address"
+				}).then(contractAddrInput => {
+					if (contractAddrInput) {
+						importContract(contractAddrInput);
 					}
-					else {
-						vscode.window.showErrorMessage("Contract has already been imported: " + contractAddr);
-					}
-				}
-			});
+				});
+			}
 		});
 		context.subscriptions.push(disposable);
+
+		function importContract(contractAddr: string) {
+			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
+				vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: "Fetching the details for the contract - " + contractAddr,
+					cancellable: false
+				}, (progress, token) => {
+					token.onCancellationRequested(() => { });
+					progress.report({ message: '' });
+					return new Promise((resolve, reject) => {
+						CosmwasmAPI.GetContract(contractAddr).then(contract => {
+							Contract.AddContract(context.globalState, contract);
+							vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
+							const contracts = Contract.GetContracts(context.globalState);
+							contractViewProvider.refresh(contracts);
+							resolve(contract);
+						}).catch(err => {
+							vscode.window.showErrorMessage("Could not import contract: " + contractAddr + " - " + err);
+							reject(err);
+						});
+					});
+				});
+			}
+			else {
+				vscode.window.showErrorMessage("Contract has already been imported: " + contractAddr);
+			}
+		}
 	}
 
 	function registerSelectContractCmd() {

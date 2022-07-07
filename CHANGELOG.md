@@ -24,6 +24,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Added
 
 - Shows a warning when `rust-lang.rust-analyzer` extension is not installed
+- Added "Initialize + Import" option. This automatically imports the contract into Cosmy Wasmy after it has been initialized
 
 
 ## [v0.4.1] - 02 July 2022

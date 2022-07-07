@@ -66,6 +66,9 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 try {
                     let res = await this.instantiateContract(account, codeId, req, label);
                     ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
+                    if (data.value.import) {
+                        await vscode.commands.executeCommand('cosmy-wasmy.addContract', res.contractAddress);
+                    }
                     resolve(undefined);
 
                 }
@@ -112,6 +115,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 <input type="text" id="label-text" placeholder="Contract Label"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
 				<button id="exec-button">Initialize</button>
+                <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">Initialize + Import</button>
 				<script>
                 (function () {
                     const vscode = acquireVsCodeApi();
@@ -124,6 +128,18 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                             codeid: codeId,
                             label: labelText,
                             input: inputText
+                        }});
+                    });
+
+                    document.querySelector('#exec-import-button').addEventListener('click', () => {
+                        const inputText = document.getElementById('input-text').value;
+                        const codeId = document.getElementById('codeid-text').value;
+                        const labelText = document.getElementById('label-text').value;
+                        vscode.postMessage({ type: 'exec-text', value: {
+                            codeid: codeId,
+                            label: labelText,
+                            input: inputText,
+                            import: true
                         }});
                     });
                 
