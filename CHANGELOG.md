@@ -19,7 +19,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 -->
 
 
-## [Unreleased]
+## [v0.5.0] - 09 July 2022
 
 ### Added
 
