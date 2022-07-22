@@ -19,6 +19,8 @@ import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 import { InitializeViewProvider } from './views/InitializeViewProvider';
 import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
 import { HistoryHandler } from './helpers/HistoryHandler';
+import { TextDecoder } from 'util';
+import path = require('path');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -238,9 +240,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	function registerAddContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', (contractAddr: string) => {
-			if(contractAddr) {
+			if (contractAddr) {
 				importContract(contractAddr);
-			} 
+			}
 			else {
 				vscode.window.showInputBox({
 					title: "Contract Address",
@@ -440,7 +442,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const rustLangExtension  = vscode.extensions.getExtension('rust-lang.rust-analyzer');
+	const rustLangExtension = vscode.extensions.getExtension('rust-lang.rust-analyzer');
 	if (!rustLangExtension) {
 		vscode.window.showWarningMessage("We recommend to install the 'rust-analyzer' extention while working with Rust on vscode.")
 	}
@@ -448,6 +450,57 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
 	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
+
+	const controller = vscode.tests.createTestController(
+		'cosmwasm',
+		'Cosmwasm Tests'
+	);
+
+	// maybe someday, come back to this and instead of string parse, do via cargo 
+	controller.resolveHandler = async test => {
+
+		const wf = vscode.workspace.workspaceFolders;
+		if (wf) {
+			if (test && test.uri) {
+				const testFile = test.uri;
+				const content = new TextDecoder().decode(await vscode.workspace.fs.readFile(testFile));
+				const lines = content.split('\n');
+				for (let line = 0; line < lines.length; line++) {
+					if (lines[line].trim() == "#[test]") {
+						const testLineIndex = line + 1;
+						const testName = getTestName(lines[testLineIndex]);
+						const testCase = controller.createTestItem(testName, testName, testFile);
+						testCase.range = new vscode.Range(new vscode.Position(testLineIndex, 0), new vscode.Position(testLineIndex, lines[testLineIndex].length));
+						testCase.canResolveChildren = false;
+						test.children.add(testCase);
+						continue;
+					}
+				}
+			}
+			else {
+				const files = await vscode.workspace.findFiles('**/*.rs');
+				for (const file of files) {
+					const content = new TextDecoder().decode(await vscode.workspace.fs.readFile(file));
+					const lines = content.split('\n');
+					for (let line = 0; line < lines.length; line++) {
+						if (lines[line] == "#[cfg(test)]") {
+							const testFile = controller.createTestItem(file.path, path.basename(file.path), file);
+							testFile.range = new vscode.Range(new vscode.Position(line, 0), new vscode.Position(line, "#[cfg(test)]".length));
+							testFile.canResolveChildren = true;
+							controller.items.add(testFile);
+							continue;
+						}
+					}
+				}
+			}
+		}
+
+		// Dont judge me. No mood for regex right now 
+		function getTestName(line: string): string {
+			return line.replace("fn","").trim().split('(')[0];
+		}
+	};
+
 }
 
 // this method is called when your extension is deactivated
