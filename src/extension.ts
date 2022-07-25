@@ -91,6 +91,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerSetUpDevEnvCmd();
 		registerUploadContractCmd();
 		registerQueryHistoryCmd();
+		registerExportDataCmd();
 	}
 
 	function registerAddAccountCmd() {
@@ -426,6 +427,21 @@ export async function activate(context: vscode.ExtensionContext) {
 				let view = new CosmwasmHistoryView(context.globalState);
 				view.getWebviewContent(context.extensionUri, panel.webview);
 			}
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerExportDataCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.export', async () => {
+			const data = ExtData.GetExtensionData(context.globalState);
+			data.accounts = await Account.GetAccounts(context.globalState);
+			vscode.workspace.openTextDocument({
+				language: "jsonc"
+			}).then(doc => {
+				vscode.window.showTextDocument(doc).then(editor => {
+					editor.insertSnippet(new vscode.SnippetString(JSON.stringify(data, null, 4)));
+				});
+			});
 		});
 		context.subscriptions.push(disposable);
 	}

@@ -131,6 +131,11 @@
           "light": "media/icons/light/history.svg",
           "dark": "media/icons/dark/history.svg"
         }
+      },
+      {
+        "command": "cosmy-wasmy.export",
+        "title": "Cosmy Wasmy: Export accounts, contracts and history as JSON",
+        "shortTitle": "Cosmy Wasmy: Export Cosmy Wasmy data"
       }
     ],
     "configuration": [
