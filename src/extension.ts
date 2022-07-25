@@ -21,6 +21,8 @@ import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
 import { HistoryHandler } from './helpers/HistoryHandler';
 import { TextDecoder } from 'util';
 import path = require('path');
+import * as cp from "child_process";
+import { exec, execSync, spawn, spawnSync } from 'child_process';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -456,6 +458,15 @@ export async function activate(context: vscode.ExtensionContext) {
 		'Cosmwasm Tests'
 	);
 
+	const runProfile = controller.createRunProfile(
+		'Run',
+		vscode.TestRunProfileKind.Run,
+		(request, token) => {
+			runHandler(request, token);
+		}
+	);
+
+
 	// maybe someday, come back to this and instead of string parse, do via cargo 
 	controller.resolveHandler = async test => {
 
@@ -497,10 +508,77 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Dont judge me. No mood for regex right now 
 		function getTestName(line: string): string {
-			return line.replace("fn","").trim().split('(')[0];
+			return line.replace("fn", "").trim().split('(')[0];
 		}
 	};
 
+	async function runHandler(
+		request: vscode.TestRunRequest,
+		token: vscode.CancellationToken
+	) {
+		// todo
+		const run = controller.createTestRun(request);
+		const queue: vscode.TestItem[] = [];
+
+		// Loop through all included tests, or all known tests, and add them to our queue
+		if (request.include) {
+			request.include.forEach(test => queue.push(test));
+		} else {
+			controller.items.forEach(test => queue.push(test));
+		}
+
+		while (queue.length > 0 && !token.isCancellationRequested) {
+			const test = queue.pop()!;
+
+			// Skip tests the user asked to exclude
+			if (request.exclude?.includes(test)) {
+				continue;
+			}
+
+
+			if (!test.canResolveChildren) {
+				const start = Date.now();
+
+				run.appendOutput(`Running test - ${test.label}\r\n`);
+				run.started(test);
+				test.busy = true;
+
+				const workingDir = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
+
+
+				var child = spawn("cargo", ["test", test.label], {
+					cwd: workingDir
+				});
+
+				child.stdout.setEncoding('utf8');
+				child.stdout.on('data', function (data) {
+					run.appendOutput(data);
+				});
+
+				child.stderr.setEncoding('utf8');
+				child.stderr.on('error', function (error) {
+					run.appendOutput(error.message);
+				});
+
+				child.on('close', function (code) {
+					if (code == 0) {
+						run.passed(test, Date.now() - start);
+					}
+					else {
+						run.failed(test, new vscode.TestMessage("Test failed with code : " + code), Date.now() - start);
+					}
+					test.busy = false;
+				});
+
+			}
+
+			test.children.forEach(test => queue.push(test));
+		}
+
+		// Make sure to end the run after all tests have been executed:
+		run.end();
+
+	}
 }
 
 // this method is called when your extension is deactivated
