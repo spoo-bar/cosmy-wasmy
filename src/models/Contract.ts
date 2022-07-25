@@ -10,16 +10,18 @@ export class Contract extends vscode.TreeItem {
     contractAddress: string;
     codeId: number;
     creator: string;
+    chainConfig: string;
 
     /**
      *
      */
-    constructor(id: string, contract: string, codeId: number, creator: string) {
+    constructor(id: string, contract: string, codeId: number, creator: string, chainId: string) {
         super(id);
         this.label = id;
         this.contractAddress = contract;
         this.codeId = codeId;
         this.creator = creator;
+        this.chainConfig = chainId;
     }
 
     public static GetContracts(context: vscode.Memento): Contract[] {

@@ -13,7 +13,7 @@ export class CosmwasmAPI {
     public static async GetContract(contractAddress: string): Promise<Contract> {
         let client = Cosmwasm.Client;
         const contractInfo = await client.getContract(contractAddress);
-        let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator);
+        let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, Workspace.GetWorkspaceChainConfig().configName);
         return contract;
     }
 
