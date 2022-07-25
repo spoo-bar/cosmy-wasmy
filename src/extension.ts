@@ -331,9 +331,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
 			try {
 				loadChainConfig();
-				vscode.window.showInformationMessage("Selected chain config has been reloaded.");
 				const accounts = await Account.GetAccounts(context.globalState);
 				accountViewProvider.refresh(accounts);
+				const contracts = Contract.GetContracts(context.globalState);
+				contractViewProvider.refresh(contracts);
+				vscode.window.showInformationMessage("Selected chain config has been reloaded.");
 			}
 			catch (error: any) {
 				vscode.window.showErrorMessage(error.message);

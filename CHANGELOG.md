@@ -18,6 +18,20 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+ 
+## [Unreleased]
+
+### Added
+
+- Add export saved state to json. Exports the accounts, contracts and ahy historical queries stored.
+- Shows a plug icon next to contracts which were imported for the currently active chain config.
+
+### Changed
+
+- Fixed [#5](https://github.com/spoo-bar/cosmy-wasmy/issues/5) - When a contract is imported, it is automatically associated with the chain config it was imported with. 
+- Contract view does not show contracts which were imported under othes chain configs. Only current config contracts or contracts with no config are shown.
+
+
 
 ## [v0.5.0] - 09 July 2022
 

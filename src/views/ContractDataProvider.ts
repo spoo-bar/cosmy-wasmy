@@ -20,7 +20,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 
 
 	refresh(contracts: Contract[]): void {
-		this.contracts = contracts;
+		this.contracts = contracts.filter(c => !c.chainConfig || c.chainConfig == "" || c.chainConfig == Workspace.GetWorkspaceChainConfig().configName);
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
@@ -46,8 +46,9 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 			contract.id = contract.contractAddress.toString();
 			contract.label = contract.codeId.toString() + ": " + contract.label;
 			contract.description = contract.contractAddress;
-			contract.tooltip = "Creator: " + contract.creator;
+			contract.tooltip = contract.contractAddress;
 			contract.contextValue = Constants.VIEWS_CONTRACT;
+			contract.iconPath = contract.chainConfig == Workspace.GetWorkspaceChainConfig().configName ?  new vscode.ThemeIcon("plug"): "";
 			contract.command = {
 				title: "Select Contract",
 				command: "cosmy-wasmy.selectContract",
@@ -87,7 +88,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 
 	private getCodeIds(): Contract[] {
 		let codeIds = [...new Set(this.contracts.map(c => c.codeId))].sort((a, b) => a - b);
-		return codeIds.map(c => new Contract(c.toString(), "", c, ""));
+		return codeIds.map(c => new Contract(c.toString(), "", c, "", ""));
 	}
 
 }
