@@ -34,10 +34,7 @@
       {
         "command": "cosmy-wasmy.addAccount",
         "title": "Add Account",
-        "icon": {
-          "light": "media/icons/light/add.svg",
-          "dark": "media/icons/dark/add.svg"
-        }
+        "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.requestFunds",
@@ -51,46 +48,27 @@
       {
         "command": "cosmy-wasmy.copyAddress",
         "title": "Copy Address",
-        "enablement": "viewItem == account || viewItem == contract",
-        "icon": {
-          "light": "media/icons/light/address.svg",
-          "dark": "media/icons/dark/address.svg"
-        }
+        "enablement": "viewItem == account || viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.copyMnemonic",
         "title": "Copy Mnemonic",
-        "enablement": "viewItem == account",
-        "icon": {
-          "light": "media/icons/light/mnemonic.svg",
-          "dark": "media/icons/dark/mnemonic.svg"
-        }
+        "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.deleteAccount",
         "title": "Delete Account",
-        "enablement": "viewItem == account",
-        "icon": {
-          "light": "media/icons/light/delete.svg",
-          "dark": "media/icons/dark/delete.svg"
-        }
+        "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.addContract",
         "title": "Add Contract",
-        "icon": {
-          "light": "media/icons/light/add.svg",
-          "dark": "media/icons/dark/add.svg"
-        }
+        "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
         "title": "Delete Contract",
-        "enablement": "viewItem == contract",
-        "icon": {
-          "light": "media/icons/light/delete.svg",
-          "dark": "media/icons/dark/delete.svg"
-        }
+        "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.reloadConfig",
@@ -127,10 +105,7 @@
       {
         "command": "cosmy-wasmy.history",
         "title": "Cosmy Wasmy: Show Cosmwasm History",
-        "icon": {
-          "light": "media/icons/light/history.svg",
-          "dark": "media/icons/dark/history.svg"
-        }
+        "icon": "$(history)"
       },
       {
         "command": "cosmy-wasmy.export",
