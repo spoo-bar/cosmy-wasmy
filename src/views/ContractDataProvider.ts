@@ -46,7 +46,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 			contract.id = contract.contractAddress.toString();
 			contract.label = contract.codeId.toString() + ": " + contract.label;
 			contract.description = contract.contractAddress;
-			contract.tooltip = contract.contractAddress;
+			contract.tooltip = getContractTooltip();
 			contract.contextValue = Constants.VIEWS_CONTRACT;
 			contract.iconPath = contract.chainConfig == Workspace.GetWorkspaceChainConfig().configName ?  new vscode.ThemeIcon("plug"): "";
 			contract.command = {
@@ -54,6 +54,13 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 				command: "cosmy-wasmy.selectContract",
 				arguments: [contract]
 			};
+		}
+
+		function getContractTooltip(): string | vscode.MarkdownString | undefined {
+			if(contract.notes && contract.notes.trim().length > 0) {
+				return new vscode.MarkdownString(contract.notes, true);
+			}
+			return contract.contractAddress;
 		}
 
 		function formatContractCodeViewItem() {

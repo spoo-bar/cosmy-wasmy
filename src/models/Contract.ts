@@ -11,6 +11,7 @@ export class Contract extends vscode.TreeItem {
     codeId: number;
     creator: string;
     chainConfig: string;
+    notes: string;
 
     /**
      *
@@ -22,6 +23,7 @@ export class Contract extends vscode.TreeItem {
         this.codeId = codeId;
         this.creator = creator;
         this.chainConfig = chainId;
+        this.notes = "";
     }
 
     public static GetContracts(context: vscode.Memento): Contract[] {
@@ -36,6 +38,16 @@ export class Contract extends vscode.TreeItem {
 
     public static DeleteContract(context: vscode.Memento, contract: Contract) {
         let contracts = this.GetContracts(context).filter(c => c.contractAddress != contract.contractAddress);
+        ExtData.SaveContracts(context, contracts);
+    }
+
+    public static UpdateContract(context: vscode.Memento, contract: Contract) {
+        let contracts = this.GetContracts(context);
+        for (const c of contracts) {
+            if(c.contractAddress == contract.contractAddress) {
+                c.notes = contract.notes;
+            }
+        }
         ExtData.SaveContracts(context, contracts);
     }
 

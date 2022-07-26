@@ -122,6 +122,12 @@
         "command": "cosmy-wasmy.export",
         "title": "Cosmy Wasmy: Export accounts, contracts and history as JSON",
         "shortTitle": "Cosmy Wasmy: Export Cosmy Wasmy data"
+      },
+      {
+        "command": "cosmy-wasmy.addComments",
+        "title": "Add comments/notes for the contract",
+        "icon": "$(comment)",
+        "enablement": "viewItem == contract"
       }
     ],
     "configuration": [
@@ -318,6 +324,11 @@
           "command": "cosmy-wasmy.copyMnemonic",
           "when": "view == account",
           "group": "cutcopypaste"
+        },
+        {
+          "command": "cosmy-wasmy.addComments",
+          "when": "view == contract",
+          "group": "inline"
         },
         {
           "command": "cosmy-wasmy.updateContractAdmin",

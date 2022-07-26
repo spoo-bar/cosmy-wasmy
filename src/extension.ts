@@ -84,6 +84,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerDeleteContractCmd();
 		registerUpdateContractAdminCmd();
 		registerClearContractAdminCmd();
+		registerAddContractCommentCmd();
 		registerResetDataCmd();
 		registerReloadConfigCmd();
 		registerBuildCmd();
@@ -357,6 +358,26 @@ export async function activate(context: vscode.ExtensionContext) {
 					await Cosmwasm.ClearAdmin(account, contract, resolve, reject);
 				});
 			});
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerAddContractCommentCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addComments', (contract: Contract) => {
+			if(contract) {
+				vscode.window.showInputBox({
+					title: "Add comments/notes for the contract",
+					prompt: "Comments/notes added here will show up as you hover on the contract in the sidebar. This is purely to help with development and is not stored on-chain in any way",
+					value: contract.notes
+				}).then(input => {
+					if(input) {
+						contract.notes = input;
+						Contract.UpdateContract(context.globalState, contract);
+						contractViewProvider.refresh(Contract.GetContracts(context.globalState));
+						vscode.window.showInformationMessage("Stored notes/comments for " + contract.label);
+					}
+				});
+			}
 		});
 		context.subscriptions.push(disposable);
 	}
