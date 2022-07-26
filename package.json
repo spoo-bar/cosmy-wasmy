@@ -62,12 +62,22 @@
       },
       {
         "command": "cosmy-wasmy.addContract",
-        "title": "Add Contract",
+        "title": "Import Contract",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
         "title": "Delete Contract",
+        "enablement": "viewItem == contract"
+      },
+      {
+        "command": "cosmy-wasmy.updateContractAdmin",
+        "title": "Update Admin",
+        "enablement": "viewItem == contract"
+      },
+      {
+        "command": "cosmy-wasmy.clearContractAdmin",
+        "title": "Clear Admin",
         "enablement": "viewItem == contract"
       },
       {
@@ -100,7 +110,8 @@
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Cosmy Wasmy: Upload contract"
+        "title": "Upload contract",
+        "icon": "$(cloud-upload)"
       },
       {
         "command": "cosmy-wasmy.history",
@@ -195,8 +206,16 @@
           },
           "cosmywasmy.contractSortOrder": {
             "type": "string",
-            "enum": ["Alphabetical", "CodeId", "None"],
-            "enumDescriptions": ["Sort the Smart Contracts alphabetically by their label", "Sort the Smart Contracts by the Code ID", "No explicit sorting - Maintains the order the contracts were imported in"],
+            "enum": [
+              "Alphabetical",
+              "CodeId",
+              "None"
+            ],
+            "enumDescriptions": [
+              "Sort the Smart Contracts alphabetically by their label",
+              "Sort the Smart Contracts by the Code ID",
+              "No explicit sorting - Maintains the order the contracts were imported in"
+            ],
             "order": 2,
             "default": "None",
             "description": "Controls the sorting order of the Smart Contracts in the Contract view",
@@ -204,8 +223,14 @@
           },
           "cosmywasmy.cosmwasmResponseView": {
             "type": "string",
-            "enum": ["NewFile", "Terminal"],
-            "enumDescriptions": ["Open a new dummy doc with response", "A seperate output channel by Cosmy Wasmy in the Output view"],
+            "enum": [
+              "NewFile",
+              "Terminal"
+            ],
+            "enumDescriptions": [
+              "Open a new dummy doc with response",
+              "A seperate output channel by Cosmy Wasmy in the Output view"
+            ],
             "order": 3,
             "default": "Terminal",
             "description": "Controls where the smart contract interactions should be displayed",
@@ -223,7 +248,7 @@
         }
       }
     ],
-    "keybindings":[
+    "keybindings": [
       {
         "command": "cosmy-wasmy.build",
         "key": "ctrl+shift+b"
@@ -271,6 +296,11 @@
           "command": "cosmy-wasmy.history",
           "when": "view == query || view == execute",
           "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.upload",
+          "when": "view == contract",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
@@ -282,12 +312,22 @@
         {
           "command": "cosmy-wasmy.copyAddress",
           "when": "view == account || view == contract",
-          "group": "z_cutcopypaste"
+          "group": "cutcopypaste"
         },
         {
           "command": "cosmy-wasmy.copyMnemonic",
           "when": "view == account",
-          "group": "z_cutcopypaste"
+          "group": "cutcopypaste"
+        },
+        {
+          "command": "cosmy-wasmy.updateContractAdmin",
+          "when": "view == contract",
+          "group": "modify"
+        },
+        {
+          "command": "cosmy-wasmy.clearContractAdmin",
+          "when": "view == contract",
+          "group": "modify"
         },
         {
           "command": "cosmy-wasmy.deleteAccount",

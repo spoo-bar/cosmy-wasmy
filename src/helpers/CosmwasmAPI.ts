@@ -89,4 +89,39 @@ export class Cosmwasm {
 			reject(undefined);
 		}
 	}
+
+    public static async UpdateAdmin(account: Account, contract: Contract, newAdmin: string, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+        const input = {
+            oldAdmin: account.address,
+            contract: contract.contractAddress,
+            newAdmin: newAdmin
+        };
+        try {
+            let client = await Cosmwasm.GetSigningClient();
+			let response = await client.updateAdmin(account.address, contract.contractAddress, newAdmin, "auto");
+			ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Update Admin");
+			resolve(undefined);
+		}
+		catch (err: any) {
+			ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Update Admin");
+			reject(undefined);
+		}
+	}
+
+    public static async ClearAdmin(account: Account, contract: Contract, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+        const input = {
+            oldAdmin: account.address,
+            contract: contract.contractAddress,
+        };
+        try {
+            let client = await Cosmwasm.GetSigningClient();
+			let response = await client.clearAdmin(account.address, contract.contractAddress, "auto");
+			ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Clear Admin");
+			resolve(undefined);
+		}
+		catch (err: any) {
+			ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Clear Admin");
+			reject(undefined);
+		}
+	}
 }

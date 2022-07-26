@@ -82,6 +82,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerAddContractCmd();
 		registerSelectContractCmd();
 		registerDeleteContractCmd();
+		registerUpdateContractAdminCmd();
+		registerClearContractAdminCmd();
 		registerResetDataCmd();
 		registerReloadConfigCmd();
 		registerBuildCmd();
@@ -239,9 +241,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	function registerAddContractCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', (contractAddr: string) => {
-			if(contractAddr) {
+			if (contractAddr) {
 				importContract(contractAddr);
-			} 
+			}
 			else {
 				vscode.window.showInputBox({
 					title: "Contract Address",
@@ -304,6 +306,57 @@ export async function activate(context: vscode.ExtensionContext) {
 					vscode.window.showInformationMessage("Deleted contract: " + item.label);
 				}
 			})
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerUpdateContractAdminCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.updateContractAdmin', (contract: Contract) => {
+			vscode.window.showInputBox({
+				title: "New contract admin address",
+				prompt: "New contract admin address"
+			}).then(input => {
+				if (input) {
+					const account = Workspace.GetSelectedAccount();
+					if (!account) {
+						vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+						return;
+					}
+					vscode.window.withProgress({
+						location: vscode.ProgressLocation.Notification,
+						title: "Updating contract admin on the contract - " + contract.label,
+						cancellable: false
+					}, (progress, token) => {
+						token.onCancellationRequested(() => { });
+						progress.report({ message: '' });
+						return new Promise(async (resolve, reject) => {
+							await Cosmwasm.UpdateAdmin(account, contract, input, resolve, reject);
+						});
+					});
+				}
+			})
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerClearContractAdminCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.clearContractAdmin', (contract: Contract) => {
+			const account = Workspace.GetSelectedAccount();
+			if (!account) {
+				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+				return;
+			}
+			vscode.window.withProgress({
+				location: vscode.ProgressLocation.Notification,
+				title: "Clearing contract admin on the contract - " + contract.label,
+				cancellable: false
+			}, (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				return new Promise(async (resolve, reject) => {
+					await Cosmwasm.ClearAdmin(account, contract, resolve, reject);
+				});
+			});
 		});
 		context.subscriptions.push(disposable);
 	}
@@ -458,7 +511,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		return;
 	}
 
-	const rustLangExtension  = vscode.extensions.getExtension('rust-lang.rust-analyzer');
+	const rustLangExtension = vscode.extensions.getExtension('rust-lang.rust-analyzer');
 	if (!rustLangExtension) {
 		vscode.window.showWarningMessage("We recommend to install the 'rust-analyzer' extention while working with Rust on vscode.")
 	}
