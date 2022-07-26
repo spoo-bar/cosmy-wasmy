@@ -46,6 +46,12 @@
         }
       },
       {
+        "command": "cosmy-wasmy.openInExplorer",
+        "title": "Open In Explorer",
+        "enablement": "viewItem == account",
+        "icon": "$(link-external)"
+      },
+      {
         "command": "cosmy-wasmy.copyAddress",
         "title": "Copy Address",
         "enablement": "viewItem == account || viewItem == contract"
@@ -179,6 +185,13 @@
                 "faucetEndpoint": {
                   "type": "string",
                   "description": "Faucet address and port to request funds"
+                },
+                "accountExplorerLink": {
+                  "type": "string",
+                  "description": "Block explorer url which includes '${accountAddress}' text to generate account url",
+                  "examples": [
+                    "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
+                  ]
                 }
               },
               "required": [
@@ -197,7 +210,8 @@
                 "addressPrefix": "juno",
                 "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
                 "defaultGasPrice": "0.025",
-                "chainDenom": "ujunox"
+                "chainDenom": "ujunox",
+                "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
               },
               {
                 "configName": "Localnet - Juno",
@@ -313,6 +327,11 @@
         {
           "command": "cosmy-wasmy.requestFunds",
           "when": "view == account && showRequestFunds",
+          "group": "inline"
+        },
+        {
+          "command": "cosmy-wasmy.openInExplorer",
+          "when": "view == account && showOpenInExplorer",
           "group": "inline"
         },
         {

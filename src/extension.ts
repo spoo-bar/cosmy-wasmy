@@ -70,11 +70,18 @@ export async function activate(context: vscode.ExtensionContext) {
 		else {
 			vscode.commands.executeCommand('setContext', 'showRequestFunds', false);
 		}
+		if (config.accountExplorerLink && config.accountExplorerLink.includes("${accountAddress}")) {
+			vscode.commands.executeCommand('setContext', 'showOpenInExplorer', true);
+		}
+		else {
+			vscode.commands.executeCommand('setContext', 'showOpenInExplorer', false);
+		}
 	}
 
 	function registerCommands() {
 		registerAddAccountCmd();
 		registerRequestFundsCmd();
+		registerOpenInExplorerCmd();
 		registerCopyAccountAddressCmd();
 		registerCopyMnemonicCmd();
 		registerDeleteAddressCmd();
@@ -177,6 +184,15 @@ export async function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage("Faucet endpoint has not been set in the chain config settings");
 				}
 			}
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerOpenInExplorerCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.openInExplorer', (item: Account) => {
+			const url = Workspace.GetWorkspaceChainConfig().accountExplorerLink;
+			const explorerUrl = url.replace("${accountAddress}", item.address);
+			vscode.env.openExternal(vscode.Uri.parse(explorerUrl));
 		});
 		context.subscriptions.push(disposable);
 	}

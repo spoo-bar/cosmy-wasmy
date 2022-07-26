@@ -83,6 +83,7 @@ class ChainConfig {
     defaultGasPrice!: string;
     chainDenom!: string;
     faucetEndpoint!: string;
+    accountExplorerLink!: string;
 
     public Validate() {
         if (!this) {

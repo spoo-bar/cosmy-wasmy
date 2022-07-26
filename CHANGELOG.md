@@ -27,6 +27,8 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Shows a plug icon next to contracts which were imported for the currently active chain config.
 - Contract context menu actions to update contract admin and to remove contract admin
 - Added [#10](https://github.com/spoo-bar/cosmy-wasmy/issues/10) - Developers can add small notes and comments to their imported contracts. The added notes are shown on hovering over the contracts in the sidebar contract view. The notes supports markdown. Note : The added notes are only for the dev view, this info is  not stored on chain.
+- Added [#11](https://github.com/spoo-bar/cosmy-wasmy/issues/11) - Block explorer link added to the account view. If set up, the icon opens the account in a block explorer in the default browser
+
 
 ### Changed
 
