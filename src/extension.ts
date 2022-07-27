@@ -550,7 +550,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const rustLangExtension = vscode.extensions.getExtension('rust-lang.rust-analyzer');
 	if (!rustLangExtension) {
-		vscode.window.showWarningMessage("We recommend to install the 'rust-analyzer' extention while working with Rust on vscode.")
+		vscode.window.showWarningMessage(new vscode.MarkdownString("We recommend to install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extention while working with Rust on vscode.").value)
 	}
 
 

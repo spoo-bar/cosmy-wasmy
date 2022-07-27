@@ -35,6 +35,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Fixed [#5](https://github.com/spoo-bar/cosmy-wasmy/issues/5) - When a contract is imported, it is automatically associated with the chain config it was imported with. 
 - Contract view does not show contracts which were imported under othes chain configs. Only current config contracts or contracts with no config are shown.
 - The icons used in extension are now vscode theme-icons and not custom svgs.
+- The warning text when `rust-lang.rust-analyzer` is not installed now shows the link to marketplace to download the extention.
 
 
 
