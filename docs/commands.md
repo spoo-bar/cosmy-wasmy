@@ -16,3 +16,4 @@ All the given keybindings can be customized
 | Reload Chain Config   | cosmy-wasmy.reloadConfig   | | This reloads the currently active chain config. Use this when you switch between different networks within same workspace |
 | Reset Data            | cosmy-wasmy.resetData      | | Deletes all the extension stored data, like accounts and contracts. | 
 | Show Cosmwasm History | cosmy-wasmy.history | ctrl+shift+a | Shows latest queries and transactions and with saved inputs. Allows easy re-execution of same queries. The number of saved queries is configurable in the settings. | 
+| Export Cosmy Wasmy data | cosmy-wasmy.export |  | Export imported accounts, all imported contracts and history as a JSON file. Careful sharing this file with others as it will include your seed phrase | 

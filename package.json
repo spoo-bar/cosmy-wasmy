@@ -2,8 +2,8 @@
   "name": "cosmy-wasmy",
   "displayName": "cosmy wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "0.5.0",
-  "preview": true,
+  "version": "1.0.0",
+  "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
   "license": "SEE LICENSE IN LICENSE",
@@ -12,13 +12,17 @@
     "vscode": "^1.67.0"
   },
   "categories": [
-    "Testing"
+    "Testing",
+    "Snippets",
+    "Other"
   ],
   "keywords": [
     "Cosmos",
     "Cosmwasm",
     "Juno",
-    "Smart Contract"
+    "Smart Contract",
+    "Archway",
+    "Chihuahua"
   ],
   "activationEvents": [
     "onView:account",
@@ -88,31 +92,31 @@
       },
       {
         "command": "cosmy-wasmy.reloadConfig",
-        "title": "Cosmy Wasmy: Reload Chain Config"
+        "title": "Reload Chain Config"
       },
       {
         "command": "cosmy-wasmy.resetData",
-        "title": "Cosmy Wasmy: Reset Data"
+        "title": "Reset Data"
       },
       {
         "command": "cosmy-wasmy.build",
-        "title": "Cosmy Wasmy: Build"
+        "title": "Build"
       },
       {
         "command": "cosmy-wasmy.runUnitTests",
-        "title": "Cosmy Wasmy: Run Unit Tests"
+        "title": "Run Unit Tests"
       },
       {
         "command": "cosmy-wasmy.optimizeContract",
-        "title": "Cosmy Wasmy: Optimize Contract"
+        "title": "Optimize Contract"
       },
       {
         "command": "cosmy-wasmy.generateSchema",
-        "title": "Cosmy Wasmy: Generate Schema"
+        "title": "Generate Schema"
       },
       {
         "command": "cosmy-wasmy.setupDevEnv",
-        "title": "Cosmy Wasmy: Setup Dev Environment"
+        "title": "Setup Dev Environment"
       },
       {
         "command": "cosmy-wasmy.upload",
@@ -121,13 +125,13 @@
       },
       {
         "command": "cosmy-wasmy.history",
-        "title": "Cosmy Wasmy: Show Cosmwasm History",
+        "title": "Show Cosmwasm History",
         "icon": "$(history)"
       },
       {
         "command": "cosmy-wasmy.export",
-        "title": "Cosmy Wasmy: Export accounts, contracts and history as JSON",
-        "shortTitle": "Cosmy Wasmy: Export Cosmy Wasmy data"
+        "title": "Export accounts, contracts and history as JSON",
+        "shortTitle": "Export Cosmy Wasmy data"
       },
       {
         "command": "cosmy-wasmy.addComments",

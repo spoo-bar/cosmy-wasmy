@@ -26,7 +26,9 @@ The structure of the expected setting for `cosmywasamy.chains`:
         "addressPrefix": "juno", // Used to derive account address
         "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi", // Used for query and tx exec of smart contracts
         "defaultGasPrice": "0.025", // Gas price set for the smart contract tx execution
-        "chainDenom": "ujunox" // the micro denom used to pay for gas and to track account balance
+        "chainDenom": "ujunox", // the micro denom used to pay for gas and to track account balance
+        "faucetEndpoint": "http://localhost:8000", //Faucet address and port to request funds
+        "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}" //Block explorer url which includes '${accountAddress}' text to generate account url
     }
 ]
 ```
