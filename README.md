@@ -59,6 +59,14 @@ You can support this extension in the following ways:
 
 1. Create issues for any bugs you encounter [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=spoo-bar&labels=&template=bug_report.md&title=)
 2. Share what features you might be interested  [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=&labels=&template=feature_request.md&title=)
-3. Contribute code to the extension - PRs are welcome
-4. Share the extension on socials
-5. If you would like to support [spoo-bar](https://www.spoorthi.dev) directly, you can donate to this address `juno1lg8ukq2ehc9k0wgjfk0afm7uea8750yp9gtfct` from [here](https://dens.sh/spoo_bar).
+3. Contribute code to the extension - PRs are always welcome
+4. Share the extension with other devs 💜
+5. If you would like to support me([spoo-bar](https://www.spoorthi.dev)) directly, you can donate to this address 
+
+    Juno - `juno1lg8ukq2ehc9k0wgjfk0afm7uea8750yp9gtfct`
+
+    Osmosis - `osmo1lg8ukq2ehc9k0wgjfk0afm7uea8750ypmpmzf9`
+
+    Cosmos Hub - `cosmos1lg8ukq2ehc9k0wgjfk0afm7uea8750ypn6gjlh`
+
+    This extension will never be paywalled. #DevsSupportingDevsByDevving
