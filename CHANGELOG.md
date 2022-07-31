@@ -31,7 +31,7 @@ Its **v1.0.0**!!
 - Contract context menu actions to update contract admin and to remove contract admin.
 - Added [#10](https://github.com/spoo-bar/cosmy-wasmy/issues/10) - Developers can add small notes and comments to their imported contracts. The added notes are shown on hovering over the contracts in the sidebar contract view. The notes supports markdown. Note : The added notes are only for the dev view, this info is not stored on chain.
 - Added [#11](https://github.com/spoo-bar/cosmy-wasmy/issues/11) - Block explorer link added to the account view. If set up, the icon opens the account in a block explorer in the default browser
-
+- Added Osmosis testnet and localnet settings into default populated chain configs
 
 ### Changed
 
@@ -39,6 +39,7 @@ Its **v1.0.0**!!
 - Contract view does not show contracts which were imported under othes chain configs. Only current config contracts or contracts with no config are shown.
 - The icons used in extension are now vscode theme-icons and not custom svgs.
 - The warning text when `rust-lang.rust-analyzer` is not installed now shows the link to marketplace to download the extention.
+- Docs are a bit more organized now, or maybe they are worse. idk. let me know in the comment section below 👇🏻
 
 
 

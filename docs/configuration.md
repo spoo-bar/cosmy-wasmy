@@ -1,7 +1,7 @@
 
 # Extension Configuration
 
-**[Juno uni-3 testnet](https://testnet.ping.pub/juno)** config and **[Juno Localnet](https://github.com/CosmosContracts/juno/pkgs/container/juno)** config is preset by default. Any other chain can be manually added.
+**[Juno uni-3 testnet](https://testnet.ping.pub/juno)**, **[Localnet - Juno](https://github.com/CosmosContracts/juno/pkgs/container/juno)**, **[Testnet - Osmosis](https://docs.osmosis.zone/developing/network/explorers.html#testnet)** and **[Localnet - Osmosis](https://docs.osmosis.zone/developing/tools/localosmosis.html#what-is-localosmosis)** configs are preset by default. Any other chain can be manually added.
 
 You can set up the extension settings here 
 > File > Preferences > Settings > Cosmy Wasmy
@@ -11,7 +11,7 @@ You can set up the extension settings here
 | Setting | Type | Default  | Scope | Details |
 | --------|------|----------|-------|---------|
 | `cosmywasmy.chainConfigName` | string | Juno UNI-3 testnet | Workspace | This setting is used to select which of the given Chain configs is to be used in this workspace |
-| `cosmywasmy.chains`  | json   | Juno UNI-3 testnet and Localnet - Juno config | Application | This setting stores an array of JSON objects which contains the Chain config details. <br /> This setting can be expanded to include any localnet or testnet chains (_mainnet not recommended_). <br/> The structure of the expected setting is elaborated below this table  |
+| `cosmywasmy.chains`  | json   | Juno UNI-3 testnet, Localnet - Juno, Testnet - Osmosis, Localnet - Osmosis config | Application | This setting stores an array of JSON objects which contains the Chain config details. <br /> This setting can be expanded to include any localnet or testnet chains (_mainnet not recommended_). <br/> The structure of the expected setting is elaborated below this table  |
 | `cosmywasmy.contractSortOrder` | enum   | None | Workspace | This setting controls the sorting order of the Smart Contracts in the Contract view <br /> * Alphabetical - Sort the Smart Contracts alphabetically by their label<br /> * CodeId - Sort the Smart Contracts by the Code ID<br /> * None - No explicit sorting - Maintains the order the contracts were imported in |
 | `cosmywasmy.cosmwasmResponseView` | enum   | Terminal | Workspace | This setting controls where the smart contract interactions should be displayed <br /> * NewFile - Open a new dummy doc with response <br /> * Terminal -  A seperate output channel by Cosmy Wasmy in the Output view |
 | `cosmywasmy.maxHistoryStored` | number | 20 | Workspace | Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored |

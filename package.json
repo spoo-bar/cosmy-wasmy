@@ -225,6 +225,23 @@
                 "defaultGasPrice": "0.025",
                 "chainDenom": "ujunox",
                 "faucetEndpoint": "http://localhost:8000"
+              },
+              {
+                "configName": "Testnet - Osmosis",
+                "chainId": "osmo-test-4",
+                "addressPrefix": "osmo",
+                "rpcEndpoint": "https://rpc-test.osmosis.zone",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "uosmo",
+                "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}"
+              },
+              {
+                "configName": "Localnet - Osmosis",
+                "chainId": "localosmosis",
+                "addressPrefix": "osmo",
+                "rpcEndpoint": "http://localhost:26657",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "uosmo"
               }
             ]
           },
