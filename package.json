@@ -138,6 +138,16 @@
         "title": "Add comments/notes for the contract",
         "icon": "$(comment)",
         "enablement": "viewItem == contract"
+      },
+      {
+        "command": "cosmy-wasmy.query",
+        "title": "Run a Cosmwasm Query",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "cosmy-wasmy.execute",
+        "title": "Execute a Cosmwasm Tx",
+        "icon": "$(save-as)"
       }
     ],
     "configuration": [
@@ -326,6 +336,16 @@
         {
           "command": "cosmy-wasmy.upload",
           "when": "resourceExtname == .wasm",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.query",
+          "when": "resourceLangId == json",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.execute",
+          "when": "resourceLangId == json",
           "group": "navigation"
         }
       ],
