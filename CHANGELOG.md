@@ -18,6 +18,12 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- showing upload contract option in editor menus as well for wasm files
+
  
 ## [v1.0.0] - 31 July 2022
 

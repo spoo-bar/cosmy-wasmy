@@ -322,6 +322,19 @@
           "when": "resourceExtname == .wasm"
         }
       ],
+      "editor/title": [
+        {
+          "command": "cosmy-wasmy.upload",
+          "when": "resourceExtname == .wasm",
+          "group": "navigation"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "cosmy-wasmy.upload",
+          "when": "resourceExtname == .wasm"
+        }
+      ],
       "view/title": [
         {
           "command": "cosmy-wasmy.addAccount",
