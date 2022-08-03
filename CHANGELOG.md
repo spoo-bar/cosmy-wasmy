@@ -22,8 +22,11 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Added
 
-- showing upload contract option in editor menus as well for wasm files
+- Showing upload contract option in editor menus as well for wasm files
 
+### Changed
+
+ - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
  
 ## [v1.0.0] - 31 July 2022
 

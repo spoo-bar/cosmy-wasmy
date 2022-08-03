@@ -57,10 +57,13 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 		}
 
 		function getContractTooltip(): string | vscode.MarkdownString | undefined {
+			let tooltip = "Address: " + contract.contractAddress;
+			tooltip += "\n";
+			tooltip += "Creator: " + contract.creator;
 			if(contract.notes && contract.notes.trim().length > 0) {
-				return new vscode.MarkdownString(contract.notes, true);
+				tooltip += "\n\n"  + contract.notes;
 			}
-			return contract.contractAddress;
+			return new vscode.MarkdownString(tooltip, true);
 		}
 
 		function formatContractCodeViewItem() {
