@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { ResponseHandler } from '../helpers/ResponseHandler';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { Cosmwasm } from '../helpers/Cosmwasm/API';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
-import { HistoryHandler } from '../helpers/HistoryHandler';
+import { HistoryHandler } from '../helpers/ExtensionData/HistoryHandler';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {

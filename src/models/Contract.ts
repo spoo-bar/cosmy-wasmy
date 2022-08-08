@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { ExtData } from '../helpers/ExtData';
+import { ExtData } from '../helpers/ExtensionData/ExtData';
 import { Workspace } from '../helpers/Workspace';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { Cosmwasm } from '../helpers/Cosmwasm/API';
 import { ResponseHandler } from '../helpers/ResponseHandler';
 
 

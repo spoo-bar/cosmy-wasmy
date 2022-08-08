@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
-import { Action, History, HistoryHandler } from '../helpers/HistoryHandler';
+import { Cosmwasm } from '../helpers/Cosmwasm/API';
+import { Action, History, HistoryHandler } from '../helpers/ExtensionData/HistoryHandler';
 import { Workspace } from '../helpers/Workspace';
 import { Contract } from '../models/Contract';
 

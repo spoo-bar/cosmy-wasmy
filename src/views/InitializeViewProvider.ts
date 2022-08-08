@@ -3,7 +3,7 @@ import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { ResponseHandler } from '../helpers/ResponseHandler';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
+import { Cosmwasm } from '../helpers/Cosmwasm/API';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {

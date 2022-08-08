@@ -3,10 +3,10 @@ import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
-import { Contract } from '../models/Contract';
-import { Workspace } from "./Workspace";
-import { ResponseHandler } from "./ResponseHandler";
-import { Account } from "../models/Account";
+import { Contract } from '../../models/Contract';
+import { Workspace } from "../Workspace";
+import { ResponseHandler } from "../ResponseHandler";
+import { Account } from "../../models/Account";
 
 
 export class CosmwasmAPI {

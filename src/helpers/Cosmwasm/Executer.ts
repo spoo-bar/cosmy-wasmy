@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Workspace } from "../Workspace";
-import { Action, HistoryHandler } from '../HistoryHandler';
-import { Cosmwasm } from '../CosmwasmAPI';
+import { Action, HistoryHandler } from '../ExtensionData/HistoryHandler';
+import { Cosmwasm } from './API';
 
 
 export class Executer {
