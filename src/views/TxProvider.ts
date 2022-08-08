@@ -1,10 +1,6 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
-import { Account } from '../models/Account';
-import { Contract } from '../models/Contract';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
-import { HistoryHandler } from '../helpers/HistoryHandler';
+import { Executer } from '../helpers/Cosmwasm/Executer';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {
@@ -25,43 +21,10 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const account = Workspace.GetSelectedAccount();
-						if (!account) {
-							vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
-							return;
-						}
-						const contract = Workspace.GetSelectedContract();
-						if (!contract) {
-							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
-							return;
-						}
-						try {
-							JSON.parse(data.value);
-						} catch {
-							vscode.window.showErrorMessage("The input is not valid JSON");
-							return;
-						}
-						this.executeTx(data, contract, account);
+						new Executer(this.context).Execute(data.value, {viewId: Constants.VIEWS_EXECUTE});
 						break;
 					}
 			}
-		});
-	}
-
-	private executeTx(data: any, contract: Contract, account: Account) {
-		const req = JSON.parse(data.value);
-
-		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_EXECUTE, data.value);
-		vscode.window.withProgress({
-			location: { viewId: Constants.VIEWS_EXECUTE },
-			title: "Executing msg on the contract - " + contract.label,
-			cancellable: false
-		}, (progress, token) => {
-			token.onCancellationRequested(() => { });
-			progress.report({ message: '' });
-			return new Promise(async (resolve, reject) => {
-				await Cosmwasm.Execute(account, contract, req, resolve, reject);
-			});
 		});
 	}
 

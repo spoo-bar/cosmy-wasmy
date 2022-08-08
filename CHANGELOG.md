@@ -23,11 +23,14 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Added
 
 - Showing upload contract option in editor menus as well for wasm files
+- Showing query and execute icons on json files to directly call contracts
+- New command `cosmy-wasmy.executeCosmwasm` which will run the current json file as input to Cosmwasm query or tx
 
 ### Changed
 
- - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
- 
+- Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
+
+
 ## [v1.0.0] - 31 July 2022
 
 Wohoooo!! 🎉

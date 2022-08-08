@@ -1,16 +1,10 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../helpers/Workspace';
 import { Constants } from '../constants';
-import { Cosmwasm } from '../helpers/CosmwasmAPI';
-import { HistoryHandler } from '../helpers/HistoryHandler';
-import { Contract } from '../models/Contract';
+import { Executer } from '../helpers/Cosmwasm/Executer';
 
 
 export class QueryProvider implements vscode.WebviewViewProvider {
-
-
 	private _view?: vscode.WebviewView;
-
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
@@ -19,9 +13,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
 		this._view = webviewView;
-
 		webviewView.webview.options = {
-			// Allow scripts in the webview
 			enableScripts: true,
 		};
 
@@ -31,36 +23,9 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						const contract = Workspace.GetSelectedContract();
-						if (!contract) {
-							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
-							return;
-						}
-						try {
-							JSON.parse(data.value);
-						} catch {
-							vscode.window.showErrorMessage("The input is not valid JSON");
-							return;
-						}
-						this.execQuery(data, contract);
+						new Executer(this.context).Query(data.value, {viewId: Constants.VIEWS_QUERY});
 					}
 			}
-		});
-	}
-
-	private execQuery(data: any, contract: Contract) {
-		const query = JSON.parse(data.value);
-		HistoryHandler.RecordAction(this.context, contract, Constants.VIEWS_QUERY, data.value);
-		vscode.window.withProgress({
-			location: { viewId: Constants.VIEWS_QUERY },
-			title: "Querying the contract - " + contract.label,
-			cancellable: false
-		}, (progress, token) => {
-			token.onCancellationRequested(() => { });
-			progress.report({ message: '' });
-			return new Promise(async (resolve, reject) => {
-				await Cosmwasm.Query(contract, query, resolve, reject);
-			});
 		});
 	}
 

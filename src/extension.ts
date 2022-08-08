@@ -19,6 +19,8 @@ import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 import { InitializeViewProvider } from './views/InitializeViewProvider';
 import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
 import { HistoryHandler } from './helpers/HistoryHandler';
+import { TextDecoder } from 'util';
+import { Executer } from './helpers/Cosmwasm/Executer';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -102,6 +104,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerUploadContractCmd();
 		registerQueryHistoryCmd();
 		registerExportDataCmd();
+		registerInteractCosmwasmCmd();
 	}
 
 	function registerAddAccountCmd() {
@@ -380,13 +383,13 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	function registerAddContractCommentCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addComments', (contract: Contract) => {
-			if(contract) {
+			if (contract) {
 				vscode.window.showInputBox({
 					title: "Add comments/notes for the contract",
 					prompt: "Comments/notes added here will show up as you hover on the contract in the sidebar. This is purely to help with development and is not stored on-chain in any way",
 					value: contract.notes
 				}).then(input => {
-					if(input) {
+					if (input) {
 						contract.notes = input;
 						Contract.UpdateContract(context.globalState, contract);
 						contractViewProvider.refresh(Contract.GetContracts(context.globalState));
@@ -535,6 +538,41 @@ export async function activate(context: vscode.ExtensionContext) {
 				});
 			});
 		});
+		context.subscriptions.push(disposable);
+	}
+
+	function registerInteractCosmwasmCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.executeCosmwasm', (jsonFile: vscode.Uri) => {
+			vscode.window.showQuickPick(["Query", "Tx"], {
+				canPickMany: false,
+				title: "Would you like to run the current json file as Query or Tx?"
+			}).then(async res => {
+				if (res) {
+					if(jsonFile) {
+						vscode.workspace.openTextDocument(jsonFile).then((document) => {
+							let jsonInput = document.getText();
+							run(res, jsonInput);
+						});
+					}	
+					else {
+						let activeFile = vscode.window.activeTextEditor;
+						if(activeFile) {
+							let jsonInput = activeFile.document.getText();
+							run(res, jsonInput);
+						}
+					}
+				}
+			})
+		});
+		function run(response: string, jsonInput: any) {
+			const cosmwasmExecutor = new Executer(context.globalState);
+			if (response === "Query") {
+				cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
+			}
+			else if (response === "Tx") {
+				cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
+			}
+		}
 		context.subscriptions.push(disposable);
 	}
 

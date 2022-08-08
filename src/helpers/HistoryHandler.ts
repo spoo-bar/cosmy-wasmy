@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { Constants } from '../constants';
 import { Contract } from '../models/Contract';
 import { ExtData } from './ExtData';
 import { Workspace } from './Workspace';
@@ -10,16 +9,9 @@ export class HistoryHandler {
         return ExtData.GetExtensionData(context).history ?? [];
     }
 
-    public static RecordAction(context: vscode.Memento, contract: Contract, view: String, input: string) {
+    public static RecordAction(context: vscode.Memento, contract: Contract, action: Action, input: string) {
         if (Workspace.GetCosmwasmQueriesStored() > 0) {
-            let actionType: Action = Action.Invalid;
-            switch (view) {
-                case Constants.VIEWS_QUERY: actionType = Action.Query; break;
-                case Constants.VIEWS_EXECUTE: actionType = Action.Tx; break;
-                case Constants.VIEWS_MIGRATE: actionType = Action.Migrate; break;
-                case Constants.VIEWS_INITIALIZE: actionType = Action.Initialize; break;
-            }
-            let history = new History(contract.contractAddress, actionType, input);
+            let history = new History(contract.contractAddress, action, input);
 
             HistoryHandler.SaveHistory(context, history);
             return;
