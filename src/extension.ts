@@ -18,9 +18,8 @@ import { MigrateViewProvider } from './views/MigrateViewProvider';
 import { CosmwasmTerminal } from './views/CosmwasmTerminal';
 import { InitializeViewProvider } from './views/InitializeViewProvider';
 import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
-import { HistoryHandler } from './helpers/ExtensionData/HistoryHandler';
-import { TextDecoder } from 'util';
 import { Executer } from './helpers/Cosmwasm/Executer';
+import { TextEncoder } from 'util';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -465,6 +464,39 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerGenerateSchemaCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.generateSchema', async () => {
 			terminal.schema();
+			const workspaceFolder = vscode.workspace.workspaceFolders;
+			if (workspaceFolder && workspaceFolder.length > 0) {
+				let settings: any = {};
+				const settingsFile = vscode.Uri.joinPath(workspaceFolder[0].uri, ".vscode", "settings.json");
+				vscode.workspace.openTextDocument(settingsFile).then((document) => {
+					settings = JSON.parse(document.getText());
+				});
+				const schema = [{
+					fileMatch: [
+						"*.json"
+					],
+					url: "/schema/execute_msg.json"
+				}, {
+					fileMatch: [
+						"*.json"
+					],
+					url: "/schema/query_msg.json"
+				}];
+				if (settings.json) {
+					if (settings.json.schemas) {
+						settings["json.schemas"].push(...schema);
+					}
+					else {
+						settings["json.schemas"] = schema;
+					}
+				}
+				else {
+					settings["json.schemas"] = schema;
+				}
+				const ss = new TextEncoder().encode(JSON.stringify(settings, null, 4));
+				vscode.workspace.fs.writeFile(settingsFile, ss);
+
+			}
 		});
 
 		context.subscriptions.push(disposable);
@@ -548,15 +580,15 @@ export async function activate(context: vscode.ExtensionContext) {
 				title: "Would you like to run the current json file as Query or Tx?"
 			}).then(async res => {
 				if (res) {
-					if(jsonFile) {
+					if (jsonFile) {
 						vscode.workspace.openTextDocument(jsonFile).then((document) => {
 							let jsonInput = document.getText();
 							run(res, jsonInput);
 						});
-					}	
+					}
 					else {
 						let activeFile = vscode.window.activeTextEditor;
-						if(activeFile) {
+						if (activeFile) {
 							let jsonInput = activeFile.document.getText();
 							run(res, jsonInput);
 						}
@@ -590,7 +622,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	if (!rustLangExtension) {
 		vscode.window.showWarningMessage(new vscode.MarkdownString("We recommend to install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extention while working with Rust on vscode.").value)
 	}
-
 
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
 	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
