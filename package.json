@@ -38,11 +38,13 @@
       {
         "command": "cosmy-wasmy.addAccount",
         "title": "Add Account",
+        "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.requestFunds",
         "title": "Request Funds",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": {
           "light": "media/icons/light/fund.svg",
@@ -52,101 +54,122 @@
       {
         "command": "cosmy-wasmy.openInExplorer",
         "title": "Open In Explorer",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": "$(link-external)"
       },
       {
         "command": "cosmy-wasmy.copyAddress",
         "title": "Copy Address",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == account || viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.copyMnemonic",
         "title": "Copy Mnemonic",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.deleteAccount",
         "title": "Delete Account",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.addContract",
         "title": "Import Contract",
+        "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
         "title": "Delete Contract",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.updateContractAdmin",
         "title": "Update Admin",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.clearContractAdmin",
         "title": "Clear Admin",
+        "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.reloadConfig",
-        "title": "Reload Chain Config"
+        "title": "Reload Chain Config",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.resetData",
-        "title": "Reset Data"
+        "title": "Reset Data",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.build",
-        "title": "Build"
+        "title": "Build",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.runUnitTests",
-        "title": "Run Unit Tests"
+        "title": "Run Unit Tests",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.optimizeContract",
-        "title": "Optimize Contract"
+        "title": "Optimize Contract",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.generateSchema",
-        "title": "Generate Schema"
+        "title": "Generate Schema",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.setupDevEnv",
-        "title": "Setup Dev Environment"
+        "title": "Setup Dev Environment",
+        "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.upload",
         "title": "Upload contract",
+        "category": "Cosmy Wasmy",
         "icon": "$(cloud-upload)"
       },
       {
         "command": "cosmy-wasmy.history",
         "title": "Show Cosmwasm History",
+        "category": "Cosmy Wasmy",
         "icon": "$(history)"
       },
       {
         "command": "cosmy-wasmy.export",
         "title": "Export accounts, contracts and history as JSON",
+        "category": "Cosmy Wasmy",
         "shortTitle": "Export Cosmy Wasmy data"
       },
       {
         "command": "cosmy-wasmy.addComments",
         "title": "Add comments/notes for the contract",
+        "category": "Cosmy Wasmy",
         "icon": "$(comment)",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.queryCosmwasm",
         "title": "query",
+        "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.execCosmwasm",
         "title": "tx",
+        "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       }
     ],
