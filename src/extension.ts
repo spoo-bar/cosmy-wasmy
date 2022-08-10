@@ -103,7 +103,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerUploadContractCmd();
 		registerQueryHistoryCmd();
 		registerExportDataCmd();
-		registerInteractCosmwasmCmd();
+		registerQueryCosmwasmCmd();
+		registerTxCosmwasmCmd();
 	}
 
 	function registerAddAccountCmd() {
@@ -573,38 +574,45 @@ export async function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposable);
 	}
 
-	function registerInteractCosmwasmCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.executeCosmwasm', (jsonFile: vscode.Uri) => {
-			vscode.window.showQuickPick(["Query", "Tx"], {
-				canPickMany: false,
-				title: "Would you like to run the current json file as Query or Tx?"
-			}).then(async res => {
-				if (res) {
-					if (jsonFile) {
-						vscode.workspace.openTextDocument(jsonFile).then((document) => {
-							let jsonInput = document.getText();
-							run(res, jsonInput);
-						});
-					}
-					else {
-						let activeFile = vscode.window.activeTextEditor;
-						if (activeFile) {
-							let jsonInput = activeFile.document.getText();
-							run(res, jsonInput);
-						}
-					}
+	function registerQueryCosmwasmCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.queryCosmwasm', (jsonFile: vscode.Uri) => {
+			if (jsonFile) {
+				vscode.workspace.openTextDocument(jsonFile).then((document) => {
+					let jsonInput = document.getText();
+					const cosmwasmExecutor = new Executer(context.globalState);
+					cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
+				});
+			}
+			else {
+				let activeFile = vscode.window.activeTextEditor;
+				if (activeFile) {
+					let jsonInput = activeFile.document.getText();
+					const cosmwasmExecutor = new Executer(context.globalState);
+					cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
 				}
-			})
+			}
 		});
-		function run(response: string, jsonInput: any) {
-			const cosmwasmExecutor = new Executer(context.globalState);
-			if (response === "Query") {
-				cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
+		context.subscriptions.push(disposable);
+	}
+
+	function registerTxCosmwasmCmd() {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.execCosmwasm', (jsonFile: vscode.Uri) => {
+			if (jsonFile) {
+				vscode.workspace.openTextDocument(jsonFile).then((document) => {
+					let jsonInput = document.getText();
+					const cosmwasmExecutor = new Executer(context.globalState);
+					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
+				});
 			}
-			else if (response === "Tx") {
-				cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
+			else {
+				let activeFile = vscode.window.activeTextEditor;
+				if (activeFile) {
+					let jsonInput = activeFile.document.getText();
+					const cosmwasmExecutor = new Executer(context.globalState);
+					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
+				}
 			}
-		}
+		});
 		context.subscriptions.push(disposable);
 	}
 

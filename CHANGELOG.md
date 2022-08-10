@@ -24,7 +24,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 - Showing upload contract option in editor menus as well for wasm files
 - Showing query and execute icons on json files to directly call contracts
-- New command `cosmy-wasmy.executeCosmwasm` which will run the current json file as input to Cosmwasm query or tx
 - On `cosmy-wasmy.generateSchema`, the json schema is set into the workspace settings so that any json file can get code completion from the query or execute msgs. 
 
 ### Changed

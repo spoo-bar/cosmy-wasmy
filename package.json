@@ -140,9 +140,13 @@
         "enablement": "viewItem == contract"
       },
       {
-        "command": "cosmy-wasmy.executeCosmwasm",
-        "title": "Execute file as Cosmwasm Query/Tx",
-        "icon": "$(play)",
+        "command": "cosmy-wasmy.queryCosmwasm",
+        "title": "query",
+        "enablement": "resourceLangId == json"
+      },
+      {
+        "command": "cosmy-wasmy.execCosmwasm",
+        "title": "tx",
         "enablement": "resourceLangId == json"
       }
     ],
@@ -335,7 +339,12 @@
           "group": "navigation"
         },
         {
-          "command": "cosmy-wasmy.executeCosmwasm",
+          "command": "cosmy-wasmy.queryCosmwasm",
+          "when": "resourceLangId == json",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.execCosmwasm",
           "when": "resourceLangId == json",
           "group": "navigation"
         }
