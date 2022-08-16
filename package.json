@@ -275,6 +275,15 @@
                 "rpcEndpoint": "http://localhost:26657",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "uosmo"
+              },
+              {
+                "configName": "Testnet - Archway - Constantine",
+                "chainId": "constantine-1",
+                "addressPrefix": "archway",
+                "rpcEndpoint": "https://rpc.constantine-1.archway.tech/",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "const",
+                "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}"
               }
             ]
           },
