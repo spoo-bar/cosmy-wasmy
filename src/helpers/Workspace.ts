@@ -25,6 +25,10 @@ export class Workspace {
         this.selectedContract = contract;
     }
 
+    public static SetWorkspaceChainConfig(chainConfigName: string) {
+        vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAIN_CONFIG_NAME, chainConfigName, vscode.ConfigurationTarget.Workspace);
+    }
+
     public static GetWorkspaceChainConfig(): ChainConfig {
         const configs = this.GetChainConfigs();
         if(configs) {
@@ -58,7 +62,7 @@ export class Workspace {
         return config;
     }
 
-    private static GetChainConfigs(): ChainConfig[] | undefined {
+    public static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
     }
@@ -78,6 +82,7 @@ export enum ContractSortOrder {
 class ChainConfig {
     configName!: string;
     chainId!: string;
+    chainEnvironment!: string;
     addressPrefix!: string;
     rpcEndpoint!: string;
     defaultGasPrice!: string;

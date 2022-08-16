@@ -32,6 +32,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Changed
 
 - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
+- The chain selection now happens from the UI of the extension, and not the Settings page in vscode.
 
 
 ## [v1.0.0] - 31 July 2022

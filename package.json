@@ -182,7 +182,8 @@
             "markdownDescription": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
             "scope": "resource",
             "order": 0,
-            "default": "Juno UNI-3 testnet"
+            "default": "Juno UNI-3 testnet",
+            "deprecationMessage": "This property is not used anymore in fetching the workspace chain config. Click on the Status bar item to select the chain config you require."
           },
           "cosmywasmy.chains": {
             "type": "array",

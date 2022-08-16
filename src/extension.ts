@@ -59,7 +59,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		const config = Workspace.GetWorkspaceChainConfig();
 		chainSelected.text = "$(plug)" + config.configName;
 		chainSelected.show();
-		Cosmwasm.CreateClientAsync();
 		refreshExtensionContext();
 	}
 
@@ -423,12 +422,46 @@ export async function activate(context: vscode.ExtensionContext) {
 	function registerReloadConfigCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
 			try {
-				loadChainConfig();
-				const accounts = await Account.GetAccounts(context.globalState);
-				accountViewProvider.refresh(accounts);
-				const contracts = Contract.GetContracts(context.globalState);
-				contractViewProvider.refresh(contracts);
-				vscode.window.showInformationMessage("Selected chain config has been reloaded.");
+				const chainConfigs = Workspace.GetChainConfigs();
+				const chainPicks: vscode.QuickPickItem[] = [];
+				chainPicks.push({
+					label: "Localnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "localnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				chainPicks.push({
+					label: "Testnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "testnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				chainPicks.push({
+					label: "Mainnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "mainnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				vscode.window.showQuickPick(chainPicks).then(async select => {
+					if (select) {
+						Workspace.SetWorkspaceChainConfig(select.label);
+						refreshExtensionContext();
+						const accounts = await Account.GetAccounts(context.globalState);
+						accountViewProvider.refresh(accounts);
+						const contracts = Contract.GetContracts(context.globalState);
+						contractViewProvider.refresh(contracts);
+
+						chainSelected.text = "$(plug)" + select.label;
+						chainSelected.show();
+						vscode.window.showInformationMessage(select.label + " has been loaded.");
+					}
+				})
 			}
 			catch (error: any) {
 				vscode.window.showErrorMessage(error.message);
@@ -618,7 +651,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	try {
 		loadChainConfig();
-		await Cosmwasm.CreateClientAsync();
 
 	}
 	catch (error: any) {
@@ -637,6 +669,5 @@ export async function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-	Cosmwasm.Client.disconnect();
 }
 

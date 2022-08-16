@@ -11,14 +11,14 @@ import { Account } from "../../models/Account";
 
 export class CosmwasmAPI {
     public static async GetContract(contractAddress: string): Promise<Contract> {
-        let client = Cosmwasm.Client;
+        let client = await Cosmwasm.GetQueryClient();
         const contractInfo = await client.getContract(contractAddress);
         let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, Workspace.GetWorkspaceChainConfig().configName);
         return contract;
     }
 
     public static async GetBalance(address: string): Promise<string> {
-        let client = Cosmwasm.Client;
+        let client = await Cosmwasm.GetQueryClient();
         let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
         let balance = await client.getBalance(address, denom);
         return balance.amount;
@@ -33,22 +33,10 @@ export class CosmwasmAPI {
 }
 
 export class Cosmwasm {
-    private static _instance: CosmWasmClient;
 
-    private constructor() { }
-
-    public static CreateClientAsync = async () => {
-        new Cosmwasm();
-        await Cosmwasm.createCosmwasmClient();
-    };
-
-    private static async createCosmwasmClient() {
+    public static async GetQueryClient() {
         const rpcEndpoint = Workspace.GetWorkspaceChainConfig().rpcEndpoint;
-        Cosmwasm._instance = await CosmWasmClient.connect(rpcEndpoint);
-    }
-
-    public static get Client() {
-        return this._instance;
+        return await CosmWasmClient.connect(rpcEndpoint);
     }
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
@@ -67,7 +55,7 @@ export class Cosmwasm {
 
     public static async Query(contract: Contract, query: any, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
 		try {
-			let resp = await Cosmwasm.Client.queryContractSmart(contract.contractAddress, query);
+			let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract.contractAddress, query);
 			ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
 			resolve(undefined);
 		}
