@@ -203,6 +203,17 @@
                   "type": "string",
                   "description": "Chain ID"
                 },
+                "chainEnvironment": {
+                  "type": "string",
+                  "description": "Is the chain localnet, testnet or (god forbid 😨) mainnet",
+                  "enum": ["localnet", "testnet", "mainnet"],
+                  "enumDescriptions": [
+                    "The chain is running locally on your system",
+                    "The chain is a testnet chain",
+                    "The chain is mainnet. DO NOT CONNECT MAINNETS to the extension unless you are super sure you know what you are doing. The extension saves the seed phrase in plain text."
+                  ],
+                  "default": "testnet"
+                },
                 "addressPrefix": {
                   "type": "string",
                   "description": "Prefix used by the chain"
@@ -234,6 +245,7 @@
               "required": [
                 "configName",
                 "chainId",
+                "chainEnvironment",
                 "addressPrefix",
                 "rpcEndpoint",
                 "defaultGasPrice",
@@ -244,6 +256,7 @@
               {
                 "configName": "Juno UNI-3 testnet",
                 "chainId": "uni-3",
+                "chainEnvironment": "testnet",
                 "addressPrefix": "juno",
                 "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
                 "defaultGasPrice": "0.025",
@@ -253,6 +266,7 @@
               {
                 "configName": "Localnet - Juno",
                 "chainId": "testing",
+                "chainEnvironment": "localnet",
                 "addressPrefix": "juno",
                 "rpcEndpoint": "http://localhost:26657",
                 "defaultGasPrice": "0.025",
@@ -262,6 +276,7 @@
               {
                 "configName": "Testnet - Osmosis",
                 "chainId": "osmo-test-4",
+                "chainEnvironment": "testnet",
                 "addressPrefix": "osmo",
                 "rpcEndpoint": "https://rpc-test.osmosis.zone",
                 "defaultGasPrice": "0.025",
@@ -271,6 +286,7 @@
               {
                 "configName": "Localnet - Osmosis",
                 "chainId": "localosmosis",
+                "chainEnvironment": "localnet",
                 "addressPrefix": "osmo",
                 "rpcEndpoint": "http://localhost:26657",
                 "defaultGasPrice": "0.025",
@@ -279,6 +295,7 @@
               {
                 "configName": "Testnet - Archway - Constantine",
                 "chainId": "constantine-1",
+                "chainEnvironment": "testnet",
                 "addressPrefix": "archway",
                 "rpcEndpoint": "https://rpc.constantine-1.archway.tech/",
                 "defaultGasPrice": "0.025",

@@ -27,6 +27,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - On `cosmy-wasmy.generateSchema`, the json schema is set into the workspace settings so that any json file can get code completion from the query or execute msgs. 
 - Added category to commands to make it easier to search and find the relevant ones from Command Palette 
 - Added Archway Constantine testnet to preset chain config 
+- Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
 
 ### Changed
 
