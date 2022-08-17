@@ -20,6 +20,12 @@ import { InitializeViewProvider } from './views/InitializeViewProvider';
 import { CosmwasmHistoryView } from './views/CosmwasmHistoryView';
 import { Executer } from './helpers/Cosmwasm/Executer';
 import { TextEncoder } from 'util';
+import { Commands } from './commands/command';
+
+
+var AccountViewProvider = new AccountDataProvider();
+export default AccountViewProvider;
+	
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -30,8 +36,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	chainSelected.command = "cosmy-wasmy.reloadConfig";
 	refreshExtensionContext();
 
-	const accountViewProvider = new AccountDataProvider();
-	vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, accountViewProvider);
+	vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, AccountViewProvider);
 
 	const contractViewProvider = new ContractDataProvider();
 	vscode.window.registerTreeDataProvider(Constants.VIEWS_CONTRACT, contractViewProvider);
@@ -53,6 +58,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 
 	let terminal = new CosmwasmTerminal();
+	Commands.Register(context);
 	registerCommands();
 
 	function loadChainConfig() {
@@ -79,7 +85,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	function registerCommands() {
-		registerAddAccountCmd();
 		registerRequestFundsCmd();
 		registerOpenInExplorerCmd();
 		registerCopyAccountAddressCmd();
@@ -106,54 +111,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		registerTxCosmwasmCmd();
 	}
 
-	function registerAddAccountCmd() {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
-			vscode.window.showInputBox({
-				title: "Account Label",
-				value: "testAccount",
-			}).then(accountLabel => {
-				if (accountLabel) {
-					if (!Account.AccountLabelExists(context.globalState, accountLabel)) {
-						const options = ["Generate seed phrase for me (Recommended)", "I have a seed phrase"];
-						vscode.window.showQuickPick(options).then(rr => {
-							if (rr) {
-								if (rr == "Generate seed phrase for me (Recommended)") {
-									DirectSecp256k1HdWallet.generate(24).then(wallet => {
-										const account = new Account(accountLabel, wallet.mnemonic)
-										saveNewAccount(account);
-									});
-								}
-								if (rr == "I have a seed phrase") {
-									vscode.window.showInputBox({
-										title: "Account Mnemonic",
-										placeHolder: "Ensure this is not your main account seed phrase. This info is stored in plain text in vscode."
-									}).then(mnemonic => {
-										if (mnemonic) {
-											const account = new Account(accountLabel, mnemonic)
-											saveNewAccount(account);
-										}
-									})
-								}
-							}
-						});
-					}
-					else {
-						vscode.window.showErrorMessage("Account label \"" + accountLabel + "\" is already taken. Choose a new one.");
-					}
-				}
-			})
-		});
-
-		context.subscriptions.push(disposable);
-
-		async function saveNewAccount(account: Account) {
-			Account.AddAccount(context.globalState, account);
-			vscode.window.showInformationMessage("Added new account: " + account.label);
-			const accounts = await Account.GetAccounts(context.globalState);
-			accountViewProvider.refresh(accounts);
-		}
-	}
-
 	function registerRequestFundsCmd() {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.requestFunds', async (item: Account) => {
 			if (item.address) {
@@ -172,7 +129,7 @@ export async function activate(context: vscode.ExtensionContext) {
 								await CosmwasmAPI.RequestFunds(item.address);
 								vscode.window.showInformationMessage("Funds updated! 🤑🤑");
 								var accounts = await Account.GetAccounts(context.globalState);
-								accountViewProvider.refresh(accounts);
+								AccountViewProvider.refresh(accounts);
 								resolve(undefined);
 							}
 							catch (err: any) {
@@ -243,7 +200,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				if (resp && resp.toLowerCase() === "yes") {
 					Account.DeleteAccount(context.globalState, item);
 					var accounts = await Account.GetAccounts(context.globalState);
-					accountViewProvider.refresh(accounts);
+					AccountViewProvider.refresh(accounts);
 					vscode.window.showInformationMessage("Deleted account: " + item.label);
 				}
 			})
@@ -410,7 +367,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					ExtData.ResetExtensionData(context.globalState);
 					vscode.window.showInformationMessage('All cosmy wasmy data was reset!');
 					var data = ExtData.GetExtensionData(context.globalState);
-					accountViewProvider.refresh(data.accounts);
+					AccountViewProvider.refresh(data.accounts);
 					contractViewProvider.refresh(data.contracts);
 				}
 			})
@@ -453,7 +410,7 @@ export async function activate(context: vscode.ExtensionContext) {
 						Workspace.SetWorkspaceChainConfig(select.label);
 						refreshExtensionContext();
 						const accounts = await Account.GetAccounts(context.globalState);
-						accountViewProvider.refresh(accounts);
+						AccountViewProvider.refresh(accounts);
 						const contracts = Contract.GetContracts(context.globalState);
 						contractViewProvider.refresh(contracts);
 
@@ -664,7 +621,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
-	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
+	AccountViewProvider.refresh(await Account.GetAccounts(context.globalState));
 }
 
 // this method is called when your extension is deactivated
