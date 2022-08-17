@@ -28,12 +28,17 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Added category to commands to make it easier to search and find the relevant ones from Command Palette 
 - Added Archway Constantine testnet to preset chain config 
 - Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
+- Added a warning text on hover when the contract is not associated with any chain configs
 
 ### Changed
 
 - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
 - The chain selection now happens from the UI of the extension, and not the Settings page in vscode.
+- Instead of showing a plug icon next to contracts with chain config sest, now, the contracts without chain config are shown with a plug disconnected icon.
 
+### Deprecated
+
+- `cosmywasmy.chainConfigName` setting deprecated and the config will now be set using the extension command `cosmy-wasmy.reloadConfig`
 
 ## [v1.0.0] - 31 July 2022
 
