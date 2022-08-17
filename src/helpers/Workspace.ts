@@ -38,7 +38,8 @@ export class Workspace {
             }
             const selectedChains = configs.filter(c => c.configName.toLowerCase() === configName.toLowerCase());
             if (!selectedChains || selectedChains.length === 0) {
-                throw new Error("Settings has Chain Config Name as " + configName + ". No chain config with that name was found in Chains setting.");
+                vscode.window.showErrorMessage("Currently selected chain is '" + configName + "' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '" + configs[0].configName + "'");
+                return configs[0];
             }
             const selecetdChain = selectedChains[0];
             //selecetdChain.Validate();
