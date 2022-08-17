@@ -20,6 +20,12 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ## [Unreleased]
 
+### todo
+- add migration docs from v1.0.0 to the unreleased version
+- add docs for json auto completion
+- add refresh account and contract view
+- tx on completion gives notif which has link to block explorer 
+
 ### Added
 
 - Showing upload contract option in editor menus as well for wasm files
@@ -35,10 +41,16 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
 - The chain selection now happens from the UI of the extension, and not the Settings page in vscode.
 - Instead of showing a plug icon next to contracts with chain config sest, now, the contracts without chain config are shown with a plug disconnected icon.
+- Default chain configs name changed
 
 ### Deprecated
 
 - `cosmywasmy.chainConfigName` setting deprecated and the config will now be set using the extension command `cosmy-wasmy.reloadConfig`
+
+### Fixed
+
+- Fixed issue where could not import same contract address if under different chain config
+
 
 ## [v1.0.0] - 31 July 2022
 
