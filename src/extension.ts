@@ -26,7 +26,7 @@ import { TextEncoder } from 'util';
 export async function activate(context: vscode.ExtensionContext) {
 
 	let chainSelected = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
-	chainSelected.tooltip = "Selected Chain Config";
+	chainSelected.tooltip = "Select a different Chain";
 	chainSelected.command = "cosmy-wasmy.reloadConfig";
 	refreshExtensionContext();
 

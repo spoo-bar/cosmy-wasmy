@@ -162,13 +162,13 @@
       },
       {
         "command": "cosmy-wasmy.queryCosmwasm",
-        "title": "query",
+        "title": "Run Query",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.execCosmwasm",
-        "title": "tx",
+        "title": "Execute Tx",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       }
@@ -207,7 +207,11 @@
                 "chainEnvironment": {
                   "type": "string",
                   "description": "Is the chain localnet, testnet or (god forbid 😨) mainnet",
-                  "enum": ["localnet", "testnet", "mainnet"],
+                  "enum": [
+                    "localnet",
+                    "testnet",
+                    "mainnet"
+                  ],
                   "enumDescriptions": [
                     "The chain is running locally on your system",
                     "The chain is a testnet chain",
@@ -380,6 +384,18 @@
         {
           "command": "cosmy-wasmy.upload",
           "when": "resourceExtname == .wasm"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "cosmy-wasmy.queryCosmwasm",
+          "when": "resourceLangId == json",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.execCosmwasm",
+          "when": "resourceLangId == json",
+          "group": "navigation"
         }
       ],
       "editor/title": [
