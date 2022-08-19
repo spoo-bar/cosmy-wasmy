@@ -13,11 +13,12 @@ import { AccountDataProvider } from '../views/AccountDataProvider';
 import { ContractDataProvider } from '../views/ContractDataProvider';
 import { CosmwasmHistoryView } from '../views/CosmwasmHistoryView';
 import { CosmwasmTerminal } from '../views/CosmwasmTerminal';
+import { Utils } from '../views/utils';
 
 export class Commands {
     public static async Register(context: vscode.ExtensionContext) {
-		const accountViewProvider = new AccountDataProvider();
-		const contractViewProvider = new ContractDataProvider();
+		global.accountViewProvider = new AccountDataProvider();
+		global.contractViewProvider = new ContractDataProvider();
 		let terminal = new CosmwasmTerminal();
 
         this.registerAddAccountCmd(context, accountViewProvider);
@@ -34,7 +35,7 @@ export class Commands {
 		this.registerClearContractAdminCmd(context);
 		this.registerAddContractCommentCmd(context, contractViewProvider);
 		this.registerResetDataCmd(context, accountViewProvider, contractViewProvider);
-		//this.registerReloadConfigCmd(context);
+		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);
 		this.registerBuildCmd(context, terminal);
 		this.registerRunUnitTestsCmd(context, terminal);
 		this.registerOptimizeContractCmd(context, terminal);
@@ -360,57 +361,56 @@ export class Commands {
 		context.subscriptions.push(disposable);
 	}
 
-	// private static registerReloadConfigCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {
-	// 	let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
-	// 		try {
-	// 			const chainConfigs = Workspace.GetChainConfigs();
-	// 			const chainPicks: vscode.QuickPickItem[] = [];
-	// 			chainPicks.push({
-	// 				label: "Localnet",
-	// 				kind: vscode.QuickPickItemKind.Separator
-	// 			})
-	// 			chainConfigs.filter(c => c.chainEnvironment == "localnet").forEach(c => chainPicks.push({
-	// 				label: c.configName,
-	// 				detail: c.chainId
-	// 			}));
-	// 			chainPicks.push({
-	// 				label: "Testnet",
-	// 				kind: vscode.QuickPickItemKind.Separator
-	// 			})
-	// 			chainConfigs.filter(c => c.chainEnvironment == "testnet").forEach(c => chainPicks.push({
-	// 				label: c.configName,
-	// 				detail: c.chainId
-	// 			}));
-	// 			chainPicks.push({
-	// 				label: "Mainnet",
-	// 				kind: vscode.QuickPickItemKind.Separator
-	// 			})
-	// 			chainConfigs.filter(c => c.chainEnvironment == "mainnet").forEach(c => chainPicks.push({
-	// 				label: c.configName,
-	// 				detail: c.chainId
-	// 			}));
-	// 			vscode.window.showQuickPick(chainPicks).then(async select => {
-	// 				if (select) {
-	// 					Workspace.SetWorkspaceChainConfig(select.label);
-	// 					refreshExtensionContext();
-	// 					const accounts = await Account.GetAccounts(context.globalState);
-	// 					accountViewProvider.refresh(accounts);
-	// 					const contracts = Contract.GetContracts(context.globalState);
-	// 					contractViewProvider.refresh(contracts);
+	private static registerReloadConfigCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
+			try {
+				const chainConfigs = Workspace.GetChainConfigs();
+				const chainPicks: vscode.QuickPickItem[] = [];
+				chainPicks.push({
+					label: "Localnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "localnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				chainPicks.push({
+					label: "Testnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "testnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				chainPicks.push({
+					label: "Mainnet",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "mainnet").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId
+				}));
+				vscode.window.showQuickPick(chainPicks).then(async select => {
+					if (select) {
+						Workspace.SetWorkspaceChainConfig(select.label);
+						Utils.RefreshExtensionContext();
+						const accounts = await Account.GetAccounts(context.globalState);
+						accountViewProvider.refresh(accounts);
+						const contracts = Contract.GetContracts(context.globalState);
+						contractViewProvider.refresh(contracts);
 
-	// 					chainSelected.text = "$(plug)" + select.label;
-	// 					chainSelected.show();
-	// 					vscode.window.showInformationMessage(select.label + " has been loaded.");
-	// 				}
-	// 			})
-	// 		}
-	// 		catch (error: any) {
-	// 			vscode.window.showErrorMessage(error.message);
-	// 		}
-	// 	});
+						Utils.UpdateConnectedChainStatusItem();
+						vscode.window.showInformationMessage(select.label + " has been loaded.");
+					}
+				})
+			}
+			catch (error: any) {
+				vscode.window.showErrorMessage(error.message);
+			}
+		});
 
-	// 	context.subscriptions.push(disposable);
-	// }
+		context.subscriptions.push(disposable);
+	}
 
 	private static registerBuildCmd(context: vscode.ExtensionContext, terminal: CosmwasmTerminal) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.build', async () => {

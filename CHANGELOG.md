@@ -25,6 +25,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - add docs for json auto completion
 - add refresh account and contract view
 - tx on completion gives notif which has link to block explorer 
+- "json.schemas" add via code instead of file manipualtion
 
 ### Added
 
