@@ -53,7 +53,7 @@ export class Contract extends vscode.TreeItem {
 
     public static ContractAddressExists(context: vscode.Memento, contractAddr: string): boolean {
         const contracts = this.GetContracts(context);
-        return contracts.some(c => c.contractAddress === contractAddr);
+        return contracts.some(c => c.contractAddress === contractAddr && c.chainConfig === Workspace.GetWorkspaceChainConfig().configName);
     }
 
     public static async Upload(wasmFile: vscode.Uri) {

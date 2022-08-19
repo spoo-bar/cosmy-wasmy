@@ -162,13 +162,13 @@
       },
       {
         "command": "cosmy-wasmy.queryCosmwasm",
-        "title": "query",
+        "title": "Run Query",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.execCosmwasm",
-        "title": "tx",
+        "title": "Execute Tx",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       }
@@ -182,7 +182,8 @@
             "markdownDescription": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
             "scope": "resource",
             "order": 0,
-            "default": "Juno UNI-3 testnet"
+            "default": "Juno UNI-3 testnet",
+            "deprecationMessage": "This property is not used anymore in fetching the workspace chain config. Click on the Status bar item to select the chain config you require."
           },
           "cosmywasmy.chains": {
             "type": "array",
@@ -202,6 +203,21 @@
                 "chainId": {
                   "type": "string",
                   "description": "Chain ID"
+                },
+                "chainEnvironment": {
+                  "type": "string",
+                  "description": "Is the chain localnet, testnet or (god forbid 😨) mainnet",
+                  "enum": [
+                    "localnet",
+                    "testnet",
+                    "mainnet"
+                  ],
+                  "enumDescriptions": [
+                    "The chain is running locally on your system",
+                    "The chain is a testnet chain",
+                    "The chain is mainnet. DO NOT CONNECT MAINNETS to the extension unless you are super sure you know what you are doing. The extension saves the seed phrase in plain text."
+                  ],
+                  "default": "testnet"
                 },
                 "addressPrefix": {
                   "type": "string",
@@ -234,6 +250,7 @@
               "required": [
                 "configName",
                 "chainId",
+                "chainEnvironment",
                 "addressPrefix",
                 "rpcEndpoint",
                 "defaultGasPrice",
@@ -242,8 +259,9 @@
             },
             "default": [
               {
-                "configName": "Juno UNI-3 testnet",
+                "configName": "Juno UNI-3",
                 "chainId": "uni-3",
+                "chainEnvironment": "testnet",
                 "addressPrefix": "juno",
                 "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
                 "defaultGasPrice": "0.025",
@@ -251,8 +269,9 @@
                 "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
               },
               {
-                "configName": "Localnet - Juno",
+                "configName": "Juno",
                 "chainId": "testing",
+                "chainEnvironment": "localnet",
                 "addressPrefix": "juno",
                 "rpcEndpoint": "http://localhost:26657",
                 "defaultGasPrice": "0.025",
@@ -260,8 +279,9 @@
                 "faucetEndpoint": "http://localhost:8000"
               },
               {
-                "configName": "Testnet - Osmosis",
+                "configName": "Osmosis test-4",
                 "chainId": "osmo-test-4",
+                "chainEnvironment": "testnet",
                 "addressPrefix": "osmo",
                 "rpcEndpoint": "https://rpc-test.osmosis.zone",
                 "defaultGasPrice": "0.025",
@@ -269,12 +289,23 @@
                 "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}"
               },
               {
-                "configName": "Localnet - Osmosis",
+                "configName": "Osmosis",
                 "chainId": "localosmosis",
+                "chainEnvironment": "localnet",
                 "addressPrefix": "osmo",
                 "rpcEndpoint": "http://localhost:26657",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "uosmo"
+              },
+              {
+                "configName": "Archway - Constantine-1",
+                "chainId": "constantine-1",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "archway",
+                "rpcEndpoint": "https://rpc.constantine-1.archway.tech/",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "const",
+                "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}"
               }
             ]
           },
@@ -353,6 +384,18 @@
         {
           "command": "cosmy-wasmy.upload",
           "when": "resourceExtname == .wasm"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "cosmy-wasmy.queryCosmwasm",
+          "when": "resourceLangId == json",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.execCosmwasm",
+          "when": "resourceLangId == json",
+          "group": "navigation"
         }
       ],
       "editor/title": [

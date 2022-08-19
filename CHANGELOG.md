@@ -20,16 +20,37 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ## [Unreleased]
 
+### todo
+- add migration docs from v1.0.0 to the unreleased version
+- add docs for json auto completion
+- add refresh account and contract view
+- tx on completion gives notif which has link to block explorer 
+- "json.schemas" add via code instead of file manipualtion
+
 ### Added
 
 - Showing upload contract option in editor menus as well for wasm files
-- Showing query and execute icons on json files to directly call contracts
+- Showing query and execute icons on json files to directly call contracts, as well as to the JSON file context menu
 - On `cosmy-wasmy.generateSchema`, the json schema is set into the workspace settings so that any json file can get code completion from the query or execute msgs. 
 - Added category to commands to make it easier to search and find the relevant ones from Command Palette 
+- Added Archway Constantine testnet to preset chain config 
+- Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
+- Added a warning text on hover when the contract is not associated with any chain configs
 
 ### Changed
 
 - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
+- The chain selection now happens from the UI of the extension, and not the Settings page in vscode.
+- Instead of showing a plug icon next to contracts with chain config sest, now, the contracts without chain config are shown with a plug disconnected icon.
+- Default chain configs name changed
+
+### Deprecated
+
+- `cosmywasmy.chainConfigName` setting deprecated and the config will now be set using the extension command `cosmy-wasmy.reloadConfig`
+
+### Fixed
+
+- Fixed issue where could not import same contract address if under different chain config
 
 
 ## [v1.0.0] - 31 July 2022

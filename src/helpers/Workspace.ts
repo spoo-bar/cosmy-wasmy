@@ -25,6 +25,10 @@ export class Workspace {
         this.selectedContract = contract;
     }
 
+    public static SetWorkspaceChainConfig(chainConfigName: string) {
+        vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAIN_CONFIG_NAME, chainConfigName, vscode.ConfigurationTarget.Workspace);
+    }
+
     public static GetWorkspaceChainConfig(): ChainConfig {
         const configs = this.GetChainConfigs();
         if(configs) {
@@ -34,7 +38,8 @@ export class Workspace {
             }
             const selectedChains = configs.filter(c => c.configName.toLowerCase() === configName.toLowerCase());
             if (!selectedChains || selectedChains.length === 0) {
-                throw new Error("Settings has Chain Config Name as " + configName + ". No chain config with that name was found in Chains setting.");
+                vscode.window.showErrorMessage("Currently selected chain is '" + configName + "' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '" + configs[0].configName + "'");
+                return configs[0];
             }
             const selecetdChain = selectedChains[0];
             //selecetdChain.Validate();
@@ -58,7 +63,7 @@ export class Workspace {
         return config;
     }
 
-    private static GetChainConfigs(): ChainConfig[] | undefined {
+    public static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
     }
@@ -78,6 +83,7 @@ export enum ContractSortOrder {
 class ChainConfig {
     configName!: string;
     chainId!: string;
+    chainEnvironment!: string;
     addressPrefix!: string;
     rpcEndpoint!: string;
     defaultGasPrice!: string;
