@@ -29,6 +29,10 @@ export class Workspace {
         vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAIN_CONFIG_NAME, chainConfigName, vscode.ConfigurationTarget.Workspace);
     }
 
+    public static SetWorkspaceSchemaAutoComplete(schemaPath: any) {
+        vscode.workspace.getConfiguration().update("json.schemas", schemaPath, vscode.ConfigurationTarget.Workspace);
+    }
+
     public static GetWorkspaceChainConfig(): ChainConfig {
         const configs = this.GetChainConfigs();
         if(configs) {

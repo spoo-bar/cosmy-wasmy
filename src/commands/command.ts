@@ -439,39 +439,18 @@ export class Commands {
 	private static registerGenerateSchemaCmd(context: vscode.ExtensionContext, terminal: CosmwasmTerminal) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.generateSchema', async () => {
 			terminal.schema();
-			const workspaceFolder = vscode.workspace.workspaceFolders;
-			if (workspaceFolder && workspaceFolder.length > 0) {
-				let settings: any = {};
-				const settingsFile = vscode.Uri.joinPath(workspaceFolder[0].uri, ".vscode", "settings.json");
-				vscode.workspace.openTextDocument(settingsFile).then((document) => {
-					settings = JSON.parse(document.getText());
-				});
-				const schema = [{
-					fileMatch: [
-						"*.json"
-					],
-					url: "/schema/execute_msg.json"
-				}, {
-					fileMatch: [
-						"*.json"
-					],
-					url: "/schema/query_msg.json"
-				}];
-				if (settings.json) {
-					if (settings.json.schemas) {
-						settings["json.schemas"].push(...schema);
-					}
-					else {
-						settings["json.schemas"] = schema;
-					}
-				}
-				else {
-					settings["json.schemas"] = schema;
-				}
-				const ss = new TextEncoder().encode(JSON.stringify(settings, null, 4));
-				vscode.workspace.fs.writeFile(settingsFile, ss);
-
-			}
+			const schema = [{
+				fileMatch: [
+					"*.json"
+				],
+				url: "/schema/execute_msg.json"
+			}, {
+				fileMatch: [
+					"*.json"
+				],
+				url: "/schema/query_msg.json"
+			}];
+			Workspace.SetWorkspaceSchemaAutoComplete(schema);
 		});
 
 		context.subscriptions.push(disposable);
