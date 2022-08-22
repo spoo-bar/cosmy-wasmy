@@ -94,6 +94,7 @@ class ChainConfig {
     chainDenom!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
+    txExplorerLink!: string;
 
     public Validate() {
         if (!this) {

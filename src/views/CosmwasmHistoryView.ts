@@ -52,13 +52,20 @@ export class CosmwasmHistoryView {
                                     location: vscode.ProgressLocation.Notification,
                                     title: "Executing msg on the contract - " + contract.label,
                                     cancellable: false
-                                }, (progress, token) => {
+                                }, async (progress, token) => {
                                     token.onCancellationRequested(() => { });
                                     progress.report({ message: '' });
-                                    return new Promise(async (resolve, reject) => {
-                                        let data = JSON.parse(action.inputData);
-                                        await Cosmwasm.Execute(account, contract, data, resolve, reject);
-                                    });
+                                    let data = JSON.parse(action.inputData);
+                                    const tx = await Cosmwasm.Execute(account, contract, data);
+                                    const url = Workspace.GetWorkspaceChainConfig().txExplorerLink;
+                                    if (tx && url) {
+                                        const explorerUrl = url.replace("${txHash}", tx);
+                                        vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
+                                        return Promise.resolve();
+                                    }
+                                    else {
+                                        return Promise.reject();
+                                    }
                                 });
                                 break;
                             }

@@ -58,18 +58,25 @@ export class Executer {
 
         const req = JSON.parse(input);
 
-		HistoryHandler.RecordAction(this.context, contract, Action.Tx, input);
-		vscode.window.withProgress({
-			location: location,
-			title: "Executing msg on the contract - " + contract.label,
-			cancellable: false
-		}, (progress, token) => {
-			token.onCancellationRequested(() => { });
-			progress.report({ message: '' });
-			return new Promise(async (resolve, reject) => {
-				await Cosmwasm.Execute(account, contract, req, resolve, reject);
-			});
-		});
+        HistoryHandler.RecordAction(this.context, contract, Action.Tx, input);
+        vscode.window.withProgress({
+            location: location,
+            title: "Executing msg on the contract - " + contract.label,
+            cancellable: false
+        }, async (progress, token) => {
+            token.onCancellationRequested(() => { });
+            progress.report({ message: '' });
+            const tx = await Cosmwasm.Execute(account, contract, req);
+            const url = Workspace.GetWorkspaceChainConfig().txExplorerLink;
+            if (tx && url) {
+                const explorerUrl = url.replace("${txHash}", tx);
+                vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
+                return Promise.resolve();
+            }
+            else {
+                return Promise.reject();
+            }
+        });
     }
 
 }

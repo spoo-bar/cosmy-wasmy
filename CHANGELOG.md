@@ -24,7 +24,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - add migration docs from v1.0.0 to the unreleased version
 - add docs for json auto completion
 - add refresh account and contract view
-- tx on completion gives notif which has link to block explorer 
 - show progress bar when chaning chains
 
 ### Added
@@ -36,6 +35,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Added Archway Constantine testnet to preset chain config 
 - Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
 - Added a warning text on hover when the contract is not associated with any chain configs
+- On tx completion, a notification shows which links to the tx explorer page based on configuration
 
 ### Changed
 

@@ -65,16 +65,15 @@ export class Cosmwasm {
 		}
 	}
 
-    public static async Execute(account: Account, contract: Contract, req: any, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+    public static async Execute(account: Account, contract: Contract, req: any) {
 		try {
             let client = await Cosmwasm.GetSigningClient();
 			let response = await client.execute(account.address, contract.contractAddress, req, "auto");
 			ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
-			resolve(undefined);
+			return response.transactionHash;
 		}
 		catch (err: any) {
 			ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
-			reject(undefined);
 		}
 	}
 
