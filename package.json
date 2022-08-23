@@ -245,6 +245,13 @@
                   "examples": [
                     "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
                   ]
+                },
+                "txExplorerLink": {
+                  "type": "string",
+                  "description": "Block explorer url which includes '${txHash}' text to generate tx url",
+                  "examples": [
+                    "https://testnet.mintscan.io/juno-testnet/txs/${txHash}"
+                  ]
                 }
               },
               "required": [
@@ -266,7 +273,8 @@
                 "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "ujunox",
-                "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
+                "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}",
+                "txExplorerLink": "https://testnet.mintscan.io/juno-testnet/txs/${txHash}"
               },
               {
                 "configName": "Juno",
@@ -286,7 +294,8 @@
                 "rpcEndpoint": "https://rpc-test.osmosis.zone",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "uosmo",
-                "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}"
+                "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}",
+                "txExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/txs/${txHash}"
               },
               {
                 "configName": "Osmosis",
@@ -305,7 +314,8 @@
                 "rpcEndpoint": "https://rpc.constantine-1.archway.tech/",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "const",
-                "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}"
+                "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}",
+                "txExplorerLink": "https://explorer.constantine-1.archway.tech/transactions/${txHash}"
               }
             ]
           },
