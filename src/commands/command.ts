@@ -16,12 +16,12 @@ import { CosmwasmTerminal } from '../views/CosmwasmTerminal';
 import { Utils } from '../views/utils';
 
 export class Commands {
-    public static async Register(context: vscode.ExtensionContext) {
+	public static async Register(context: vscode.ExtensionContext) {
 		global.accountViewProvider = new AccountDataProvider();
 		global.contractViewProvider = new ContractDataProvider();
 		let terminal = new CosmwasmTerminal();
 
-        this.registerAddAccountCmd(context, accountViewProvider);
+		this.registerAddAccountCmd(context, accountViewProvider);
 		this.registerRequestFundsCmd(context, accountViewProvider);
 		this.registerOpenInExplorerCmd(context);
 		this.registerCopyAccountAddressCmd(context);
@@ -46,7 +46,7 @@ export class Commands {
 		this.registerExportDataCmd(context);
 		this.registerQueryCosmwasmCmd(context);
 		this.registerTxCosmwasmCmd(context);
-    }
+	}
 
 	private static registerAddAccountCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
@@ -392,15 +392,26 @@ export class Commands {
 				}));
 				vscode.window.showQuickPick(chainPicks).then(async select => {
 					if (select) {
-						Workspace.SetWorkspaceChainConfig(select.label);
-						Utils.RefreshExtensionContext();
-						const accounts = await Account.GetAccounts(context.globalState);
-						accountViewProvider.refresh(accounts);
-						const contracts = Contract.GetContracts(context.globalState);
-						contractViewProvider.refresh(contracts);
+						vscode.window.withProgress({
+							location: vscode.ProgressLocation.Notification,
+							title: "Loading chain - " + select.label,
+							cancellable: false
+						}, async (progress, token) => {
+							token.onCancellationRequested(() => { });
+							progress.report({ message: '' });
 
-						Utils.UpdateConnectedChainStatusItem();
-						vscode.window.showInformationMessage(select.label + " has been loaded.");
+							Workspace.SetWorkspaceChainConfig(select.label);
+							Utils.RefreshExtensionContext();
+
+							const accounts = await Account.GetAccounts(context.globalState);
+							accountViewProvider.refresh(accounts);
+
+							const contracts = Contract.GetContracts(context.globalState);
+							contractViewProvider.refresh(contracts);
+
+							Utils.UpdateConnectedChainStatusItem();
+							vscode.window.showInformationMessage(select.label + " has been loaded to the workspace.");
+						});
 					}
 				})
 			}
@@ -568,4 +579,4 @@ export class Commands {
 		});
 		context.subscriptions.push(disposable);
 	}
- }
+}

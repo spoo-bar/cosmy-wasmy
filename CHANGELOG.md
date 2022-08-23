@@ -24,7 +24,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - add migration docs from v1.0.0 to the unreleased version
 - add docs for json auto completion
 - add refresh account and contract view
-- show progress bar when chaning chains
 
 ### Added
 
