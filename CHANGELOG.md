@@ -50,6 +50,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Fixed
 
 - Fixed issue where could not import same contract address if under different chain config
+- Fixed issue where extension would crash and would not start if the rpc endpoint was down.
 
 
 ## [v1.0.0] - 31 July 2022

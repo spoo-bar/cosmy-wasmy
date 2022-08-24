@@ -29,7 +29,12 @@ export class Account extends vscode.TreeItem {
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;
-			account.balance = await CosmwasmAPI.GetBalance(account.address);
+			try {
+				account.balance = await CosmwasmAPI.GetBalance(account.address);
+			}
+			catch {
+				account.balance = "NaN"; // lol but yea todo - when cant fetch balance, show that balance was not fetched. until then making it seem like js is being naughty 😈
+			}
 		}
 		return accountData;
 	}
