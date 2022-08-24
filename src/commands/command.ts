@@ -365,7 +365,7 @@ export class Commands {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.reloadConfig', async () => {
 			try {
 				const chainConfigs = Workspace.GetChainConfigs();
-				const chainPicks: vscode.QuickPickItem[] = [];
+				let chainPicks: vscode.QuickPickItem[] = [];
 				chainPicks.push({
 					label: "Localnet",
 					kind: vscode.QuickPickItemKind.Separator
@@ -390,7 +390,12 @@ export class Commands {
 					label: c.configName,
 					detail: c.chainId
 				}));
-				vscode.window.showQuickPick(chainPicks).then(async select => {
+				chainPicks.filter(c => c.label == Workspace.GetWorkspaceChainConfig().configName).forEach(c => c.picked = true)
+				vscode.window.showQuickPick(chainPicks, {
+					canPickMany: false,			
+					title: "Select a new chain config",
+					placeHolder: Workspace.GetWorkspaceChainConfig().configName	
+				}).then(async select => {
 					if (select) {
 						vscode.window.withProgress({
 							location: vscode.ProgressLocation.Notification,
