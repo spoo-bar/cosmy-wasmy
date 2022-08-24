@@ -390,7 +390,7 @@ export class Commands {
 					label: c.configName,
 					detail: c.chainId
 				}));
-				chainPicks.filter(c => c.label == Workspace.GetWorkspaceChainConfig().configName).forEach(c => c.picked = true)
+				chainPicks.filter(c => c.label == Workspace.GetWorkspaceChainConfig().configName).forEach(c => c.description = " (currently selected) ")
 				vscode.window.showQuickPick(chainPicks, {
 					canPickMany: false,			
 					title: "Select a new chain config",
