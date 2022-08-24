@@ -57,7 +57,7 @@ export class CosmwasmHistoryView {
                                     progress.report({ message: '' });
                                     let data = JSON.parse(action.inputData);
                                     const tx = await Cosmwasm.Execute(account, contract, data);
-                                    const url = Workspace.GetWorkspaceChainConfig().txExplorerLink;
+                                    const url = global.workspaceChain.txExplorerLink;
                                     if (tx && url) {
                                         const explorerUrl = url.replace("${txHash}", tx);
                                         vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);

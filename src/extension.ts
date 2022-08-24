@@ -5,12 +5,14 @@ import { Account } from './models/Account';
 import { Contract } from './models/Contract';
 import { Commands } from './commands/command';
 import { Utils, Views } from './views/utils';
+import { Workspace } from './helpers/Workspace';
 
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
+	global.workspaceChain = Workspace.GetWorkspaceChainConfig();
 	Utils.CreateConnectedChainStatusItem();
 
 	Commands.Register(context);

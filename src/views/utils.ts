@@ -20,21 +20,19 @@ export class Utils {
     }
 
     public static UpdateConnectedChainStatusItem() {
-        const config = Workspace.GetWorkspaceChainConfig();
-        this.selectedChain.text = "$(plug)" + config.configName;
+        this.selectedChain.text = "$(plug)" + global.workspaceChain.configName;
         this.selectedChain.show();
         Utils.RefreshExtensionContext();
     }
 
     public static RefreshExtensionContext() {
-        const config = Workspace.GetWorkspaceChainConfig();
-        if (config.faucetEndpoint) {
+        if (global.workspaceChain.faucetEndpoint) {
             vscode.commands.executeCommand('setContext', 'showRequestFunds', true);
         }
         else {
             vscode.commands.executeCommand('setContext', 'showRequestFunds', false);
         }
-        if (config.accountExplorerLink && config.accountExplorerLink.includes("${accountAddress}")) {
+        if (global.workspaceChain.accountExplorerLink && global.workspaceChain.accountExplorerLink.includes("${accountAddress}")) {
             vscode.commands.executeCommand('setContext', 'showOpenInExplorer', true);
         }
         else {

@@ -27,7 +27,7 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 
 	getTreeItem(account: Account): vscode.TreeItem | Thenable<vscode.TreeItem> {
 		account.id = account.label;
-		account.description = account.balance + Workspace.GetWorkspaceChainConfig().chainDenom;
+		account.description = account.balance + global.workspaceChain.chainDenom;
 		account.tooltip = account.address;
 		account.contextValue = Constants.VIEWS_ACCOUNT;
 		account.command = {

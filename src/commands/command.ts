@@ -99,7 +99,7 @@ export class Commands {
 	private static registerRequestFundsCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.requestFunds', async (item: Account) => {
 			if (item.address) {
-				if (Workspace.GetWorkspaceChainConfig().faucetEndpoint) {
+				if (global.workspaceChain.faucetEndpoint) {
 					vscode.window.withProgress({
 						location: {
 							viewId: Constants.VIEWS_ACCOUNT
@@ -134,7 +134,7 @@ export class Commands {
 
 	private static registerOpenInExplorerCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.openInExplorer', (item: Account) => {
-			const url = Workspace.GetWorkspaceChainConfig().accountExplorerLink;
+			const url = global.workspaceChain.accountExplorerLink;
 			const explorerUrl = url.replace("${accountAddress}", item.address);
 			vscode.env.openExternal(vscode.Uri.parse(explorerUrl));
 		});
@@ -390,11 +390,11 @@ export class Commands {
 					label: c.configName,
 					detail: c.chainId
 				}));
-				chainPicks.filter(c => c.label == Workspace.GetWorkspaceChainConfig().configName).forEach(c => c.description = " (currently selected) ")
+				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description = " (currently selected) ")
 				vscode.window.showQuickPick(chainPicks, {
 					canPickMany: false,			
 					title: "Select a new chain config",
-					placeHolder: Workspace.GetWorkspaceChainConfig().configName	
+					placeHolder: global.workspaceChain.configName	
 				}).then(async select => {
 					if (select) {
 						vscode.window.withProgress({

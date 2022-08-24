@@ -67,7 +67,7 @@ export class Executer {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
             const tx = await Cosmwasm.Execute(account, contract, req);
-            const url = Workspace.GetWorkspaceChainConfig().txExplorerLink;
+            const url = global.workspaceChain.txExplorerLink;
             if (tx && url) {
                 const explorerUrl = url.replace("${txHash}", tx);
                 vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);

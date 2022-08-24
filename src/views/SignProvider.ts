@@ -38,7 +38,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 		}
 		try {
 			let wallet = await Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+				prefix: global.workspaceChain.addressPrefix,
 			});
 			const signDoc = this.makeSignDoc(account.address, data.value);
 			let response = await wallet.signAmino(account.address, signDoc)
@@ -57,7 +57,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 		}
 
 		return {
-			chain_id: Workspace.GetWorkspaceChainConfig().chainId,
+			chain_id: global.workspaceChain.chainId,
 			account_number: '0', sequence: '0',
 			fee: { gas: '0', amount: [] },
 			msgs: [

@@ -13,21 +13,21 @@ export class CosmwasmAPI {
     public static async GetContract(contractAddress: string): Promise<Contract> {
         let client = await Cosmwasm.GetQueryClient();
         const contractInfo = await client.getContract(contractAddress);
-        let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, Workspace.GetWorkspaceChainConfig().configName);
+        let contract = new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, global.workspaceChain.configName);
         return contract;
     }
 
     public static async GetBalance(address: string): Promise<string> {
         let client = await Cosmwasm.GetQueryClient();
-        let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
+        let denom = global.workspaceChain.chainDenom;
         let balance = await client.getBalance(address, denom);
         return balance.amount;
     }
 
     public static async RequestFunds(address: string) {
-        const faucetEndpoint = Workspace.GetWorkspaceChainConfig().faucetEndpoint;
+        const faucetEndpoint = global.workspaceChain.faucetEndpoint;
         let faucet = new FaucetClient(faucetEndpoint);
-        let denom = Workspace.GetWorkspaceChainConfig().chainDenom;
+        let denom = global.workspaceChain.chainDenom;
         await faucet.credit(address, denom);
     }
 }
@@ -35,18 +35,18 @@ export class CosmwasmAPI {
 export class Cosmwasm {
 
     public static async GetQueryClient() {
-        const rpcEndpoint = Workspace.GetWorkspaceChainConfig().rpcEndpoint;
+        const rpcEndpoint = global.workspaceChain.rpcEndpoint;
         return await CosmWasmClient.connect(rpcEndpoint);
     }
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
         let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-            prefix: Workspace.GetWorkspaceChainConfig().addressPrefix,
+            prefix: global.workspaceChain.addressPrefix,
         });
-        let gasPrice = Workspace.GetWorkspaceChainConfig().defaultGasPrice + Workspace.GetWorkspaceChainConfig().chainDenom;
+        let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
-            Workspace.GetWorkspaceChainConfig().rpcEndpoint,
+            global.workspaceChain.rpcEndpoint,
             signer, {
             gasPrice: GasPrice.fromString(gasPrice)
         });

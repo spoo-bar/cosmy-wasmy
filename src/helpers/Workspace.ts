@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Z_ASCII } from 'zlib';
 import { Constants } from '../constants';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
@@ -27,6 +28,7 @@ export class Workspace {
 
     public static SetWorkspaceChainConfig(chainConfigName: string) {
         vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAIN_CONFIG_NAME, chainConfigName, vscode.ConfigurationTarget.Workspace);
+        global.workspaceChain = this.GetChainConfig(chainConfigName);
     }
 
     public static SetWorkspaceSchemaAutoComplete(schemaPath: any) {
@@ -35,19 +37,12 @@ export class Workspace {
 
     public static GetWorkspaceChainConfig(): ChainConfig {
         const configs = this.GetChainConfigs();
-        if(configs) {
+        if (configs) {
             const configName = vscode.workspace.getConfiguration().get<string>(Constants.CONFIGURATION_CHAIN_CONFIG_NAME);
             if (!configName) {
                 return configs[0];
             }
-            const selectedChains = configs.filter(c => c.configName.toLowerCase() === configName.toLowerCase());
-            if (!selectedChains || selectedChains.length === 0) {
-                vscode.window.showErrorMessage("Currently selected chain is '" + configName + "' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '" + configs[0].configName + "'");
-                return configs[0];
-            }
-            const selecetdChain = selectedChains[0];
-            //selecetdChain.Validate();
-            return selecetdChain;
+            return this.GetChainConfig(configName);
         }
         throw new Error("Chain settings have not been configured. Please set them up in File > Preferences > Settings > Cosmy Wasmy.");
     }
@@ -71,20 +66,33 @@ export class Workspace {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
     }
+
+    private static GetChainConfig(chainConfigName: string): ChainConfig {
+        const configs = this.GetChainConfigs();
+        if (configs) {
+            const selectedChains = configs.filter(c => c.configName.toLowerCase() === chainConfigName.toLowerCase());
+            if (!selectedChains || selectedChains.length === 0) {
+                vscode.window.showErrorMessage("Currently selected chain is '" + chainConfigName + "' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '" + configs[0].configName + "'");
+                return configs[0];
+            }
+            const selecetdChain = selectedChains[0];
+            return selecetdChain;
+        }
+    }
 }
 
 export enum CosmwasmResponseView {
-    NewFile = "NewFile", 
+    NewFile = "NewFile",
     Terminal = "Terminal"
 }
 
 export enum ContractSortOrder {
-    Alphabetical = "Alphabetical", 
+    Alphabetical = "Alphabetical",
     CodeId = "CodeId",
     None = "None"
 }
 
-class ChainConfig {
+export class ChainConfig {
     configName!: string;
     chainId!: string;
     chainEnvironment!: string;
@@ -110,7 +118,7 @@ class ChainConfig {
             throw new Error("Chain address prefix is empty");
         }
         if (!this.rpcEndpoint || this.rpcEndpoint === " ") {
-            throw new Error("Chain RPC endpoint is empty");            
+            throw new Error("Chain RPC endpoint is empty");
         }
         else {
             const url = new URL(this.rpcEndpoint);
