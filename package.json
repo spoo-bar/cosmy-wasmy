@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "cosmy wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
