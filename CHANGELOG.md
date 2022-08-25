@@ -23,7 +23,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### todo
 - add migration docs from v1.0.0 to the unreleased version
 - add docs for json auto completion
-- add refresh account and contract view
 
 ### Added
 
@@ -35,12 +34,13 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
 - Added a warning text on hover when the contract is not associated with any chain configs
 - On tx completion, a notification shows which links to the tx explorer page based on configuration
+- Added command `cosmy-wasmy.refreshAccount` to refresh the account view in the sidebar.
 
 ### Changed
 
 - Tooltip on Contract view item hover now shows the contract address and the creator address by default, and appends the notes at the end if any   
 - The chain selection now happens from the UI of the extension, and not the Settings page in vscode.
-- Instead of showing a plug icon next to contracts with chain config sest, now, the contracts without chain config are shown with a plug disconnected icon.
+- Instead of showing a plug icon next to contracts with chain config set, now, the contracts without chain config are shown with a plug disconnected icon.
 - Default chain configs name changed
 
 ### Deprecated

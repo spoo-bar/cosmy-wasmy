@@ -77,6 +77,12 @@
         "enablement": "viewItem == account"
       },
       {
+        "command": "cosmy-wasmy.refreshAccount",
+        "title": "Refresh Account View",
+        "category": "Cosmy Wasmy",
+        "icon": "$(refresh)"
+      },
+      {
         "command": "cosmy-wasmy.addContract",
         "title": "Import Contract",
         "category": "Cosmy Wasmy",
@@ -434,6 +440,11 @@
       "view/title": [
         {
           "command": "cosmy-wasmy.addAccount",
+          "when": "view == account",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.refreshAccount",
           "when": "view == account",
           "group": "navigation"
         },

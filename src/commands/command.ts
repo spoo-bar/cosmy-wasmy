@@ -46,6 +46,7 @@ export class Commands {
 		this.registerExportDataCmd(context);
 		this.registerQueryCosmwasmCmd(context);
 		this.registerTxCosmwasmCmd(context);
+		this.registerRefreshAccountCmd(context);
 	}
 
 	private static registerAddAccountCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
@@ -392,9 +393,9 @@ export class Commands {
 				}));
 				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description = " (currently selected) ")
 				vscode.window.showQuickPick(chainPicks, {
-					canPickMany: false,			
+					canPickMany: false,
 					title: "Select a new chain config",
-					placeHolder: global.workspaceChain.configName	
+					placeHolder: global.workspaceChain.configName
 				}).then(async select => {
 					if (select) {
 						vscode.window.withProgress({
@@ -581,6 +582,23 @@ export class Commands {
 					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
 				}
 			}
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static registerRefreshAccountCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.refreshAccount', async () => {
+			vscode.window.withProgress({
+				location: { viewId: Constants.VIEWS_ACCOUNT },
+				title: "Refreshing account view",
+				cancellable: false
+			}, async (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				const accounts = await Account.GetAccounts(context.globalState);
+				accountViewProvider.refresh(accounts);
+				return Promise.resolve();
+			});
 		});
 		context.subscriptions.push(disposable);
 	}
