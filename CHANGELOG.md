@@ -24,7 +24,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 - Showing upload contract option in editor menus as well for wasm files
 - Showing query and execute icons on json files to directly call contracts, as well as to the JSON file context menu
-- On `cosmy-wasmy.generateSchema`, the json schema is set into the workspace settings so that any json file can get code completion from the query or execute msgs. 
+- On `cosmy-wasmy.generateSchema`, the json schema is set into the workspace settings so that any json file can get code completion from the query or execute msgs. (Thanks [Callum](https://github.com/Callum-A) for feature suggestion)
 - Added category to commands to make it easier to search and find the relevant ones from Command Palette 
 - Added Archway Constantine testnet to preset chain config 
 - Added `cosmywasmy.chains.chainEnvironment` to chain config which stores if the chain is localnet, testnet or mainnet.
