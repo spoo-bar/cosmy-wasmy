@@ -20,10 +20,6 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ## [Unreleased]
 
-### todo
-- add migration docs from v1.0.0 to the unreleased version
-- add docs for json auto completion
-
 ### Added
 
 - Showing upload contract option in editor menus as well for wasm files

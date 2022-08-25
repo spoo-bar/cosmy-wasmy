@@ -14,8 +14,6 @@ Once a contract has been imported, you can do the following from the context men
 
 ![feature Contract Comments](/./images/contract_comments.gif)
 
-If any imported contract has a plug (🔌) icon next to it, it implies that the contract was imported in the same chain as the currently active chain config. 
-
-If the contract does not have a plug (🔌) icon next to it, this means it was imported before v1.0.0 of the extension came out and the extension does not have the relevant information as to which chain config it was imported with. You can delete the contract and reimport it to set it up right.
+If any imported contract has a disconnected plug icon next to it, it implies that the contract was imported before v1.0.0 of the extension came out and the extension does not have the relevant information as to which chain config it was imported with. You can delete the contract and reimport it to set it up right.
 
 Contracts which were imported under other chain config are not shown.

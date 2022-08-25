@@ -13,3 +13,5 @@ Once an account has been created, you can
 
 
 ![feature Account](/./images/account.gif)
+
+If the RPC endpoint in the chain config is not reachable, the account balance cannot be fetched and is shown as `NaN`. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances

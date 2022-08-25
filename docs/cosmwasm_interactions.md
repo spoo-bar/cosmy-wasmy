@@ -6,6 +6,12 @@ Input the JSON request query data and select the smart contract from the above v
 
 ![feature Query](/./images/query.gif)
 
+### OR
+
+Open a JSON file, and click on the `Run Query` button.
+
+![feature Query with autocomplete](/./images/autocomplete.gif)
+
 ## Execute
 
 Input the JSON request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will be output The historical txs are also stored and can be accessed by `Show Cosmwasm History` command for easy re-execution.
@@ -37,6 +43,6 @@ The selected account will be set as admin for the contract.
 
 You can also upload a wasm file to selected chain with selected account. 
 
-Right clicking on a wasm file shows this command in the context menu or command can be invoked using Command Palette/Key Binding and file dialog opens to select a wasm file.
+Right clicking on a wasm file shows this command in the context menu or right clicking on the tab of the currently open wasm file shows this command in the context menu or command can be invoked using Command Palette/Key Binding and file dialog opens to select a wasm file.
 
 ![feature Upload Contract](/./images/upload.gif)
