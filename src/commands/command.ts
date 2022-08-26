@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { ExtData } from '../helpers/ExtensionData/ExtData';
 import { Workspace } from '../helpers/Workspace';
 import { Account } from '../models/Account';
 import { Contract } from '../models/Contract';
@@ -9,6 +8,7 @@ import { Utils } from '../views/utils';
 import { AccountCmds } from './account';
 import { ContractCmds } from './contract';
 import { TerminalCmds } from './terminal';
+import { WorkspaceDataCmds } from './workspacedata';
 
 export class Commands {
 	public static async Register(context: vscode.ExtensionContext) {
@@ -18,10 +18,9 @@ export class Commands {
 		AccountCmds.Register(context);
 		ContractCmds.Register(context);
 		TerminalCmds.Register(context);	
+		WorkspaceDataCmds.Register(context);
 
-		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);		
-		this.registerResetDataCmd(context, accountViewProvider, contractViewProvider);
-		this.registerExportDataCmd(context);	
+		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);			
 	}
 
 	private static registerReloadConfigCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {
@@ -90,39 +89,4 @@ export class Commands {
 
 		context.subscriptions.push(disposable);
 	}
-
-	private static registerExportDataCmd(context: vscode.ExtensionContext) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.export', async () => {
-			const data = ExtData.GetExtensionData(context.globalState);
-			data.accounts = await Account.GetAccounts(context.globalState);
-			vscode.workspace.openTextDocument({
-				language: "jsonc"
-			}).then(doc => {
-				vscode.window.showTextDocument(doc).then(editor => {
-					editor.insertSnippet(new vscode.SnippetString(JSON.stringify(data, null, 4)));
-				});
-			});
-		});
-		context.subscriptions.push(disposable);
-	}
-
-	private static registerResetDataCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.resetData', () => {
-			vscode.window.showQuickPick(["Yes", "No"], {
-				title: "Are you sure you want to delete all data?",
-				placeHolder: "Are you sure you want to delete all data?"
-			}).then(resp => {
-				if (resp && resp.toLowerCase() === "yes") {
-					ExtData.ResetExtensionData(context.globalState);
-					vscode.window.showInformationMessage('All cosmy wasmy data was reset!');
-					var data = ExtData.GetExtensionData(context.globalState);
-					accountViewProvider.refresh(data.accounts);
-					contractViewProvider.refresh(data.contracts);
-				}
-			})
-		});
-
-		context.subscriptions.push(disposable);
-	}
-
 }
