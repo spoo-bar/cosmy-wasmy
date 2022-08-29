@@ -1,8 +1,8 @@
 /* eslint-disable no-var */
 
-import { ChainConfig } from "./helpers/Workspace";
-import { AccountDataProvider } from "./views/AccountDataProvider";
-import { ContractDataProvider } from "./views/ContractDataProvider";
+import { ChainConfig } from "./helpers/workspace";
+import { AccountDataProvider } from "./views/accountDataProvider";
+import { ContractDataProvider } from "./views/contractDataProvider";
 
 declare global {
   var accountViewProvider: AccountDataProvider;

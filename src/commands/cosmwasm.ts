@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Executer } from '../helpers/Cosmwasm/Executer';
-import { Workspace } from '../helpers/Workspace';
-import { CosmwasmHistoryView } from '../views/CosmwasmHistoryView';
+import { Executer } from '../helpers/cosmwasm/executer';
+import { Workspace } from '../helpers/workspace';
+import { CosmwasmHistoryView } from '../views/cosmwasmHistoryView';
 
 export class CosmwasmCmds {
     public static async Register(context: vscode.ExtensionContext) {

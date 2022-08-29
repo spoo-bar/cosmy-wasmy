@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../helpers/Workspace';
-import { CosmwasmTerminal } from '../views/CosmwasmTerminal';
+import { Workspace } from '../helpers/workspace';
+import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
 
 export class TerminalCmds {
     public static async Register(context: vscode.ExtensionContext) {

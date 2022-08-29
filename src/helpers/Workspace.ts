@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { Z_ASCII } from 'zlib';
 import { Constants } from '../constants';
-import { Account } from '../models/Account';
-import { Contract } from '../models/Contract';
+import { Account } from '../models/account';
+import { Contract } from '../models/contract';
 
 
 export class Workspace {

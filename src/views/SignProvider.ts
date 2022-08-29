@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import { StdSignDoc } from "@cosmjs/amino";
-import { Workspace } from '../helpers/Workspace';
-import { ResponseHandler } from '../helpers/ResponseHandler';
+import { Workspace } from '../helpers/workspace';
+import { ResponseHandler } from '../helpers/responseHandler';
 
 
 export class SignProvider implements vscode.WebviewViewProvider {

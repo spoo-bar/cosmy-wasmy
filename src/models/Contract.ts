@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { ExtData } from '../helpers/ExtensionData/ExtData';
-import { Workspace } from '../helpers/Workspace';
-import { Cosmwasm } from '../helpers/Cosmwasm/API';
-import { ResponseHandler } from '../helpers/ResponseHandler';
+import { ExtData } from '../helpers/extensionData/extData';
+import { Workspace } from '../helpers/workspace';
+import { Cosmwasm } from '../helpers/cosmwasm/api';
+import { ResponseHandler } from '../helpers/responseHandler';
 
 
 export class Contract extends vscode.TreeItem {

@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Workspace } from '../helpers/Workspace';
-import { InitializeViewProvider } from './InitializeViewProvider';
-import { MigrateViewProvider } from './MigrateViewProvider';
-import { QueryProvider } from './QueryProvider';
-import { SignProvider } from './SignProvider';
-import { TxProvider } from './TxProvider';
+import { Workspace } from '../helpers/workspace';
+import { InitializeViewProvider } from './initializeViewProvider';
+import { MigrateViewProvider } from './migrateViewProvider';
+import { QueryProvider } from './queryProvider';
+import { SignProvider } from './signProvider';
+import { TxProvider } from './txProvider';
 
 export class Utils {
 

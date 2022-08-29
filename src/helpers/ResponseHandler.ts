@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { CosmwasmTerminal } from '../views/CosmwasmTerminal';
-import { CosmwasmResponseView, Workspace } from './Workspace';
+import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
+import { CosmwasmResponseView, Workspace } from './workspace';
 
 export class ResponseHandler {
     public static OutputSuccess(input: string, response: string, action: string) {

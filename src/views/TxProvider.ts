@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Executer } from '../helpers/Cosmwasm/Executer';
+import { Executer } from '../helpers/cosmwasm/executer';
 
 
 export class TxProvider implements vscode.WebviewViewProvider {

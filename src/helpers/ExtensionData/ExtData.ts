@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { Constants } from '../../constants';
-import { Account } from '../../models/Account';
-import { Contract } from '../../models/Contract';
-import { History } from './HistoryHandler';
+import { Account } from '../../models/account';
+import { Contract } from '../../models/contract';
+import { History } from './historyHandler';
 
 export class ExtData {
 	accounts: Account[];

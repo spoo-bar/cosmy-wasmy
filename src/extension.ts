@@ -1,11 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { Account } from './models/Account';
-import { Contract } from './models/Contract';
+import { Account } from './models/account';
+import { Contract } from './models/contract';
 import { Commands } from './commands/command';
 import { Utils, Views } from './views/utils';
-import { Workspace } from './helpers/Workspace';
+import { Workspace } from './helpers/workspace';
 
 
 // this method is called when your extension is activated

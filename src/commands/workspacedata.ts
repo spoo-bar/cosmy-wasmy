@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { ExtData } from '../helpers/ExtensionData/ExtData';
-import { Account } from '../models/Account';
-import { AccountDataProvider } from '../views/AccountDataProvider';
-import { ContractDataProvider } from '../views/ContractDataProvider';
+import { ExtData } from '../helpers/extensionData/extData';
+import { Account } from '../models/account';
+import { AccountDataProvider } from '../views/accountDataProvider';
+import { ContractDataProvider } from '../views/contractDataProvider';
 
 export class WorkspaceDataCmds {
     public static async Register(context: vscode.ExtensionContext) {

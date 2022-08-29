@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { Contract } from '../../models/Contract';
-import { ExtData } from './ExtData';
-import { Workspace } from '../Workspace';
+import { Contract } from '../../models/contract';
+import { ExtData } from './extData';
+import { Workspace } from '../workspace';
 
 export class HistoryHandler {
 

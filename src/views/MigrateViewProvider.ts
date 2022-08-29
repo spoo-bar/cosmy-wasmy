@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../helpers/Workspace';
+import { Workspace } from '../helpers/workspace';
 import { Constants } from '../constants';
-import { ResponseHandler } from '../helpers/ResponseHandler';
-import { Cosmwasm } from '../helpers/Cosmwasm/API';
-import { Account } from '../models/Account';
-import { Contract } from '../models/Contract';
-import { HistoryHandler } from '../helpers/ExtensionData/HistoryHandler';
+import { ResponseHandler } from '../helpers/responseHandler';
+import { Cosmwasm } from '../helpers/cosmwasm/api';
+import { Account } from '../models/account';
+import { Contract } from '../models/contract';
+import { HistoryHandler } from '../helpers/extensionData/historyHandler';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {

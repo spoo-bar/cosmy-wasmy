@@ -2,11 +2,11 @@ import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import clipboard from 'clipboardy';
 import { Constants } from '../constants';
-import { CosmwasmAPI } from '../helpers/Cosmwasm/API';
-import { Workspace } from '../helpers/Workspace';
-import { Account } from '../models/Account';
-import { Contract } from '../models/Contract';
-import { AccountDataProvider } from '../views/AccountDataProvider';
+import { CosmwasmAPI } from '../helpers/cosmwasm/api';
+import { Workspace } from '../helpers/workspace';
+import { Account } from '../models/account';
+import { Contract } from '../models/contract';
+import { AccountDataProvider } from '../views/accountDataProvider';
 
 export class AccountCmds {
     public static async Register(context: vscode.ExtensionContext) {

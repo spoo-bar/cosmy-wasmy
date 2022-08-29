@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { Cosmwasm, CosmwasmAPI } from '../helpers/Cosmwasm/API';
-import { Workspace } from '../helpers/Workspace';
-import { Contract } from '../models/Contract';
-import { ContractDataProvider } from '../views/ContractDataProvider';
+import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
+import { Workspace } from '../helpers/workspace';
+import { Contract } from '../models/contract';
+import { ContractDataProvider } from '../views/contractDataProvider';
 
 export class ContractCmds {
     public static async Register(context: vscode.ExtensionContext) {

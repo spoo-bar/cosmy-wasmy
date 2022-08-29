@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../helpers/Workspace';
-import { Account } from '../models/Account';
-import { Contract } from '../models/Contract';
-import { AccountDataProvider } from '../views/AccountDataProvider';
-import { ContractDataProvider } from '../views/ContractDataProvider';
+import { Workspace } from '../helpers/workspace';
+import { Account } from '../models/account';
+import { Contract } from '../models/contract';
+import { AccountDataProvider } from '../views/accountDataProvider';
+import { ContractDataProvider } from '../views/contractDataProvider';
 import { Utils } from '../views/utils';
 import { AccountCmds } from './account';
 import { ContractCmds } from './contract';
+import { CosmwasmCmds } from './cosmwasm';
 import { TerminalCmds } from './terminal';
 import { WorkspaceDataCmds } from './workspacedata';
 
@@ -19,6 +20,7 @@ export class Commands {
 		ContractCmds.Register(context);
 		TerminalCmds.Register(context);	
 		WorkspaceDataCmds.Register(context);
+		CosmwasmCmds.Register(context);
 
 		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);			
 	}
