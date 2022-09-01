@@ -60,7 +60,12 @@ export class CosmwasmHistoryView {
                                     const url = global.workspaceChain.txExplorerLink;
                                     if (tx && url) {
                                         const explorerUrl = url.replace("${txHash}", tx);
-                                        vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
+                                        if (Workspace.GetOpenTxInSimpleBrowser()) {
+                                            vscode.commands.executeCommand("simpleBrowser.api.open", vscode.Uri.parse(explorerUrl));
+                                        }
+                                        else {
+                                            vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
+                                        }
                                         return Promise.resolve();
                                     }
                                     else {

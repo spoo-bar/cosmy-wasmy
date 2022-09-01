@@ -365,6 +365,13 @@
             "minimum": 0,
             "maximum": 500,
             "scope": "resource"
+          },
+          "cosmywasmy.openTxExplorerInVscode": {
+            "type": "boolean",
+            "markdownDescription": "If this setting is set, and the current chain config has `txExplorerLink` value set, on the successful execution of a msg, the tx explorer link opens automatically within vscode in simple browser.",
+            "order": 5,
+            "default": false,
+            "scope": "resource"
           }
         }
       }

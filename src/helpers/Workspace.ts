@@ -62,6 +62,10 @@ export class Workspace {
         return config;
     }
 
+    public static GetOpenTxInSimpleBrowser(): boolean {
+        return vscode.workspace.getConfiguration().get<boolean>(Constants.CONFIGURATION_OPEN_TX_IN_VSCODE, false);
+    }
+
     public static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;

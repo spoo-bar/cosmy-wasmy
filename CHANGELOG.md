@@ -18,6 +18,23 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- Added new setting `cosmywasmy.openTxExplorerInVscode`, if set to true, on a successful tx execution, instead of a notification, the tx explorer link will open within vscode in the simple browser. (only works if txExplorerLink is set as well for the chain config)
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security 
+
+
 ## [v1.1.0] - 25 August 2022
 
 ### Added
