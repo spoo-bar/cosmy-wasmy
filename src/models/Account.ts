@@ -23,7 +23,7 @@ export class Account extends vscode.TreeItem {
 
 	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
-		for(let account of accountData) {
+		for (let account of accountData) {
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix,
 			});
@@ -49,13 +49,18 @@ export class Account extends vscode.TreeItem {
 		ExtData.SaveAccounts(context, accounts);
 	}
 
-    public static DeleteAccount(context: vscode.Memento, account: Account) {
-        let accounts = this.GetAccountsBasic(context).filter(a => a.label != account.label);
+	public static DeleteAccount(context: vscode.Memento, account: Account) {
+		let accounts = this.GetAccountsBasic(context).filter(a => a.label != account.label);
 		ExtData.SaveAccounts(context, accounts);
-    }
+	}
 
 	public static AccountLabelExists(context: vscode.Memento, accountLabel: string): boolean {
 		const accounts = this.GetAccountsBasic(context);
 		return accounts.some(a => a.label === accountLabel);
+	}
+
+	public static AccountMnemonicExists(context: vscode.Memento, mnemonic: string): boolean {
+		const accounts = this.GetAccountsBasic(context);
+		return accounts.some(a => a.mnemonic === mnemonic);;
 	}
 }

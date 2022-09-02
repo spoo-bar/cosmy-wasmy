@@ -9,18 +9,18 @@ import { Contract } from '../models/contract';
 import { AccountDataProvider } from '../views/accountDataProvider';
 
 export class AccountCmds {
-    public static async Register(context: vscode.ExtensionContext) {
-        this.registerAddAccountCmd(context, accountViewProvider);
-        this.registerRequestFundsCmd(context, accountViewProvider);
-        this.registerOpenInExplorerCmd(context);
-        this.registerCopyAccountAddressCmd(context);
-        this.registerCopyMnemonicCmd(context);
-        this.registerDeleteAddressCmd(context, accountViewProvider);
-        this.registerSelectAccountCmd(context);
+	public static async Register(context: vscode.ExtensionContext) {
+		this.registerAddAccountCmd(context, accountViewProvider);
+		this.registerRequestFundsCmd(context, accountViewProvider);
+		this.registerOpenInExplorerCmd(context);
+		this.registerCopyAccountAddressCmd(context);
+		this.registerCopyMnemonicCmd(context);
+		this.registerDeleteAddressCmd(context, accountViewProvider);
+		this.registerSelectAccountCmd(context);
 		this.registerRefreshAccountCmd(context);
-    }
+	}
 
-    
+
 	private static registerAddAccountCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
 			vscode.window.showInputBox({
@@ -62,10 +62,15 @@ export class AccountCmds {
 		context.subscriptions.push(disposable);
 
 		async function saveNewAccount(account: Account) {
-			Account.AddAccount(context.globalState, account);
-			vscode.window.showInformationMessage("Added new account: " + account.label);
-			const accounts = await Account.GetAccounts(context.globalState);
-			accountViewProvider.refresh(accounts);
+			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
+				Account.AddAccount(context.globalState, account);
+				vscode.window.showInformationMessage("Added new account: " + account.label);
+				const accounts = await Account.GetAccounts(context.globalState);
+				accountViewProvider.refresh(accounts);
+			}
+			else {
+				vscode.window.showErrorMessage(account.label + " - Account with given seed phrase is already imported.");
+			}
 		}
 	}
 
@@ -173,7 +178,7 @@ export class AccountCmds {
 		context.subscriptions.push(disposable);
 	}
 
-    private static registerRefreshAccountCmd(context: vscode.ExtensionContext) {
+	private static registerRefreshAccountCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.refreshAccount', async () => {
 			vscode.window.withProgress({
 				location: { viewId: Constants.VIEWS_ACCOUNT },

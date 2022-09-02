@@ -32,6 +32,8 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Fixed
 
+- Fixed issue where it was possible to import multiple accounts with same mnemonic.
+
 ### Security 
 
 
