@@ -5,7 +5,6 @@ import { ResponseHandler } from '../helpers/responseHandler';
 import { Cosmwasm } from '../helpers/cosmwasm/api';
 import { Account } from '../models/account';
 import { Contract } from '../models/contract';
-import { HistoryHandler } from '../helpers/extensionData/historyHandler';
 
 
 export class MigrateViewProvider implements vscode.WebviewViewProvider {

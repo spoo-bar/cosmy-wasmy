@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Workspace } from "../workspace";
 import { Action, HistoryHandler } from '../extensionData/historyHandler';
+import { Workspace } from "../workspace";
 import { Cosmwasm } from './api';
 
 
