@@ -22,7 +22,8 @@ export class Commands {
 		WorkspaceDataCmds.Register(context);
 		CosmwasmCmds.Register(context);
 
-		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);			
+		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);	
+		this.registerRecordCWCmd(context);		
 	}
 
 	private static registerReloadConfigCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {
@@ -89,6 +90,14 @@ export class Commands {
 			}
 		});
 
+		context.subscriptions.push(disposable);
+	}
+
+	private static registerRecordCWCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.recordCW', () => {
+			Workspace.ToggleRecordCW();
+			Utils.ShowRecordStatusItem();
+		});
 		context.subscriptions.push(disposable);
 	}
 }

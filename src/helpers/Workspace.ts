@@ -9,6 +9,7 @@ export class Workspace {
 
     private static selectedAccount: Account;
     private static selectedContract: Contract;
+    private static recordCW: boolean = false;
 
     public static GetSelectedAccount(): Account {
         return this.selectedAccount;
@@ -25,6 +26,15 @@ export class Workspace {
     public static SetSelectedContract(contract: Contract) {
         this.selectedContract = contract;
     }
+
+    public static GetRecordCW(): boolean {
+        return this.recordCW;
+    }
+
+    public static ToggleRecordCW() {
+        this.recordCW = !this.recordCW;
+    }
+
 
     public static SetWorkspaceChainConfig(chainConfigName: string) {
         vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAIN_CONFIG_NAME, chainConfigName, vscode.ConfigurationTarget.Workspace);

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
+import { Workspace } from '../helpers/workspace';
 import { InitializeViewProvider } from './initializeViewProvider';
 import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
@@ -9,7 +10,7 @@ import { TxProvider } from './txProvider';
 export class Utils {
 
     private static selectedChain: vscode.StatusBarItem;
-    private static recordStatus: vscode.StatusBarItem;
+    private static recordStatus: vscode.StatusBarItem = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_RECORD_STATUS, vscode.StatusBarAlignment.Left);
 
     public static CreateConnectedChainStatusItem() {
         this.selectedChain = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
@@ -19,14 +20,21 @@ export class Utils {
         this.UpdateConnectedChainStatusItem();
     }
 
-    public static CreateRecordStatusItem() {
-        this.recordStatus = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_RECORD_STATUS, vscode.StatusBarAlignment.Left);
-        this.recordStatus.tooltip = "Start recording";
-        this.recordStatus.command = "cosmy-wasmy.reloadConfig";
-        //this.recordStatus.text = "$(record) Start recording API interactions";
-        this.recordStatus.text = "$(stop) Stop recording API interactions";
-        this.recordStatus.show();
-        //this.UpdateConnectedChainStatusItem();
+    public static ShowRecordStatusItem() {
+        if (Workspace.GetRecordCW()) {
+            // Not recording currently
+            this.recordStatus.tooltip = "Stop recording API interactions";
+            this.recordStatus.command = "cosmy-wasmy.recordCW";
+            this.recordStatus.text = "$(stop) Stop recording";
+            this.recordStatus.show();
+        }
+        else {
+            // Recording currently
+            this.recordStatus.tooltip = "Start recording API interactions";
+            this.recordStatus.command = "cosmy-wasmy.recordCW";
+            this.recordStatus.text = "$(record) Start recording ";
+            this.recordStatus.show();
+        }
     }
 
     public static UpdateConnectedChainStatusItem() {
@@ -55,21 +63,21 @@ export class Views {
     public static Register(context: vscode.ExtensionContext) {
         vscode.window.registerTreeDataProvider(Constants.VIEWS_ACCOUNT, global.accountViewProvider);
         vscode.window.registerTreeDataProvider(Constants.VIEWS_CONTRACT, global.contractViewProvider);
-    
+
         const signingViewProvider = new SignProvider(context.extensionUri);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_SIGN, signingViewProvider));
-    
+
         const queryViewProvider = new QueryProvider(context.extensionUri, context.globalState);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_QUERY, queryViewProvider));
-    
+
         const txViewProvider = new TxProvider(context.extensionUri, context.globalState);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_EXECUTE, txViewProvider));
-    
+
         const migrateViewProvider = new MigrateViewProvider(context.extensionUri, context.globalState);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_MIGRATE, migrateViewProvider));
-    
+
         const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
-        
+
     }
 }
