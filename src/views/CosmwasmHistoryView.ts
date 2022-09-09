@@ -35,9 +35,15 @@ export class CosmwasmHistoryView {
                                 }, (progress, token) => {
                                     token.onCancellationRequested(() => { });
                                     progress.report({ message: '' });
-                                    return new Promise(async (resolve, reject) => {
+                                    return new Promise(async () => {
                                         let data = JSON.parse(action.inputData);
-                                        await Cosmwasm.Query(contract, data, resolve, reject);
+                                        let response = await Cosmwasm.Query(contract, data);
+                                        if(response.isSuccess) {
+                                            return Promise.resolve();
+                                        }
+                                        else {
+                                            return Promise.reject();
+                                        }
                                     });
                                 });
                                 break;

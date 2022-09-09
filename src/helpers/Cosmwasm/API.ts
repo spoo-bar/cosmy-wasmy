@@ -53,15 +53,21 @@ export class Cosmwasm {
         return client;
     }
 
-    public static async Query(contract: Contract, query: any, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
+    public static async Query(contract: Contract, query: any) {
 		try {
 			let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract.contractAddress, query);
 			ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
-			resolve(undefined);
+            return {
+                isSuccess: true,
+                response: resp
+            };
 		}
 		catch (err: any) {
 			ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
-			reject(undefined);
+            return {
+                isSuccess: false,
+                response: err
+            };
 		}
 	}
 

@@ -32,8 +32,14 @@ export class Executer {
         }, (progress, token) => {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
-            return new Promise(async (resolve, reject) => {
-                await Cosmwasm.Query(contract, query, resolve, reject);
+            return new Promise(async () => {
+                let response = await Cosmwasm.Query(contract, query);
+                if(response.isSuccess) {
+                    return Promise.resolve();
+                }
+                else {
+                    return Promise.reject();
+                }
             });
         });
     }
