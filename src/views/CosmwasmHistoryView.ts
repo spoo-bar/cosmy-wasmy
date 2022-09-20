@@ -32,19 +32,17 @@ export class CosmwasmHistoryView {
                                     location: vscode.ProgressLocation.Notification,
                                     title: "Querying the contract - " + contract.label,
                                     cancellable: false
-                                }, (progress, token) => {
+                                }, async (progress, token) => {
                                     token.onCancellationRequested(() => { });
                                     progress.report({ message: '' });
-                                    return new Promise(async () => {
-                                        let data = JSON.parse(action.inputData);
-                                        let response = await Cosmwasm.Query(contract, data);
-                                        if(response.isSuccess) {
-                                            return Promise.resolve();
-                                        }
-                                        else {
-                                            return Promise.reject();
-                                        }
-                                    });
+                                    let data = JSON.parse(action.inputData);
+                                    let response = await Cosmwasm.Query(contract, data);
+                                    if (response.isSuccess) {
+                                        return Promise.resolve();
+                                    }
+                                    else {
+                                        return Promise.reject();
+                                    }
                                 });
                                 break;
                             }

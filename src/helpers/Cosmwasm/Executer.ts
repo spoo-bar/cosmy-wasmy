@@ -29,18 +29,16 @@ export class Executer {
             location: location,
             title: "Querying the contract - " + contract.label,
             cancellable: false
-        }, (progress, token) => {
+        }, async (progress, token) => {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
-            return new Promise(async () => {
-                let response = await Cosmwasm.Query(contract, query);
-                if(response.isSuccess) {
-                    return Promise.resolve();
-                }
-                else {
-                    return Promise.reject();
-                }
-            });
+            let response = await Cosmwasm.Query(contract, query);
+            if (response.isSuccess) {
+                return Promise.resolve();
+            }
+            else {
+                return Promise.reject();
+            }
         });
     }
 
