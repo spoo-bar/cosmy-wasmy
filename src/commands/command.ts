@@ -23,7 +23,7 @@ export class Commands {
 		CosmwasmCmds.Register(context);
 
 		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);	
-		this.registerRecordCWCmd(context);		
+		//this.registerRecordCWCmd(context);		
 	}
 
 	private static registerReloadConfigCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider, contractViewProvider: ContractDataProvider) {

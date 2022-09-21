@@ -14,7 +14,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	global.workspaceChain = Workspace.GetWorkspaceChainConfig();
 	Utils.CreateConnectedChainStatusItem();
-	Utils.ShowRecordStatusItem();
+	//Utils.ShowRecordStatusItem();
 
 	Commands.Register(context);
 	Views.Register(context);
