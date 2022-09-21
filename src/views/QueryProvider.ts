@@ -23,7 +23,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						new Executer(this.context).Query(data.value, {viewId: Constants.VIEWS_QUERY});
+						new Executer(this.context, true).Query(data.value, {viewId: Constants.VIEWS_QUERY});
 					}
 			}
 		});

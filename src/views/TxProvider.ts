@@ -21,7 +21,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						new Executer(this.context).Execute(data.value, {viewId: Constants.VIEWS_EXECUTE});
+						new Executer(this.context, true).Execute(data.value, {viewId: Constants.VIEWS_EXECUTE});
 						break;
 					}
 			}

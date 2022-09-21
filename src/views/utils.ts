@@ -23,14 +23,14 @@ export class Utils {
     public static ShowRecordStatusItem() {
         if (Workspace.GetRecordCW()) {
             // Not recording currently
-            this.recordStatus.tooltip = "Stop recording API interactions";
+            this.recordStatus.tooltip = "Stop recording CW API interactions";
             this.recordStatus.command = "cosmy-wasmy.recordCW";
             this.recordStatus.text = "$(stop) Stop recording";
             this.recordStatus.show();
         }
         else {
             // Recording currently
-            this.recordStatus.tooltip = "Start recording API interactions";
+            this.recordStatus.tooltip = "Start recording CW API interactions";
             this.recordStatus.command = "cosmy-wasmy.recordCW";
             this.recordStatus.text = "$(record) Start recording ";
             this.recordStatus.show();

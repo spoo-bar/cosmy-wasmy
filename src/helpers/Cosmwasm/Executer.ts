@@ -7,7 +7,8 @@ import { Cosmwasm } from './api';
 export class Executer {
 
     constructor(
-        private readonly context: vscode.Memento
+        private readonly context: vscode.Memento,
+        private readonly useHistoryHandler: boolean
     ) { }
 
     public Query(input: any, location: vscode.ProgressLocation | { viewId: string }) {
@@ -24,7 +25,11 @@ export class Executer {
         }
 
         const query = JSON.parse(input);
-        HistoryHandler.RecordAction(this.context, contract, Action.Query, input);
+        
+        if (this.useHistoryHandler) {
+            HistoryHandler.RecordAction(this.context, contract, Action.Query, input);
+        }
+
         vscode.window.withProgress({
             location: location,
             title: "Querying the contract - " + contract.label,
@@ -62,7 +67,10 @@ export class Executer {
 
         const req = JSON.parse(input);
 
-        HistoryHandler.RecordAction(this.context, contract, Action.Tx, input);
+        if(this.useHistoryHandler) {
+            HistoryHandler.RecordAction(this.context, contract, Action.Tx, input);
+        }
+        
         vscode.window.withProgress({
             location: location,
             title: "Executing msg on the contract - " + contract.label,

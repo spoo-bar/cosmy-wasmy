@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { Cosmwasm } from '../helpers/cosmwasm/api';
+import { Executer } from '../helpers/cosmwasm/executer';
 import { Action, History, HistoryHandler } from '../helpers/extensionData/historyHandler';
 import { Workspace } from '../helpers/workspace';
 import { Contract } from '../models/contract';
@@ -8,10 +9,12 @@ export class CosmwasmHistoryView {
 
     private history: History[]
     private contracts: Contract[];
+    private executer: Executer;
 
     constructor(private readonly context: vscode.Memento) {
         this.history = HistoryHandler.GetHistory(this.context).reverse();
         this.contracts = Contract.GetContracts(this.context);
+        this.executer = new Executer(context, false);
     }
 
     public getWebviewContent(extensionUri: vscode.Uri, webview: vscode.Webview) {
@@ -26,61 +29,17 @@ export class CosmwasmHistoryView {
                     const action = this.history[data.value];
                     const contract = this.getContract(action);
                     if (contract) {
+                        Workspace.SetSelectedContract(contract);
                         switch (action.actionType) {
                             case Action.Query: {
-                                vscode.window.withProgress({
-                                    location: vscode.ProgressLocation.Notification,
-                                    title: "Querying the contract - " + contract.label,
-                                    cancellable: false
-                                }, async (progress, token) => {
-                                    token.onCancellationRequested(() => { });
-                                    progress.report({ message: '' });
-                                    let data = JSON.parse(action.inputData);
-                                    let response = await Cosmwasm.Query(contract, data);
-                                    if (response.isSuccess) {
-                                        return Promise.resolve();
-                                    }
-                                    else {
-                                        return Promise.reject();
-                                    }
-                                });
+                                this.executer.Query(action.inputData, vscode.ProgressLocation.Notification);
                                 break;
                             }
                             case Action.Tx: {
-                                const account = Workspace.GetSelectedAccount();
-                                if (!account) {
-                                    vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
-                                    return;
-                                }
-                                vscode.window.withProgress({
-                                    location: vscode.ProgressLocation.Notification,
-                                    title: "Executing msg on the contract - " + contract.label,
-                                    cancellable: false
-                                }, async (progress, token) => {
-                                    token.onCancellationRequested(() => { });
-                                    progress.report({ message: '' });
-                                    let data = JSON.parse(action.inputData);
-                                    const tx = await Cosmwasm.Execute(account, contract, data);
-                                    const url = global.workspaceChain.txExplorerLink;
-                                    if (tx && url) {
-                                        const explorerUrl = url.replace("${txHash}", tx);
-                                        if (Workspace.GetOpenTxInSimpleBrowser()) {
-                                            vscode.commands.executeCommand("simpleBrowser.api.open", vscode.Uri.parse(explorerUrl));
-                                        }
-                                        else {
-                                            vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
-                                        }
-                                        return Promise.resolve();
-                                    }
-                                    else {
-                                        return Promise.reject();
-                                    }
-                                });
+                                this.executer.Execute(action.inputData, vscode.ProgressLocation.Notification)
                                 break;
                             }
-                            default: {
-
-                            }
+                            default: {}
                         }
                     }
                     else {
