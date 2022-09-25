@@ -18,6 +18,13 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+## [v1.2.1] - 25 September 2022
+
+### Fixed
+
+- Fixed the chainid of the latest Juno Uni testnet from uni-4 to uni-5 
+
+
 ## [v1.2.0] - 24 September 2022
 
 ### Added

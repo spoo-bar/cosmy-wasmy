@@ -18,7 +18,7 @@ All the required components will now be installed for you to start your smart co
 
 To access all the Cosmwasm related features, click on the Cosmy Wasmy icon on the sidebar.
 
-The extension by default connects to the Juno `uni-4` testnet. You can go to the [settings](/docs/configuration.md) and customize this to target your local instance or any other testnet.
+The extension by default connects to the Juno `uni-5` testnet. You can go to the [settings](/docs/configuration.md) and customize this to target your local instance or any other testnet.
 
 ## Warnings
 
