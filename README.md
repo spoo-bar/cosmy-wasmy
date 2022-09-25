@@ -18,7 +18,7 @@ All the required components will now be installed for you to start your smart co
 
 To access all the Cosmwasm related features, click on the Cosmy Wasmy icon on the sidebar.
 
-The extension by default connects to the Juno `uni-3` testnet. You can go to the [settings](/docs/configuration.md) and customize this to target your local instance or any other testnet.
+The extension by default connects to the Juno `uni-4` testnet. You can go to the [settings](/docs/configuration.md) and customize this to target your local instance or any other testnet.
 
 ## Warnings
 
@@ -50,8 +50,7 @@ Find release notes in [CHANGELOG](CHANGELOG.md)
 ## Thanks
 
 Big shoutout to [aswever](https://github.com/aswever), lots of the feature inspirations came from [cosmwasm.tools](https://cosmwasm.tools/).
-And to [deuslabs.fi](https://deuslabs.fi) for providing rpc endpoints for the juno uni-3 testnet. Their endpoints are used as default configuration by the extension.
- 
+
 
 ## Support 
 

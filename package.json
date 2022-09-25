@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "cosmy wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -272,11 +272,11 @@
             },
             "default": [
               {
-                "configName": "Juno UNI-3",
-                "chainId": "uni-3",
+                "configName": "Juno uni-4",
+                "chainId": "uni-4",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "juno",
-                "rpcEndpoint": "https://rpc.uni.juno.deuslabs.fi",
+                "rpcEndpoint": "https://rpc.uni.junonetwork.io/",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "ujunox",
                 "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}",
