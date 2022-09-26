@@ -36,7 +36,7 @@ export class CosmwasmCmds {
 			if (jsonFile) {
 				vscode.workspace.openTextDocument(jsonFile).then((document) => {
 					let jsonInput = document.getText();
-					const cosmwasmExecutor = new Executer(context.globalState);
+					const cosmwasmExecutor = new Executer(context.globalState, true);
 					cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
 				});
 			}
@@ -44,7 +44,7 @@ export class CosmwasmCmds {
 				let activeFile = vscode.window.activeTextEditor;
 				if (activeFile) {
 					let jsonInput = activeFile.document.getText();
-					const cosmwasmExecutor = new Executer(context.globalState);
+					const cosmwasmExecutor = new Executer(context.globalState, true);
 					cosmwasmExecutor.Query(jsonInput, vscode.ProgressLocation.Notification);
 				}
 			}
@@ -57,7 +57,7 @@ export class CosmwasmCmds {
 			if (jsonFile) {
 				vscode.workspace.openTextDocument(jsonFile).then((document) => {
 					let jsonInput = document.getText();
-					const cosmwasmExecutor = new Executer(context.globalState);
+					const cosmwasmExecutor = new Executer(context.globalState, true);
 					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
 				});
 			}
@@ -65,7 +65,7 @@ export class CosmwasmCmds {
 				let activeFile = vscode.window.activeTextEditor;
 				if (activeFile) {
 					let jsonInput = activeFile.document.getText();
-					const cosmwasmExecutor = new Executer(context.globalState);
+					const cosmwasmExecutor = new Executer(context.globalState, true);
 					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
 				}
 			}

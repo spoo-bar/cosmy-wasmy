@@ -18,7 +18,14 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
-## [Unreleased]
+## [v1.2.1] - 25 September 2022
+
+### Fixed
+
+- Fixed the chainid of the latest Juno Uni testnet from uni-4 to uni-5 
+
+
+## [v1.2.0] - 24 September 2022
 
 ### Added
 
@@ -26,15 +33,12 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Changed
 
-### Deprecated
-
-### Removed
+- Changed Juni uni-3 to uni-4 configuration in present chain config
 
 ### Fixed
 
 - Fixed issue where it was possible to import multiple accounts with same mnemonic.
 
-### Security 
 
 
 ## [v1.1.0] - 25 August 2022
