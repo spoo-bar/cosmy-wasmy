@@ -53,9 +53,9 @@ export class Cosmwasm {
         return client;
     }
 
-    public static async Query(contract: Contract, query: any) {
+    public static async Query(contract: string, query: any) {
 		try {
-			let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract.contractAddress, query);
+			let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract, query);
 			ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
             return {
                 isSuccess: true,
@@ -71,15 +71,22 @@ export class Cosmwasm {
 		}
 	}
 
-    public static async Execute(account: Account, contract: Contract, req: any) {
+    public static async Execute(account: Account, contract: string, req: any) {
 		try {
             let client = await Cosmwasm.GetSigningClient();
-			let response = await client.execute(account.address, contract.contractAddress, req, "auto");
+			let response = await client.execute(account.address, contract, req, "auto");
 			ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
-			return response.transactionHash;
+            return {
+                isSuccess: true,
+                response: response
+            };
 		}
 		catch (err: any) {
 			ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+            return {
+                isSuccess: false,
+                response: err
+            };
 		}
 	}
 
