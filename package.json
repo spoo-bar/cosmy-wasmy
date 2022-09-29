@@ -651,6 +651,7 @@
     "@cosmjs/faucet-client": "^0.28.4",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.28.4",
-    "clipboardy": "^3.0.0"
+    "clipboardy": "^3.0.0",
+    "toml": "^3.0.0"
   }
 }

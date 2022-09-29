@@ -1,5 +1,4 @@
 import { isMultisigThresholdPubkey } from '@cosmjs/amino';
-import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { Action, HistoryHandler } from '../extensionData/historyHandler';
 import { Workspace } from "../workspace";
@@ -104,34 +103,3 @@ export class Executer {
 }
 
 
-export class SmartExecutor {
-    
-    // this func aint really all that smart tho
-    public async SmartCall(contractAddress: string, input: any) {
-        const call = Object.keys(input)[0];
-        const workspaceFolder = vscode.workspace.workspaceFolders[0];
-        const decoder = new TextDecoder();
-        const account = Workspace.GetSelectedAccount();
-
-        // Check if the call is a query
-        const querySchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "query_msg.json");
-        const queryContent = decoder.decode(await vscode.workspace.fs.readFile(querySchema));
-        const queries = JSON.parse(queryContent).oneOf.map(q => q.required[0]);
-        if(queries.some(q => q == call)) {
-            return await Cosmwasm.Query(contractAddress, input);
-        }
-
-        // Check if the call is a tx
-        const executeSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "execute_msg.json");
-        const executeContent = decoder.decode(await vscode.workspace.fs.readFile(executeSchema));
-        const execs = JSON.parse(executeContent).oneOf.map(e => e.required[0]);
-        if(execs.some(e => e == call)) {
-            return await Cosmwasm.Execute(account, contractAddress, input);
-        }
-
-        // const instantiateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "instantiate_msg.json");
-        // const migrateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "migrate_msg.json");
-        
-        return; 
-    }
-}

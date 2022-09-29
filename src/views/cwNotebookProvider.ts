@@ -1,8 +1,7 @@
 import { TextDecoder, TextEncoder } from 'util';
 import * as vscode from 'vscode';
-import { Cosmwasm } from '../helpers/cosmwasm/api';
-import { Executer, SmartExecutor } from '../helpers/cosmwasm/executer';
-import { Contract } from '../models/contract';
+var toml = require('toml');
+import { SmartExecutor } from "../helpers/cosmwasm/SmartExecutor";
 
 interface RawNotebookCell {
     language: string;
@@ -48,10 +47,20 @@ export class CWController {
     readonly controllerId = 'cw-notebook-controller-id';
     readonly notebookType = 'cw-notebook';
     readonly label = 'CW Notebook';
-    readonly supportedLanguages = ['json'];
+    readonly supportedLanguages = ['json', 'toml'];
 
     private readonly _controller: vscode.NotebookController;
     private _executionOrder = 0;
+
+    // custom config per notebook to keep notebook as self contained as possible
+    private _clientConfig = {
+        mnemonic: "",
+        contractAddress: "",
+        rpcEndpoint: "",
+        gasPrice: "",
+        addressPrefix: "",
+    };
+    private executor: SmartExecutor;
 
 
     constructor() {
@@ -64,6 +73,7 @@ export class CWController {
         this._controller.supportedLanguages = this.supportedLanguages;
         this._controller.supportsExecutionOrder = true;
         this._controller.executeHandler = this._execute.bind(this);
+        this.executor = new SmartExecutor();
     }
 
     private _execute(cells: vscode.NotebookCell[], _notebook: vscode.NotebookDocument, _controller: vscode.NotebookController): void {
@@ -80,26 +90,43 @@ export class CWController {
         /* Do some execution here; not implemented */
 
         try {
+            let lang = cell.document.languageId;
             let input = cell.document.getText()
-            let json = JSON.parse(input);
+            if (lang == "json") {
+                let json = JSON.parse(input);
 
-            let response = await new SmartExecutor().SmartCall("juno1hm6ur9xkhlnm5uhfmwcqczr3pmywldfvgs3a85jg5yjsdw5lwlcqpjerky", json)
+                let response = await this.executor.SmartCall(this._clientConfig.contractAddress, json, this._clientConfig.mnemonic)
 
-            if (response.isSuccess) {
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.json(response.response)
-                    ])
-                ]);
+                if (response.isSuccess) {
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.json(response.response)
+                        ])
+                    ]);
+                }
+                else {
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.error(response.response)
+                        ])
+                    ]);
+                }
             }
-            else {
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.error(response.response)
-                    ])
-                ]);
+            else if (lang == "toml") {
+                let configParsed = toml.parse(input);
+                this._clientConfig = configParsed.config;
+                await this.executor.SetupAccount(this._clientConfig.mnemonic, this._clientConfig.addressPrefix);
+                await this.executor.SetupClient(this._clientConfig.rpcEndpoint);
+
+                execution.replaceOutput([new vscode.NotebookCellOutput([
+                    vscode.NotebookCellOutputItem.text("💾 Loaded the above data to notebook state")
+                ]), new vscode.NotebookCellOutput([
+                    vscode.NotebookCellOutputItem.text("🔑 Your account address is " + this.executor.GetAccountAddress() + ".")
+                ]), new vscode.NotebookCellOutput([
+                    vscode.NotebookCellOutputItem.text("▶️ You can now run any query or tx with this account and contract at the given endpoint.")
+                ])])
             }
-            
+
         }
         catch (error) {
             execution.replaceOutput([
@@ -108,11 +135,11 @@ export class CWController {
                 ])
             ]);
         }
-        
+
         execution.end(true, Date.now());
     }
 
-    dispose() : any {
+    dispose(): any {
 
     }
 }
