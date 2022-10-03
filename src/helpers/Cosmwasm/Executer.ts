@@ -42,7 +42,7 @@ export class Executer {
         }, async (progress, token) => {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
-            let response = await Cosmwasm.Query(contract, query);
+            let response = await Cosmwasm.Query(contract.contractAddress, query);
             if (response.isSuccess) {
                 return Promise.resolve();
             }
@@ -83,10 +83,10 @@ export class Executer {
         }, async (progress, token) => {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
-            const tx = await Cosmwasm.Execute(account, contract, req);
+            const tx = await Cosmwasm.Execute(account, contract.contractAddress, req);
             const url = global.workspaceChain.txExplorerLink;
-            if (tx && url) {
-                const explorerUrl = url.replace("${txHash}", tx);
+            if (tx.isSuccess && url) {
+                const explorerUrl = url.replace("${txHash}", tx.response.transactionHash);
                 if (Workspace.GetOpenTxInSimpleBrowser()) {
                     vscode.commands.executeCommand("simpleBrowser.api.open", vscode.Uri.parse(explorerUrl));
                 }
@@ -100,6 +100,6 @@ export class Executer {
             }
         });
     }
-
 }
+
 

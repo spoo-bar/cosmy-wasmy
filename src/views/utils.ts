@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Workspace } from '../helpers/workspace';
+import { CWNotebookController, CWSerializer } from './cwNotebookProvider';
 import { InitializeViewProvider } from './initializeViewProvider';
 import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
@@ -79,5 +80,7 @@ export class Views {
         const initializeViewProvider = new InitializeViewProvider(context.extensionUri);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
+        context.subscriptions.push(vscode.workspace.registerNotebookSerializer(Constants.VIEWS_NOTEBOOK, new CWSerializer()));
+        context.subscriptions.push(new CWNotebookController());
     }
 }

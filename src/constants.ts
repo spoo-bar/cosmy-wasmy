@@ -16,6 +16,9 @@ export class Constants {
     public static readonly VIEWS_SIGN = "sign";
     public static readonly VIEWS_MIGRATE = "migrate";
     public static readonly VIEWS_INITIALIZE = "intialize";
+
+    public static readonly VIEWS_NOTEBOOK = "cw-notebook";
+    public static readonly VIEWS_NOTEBOOK_CONTROLLER = "cw-notebook-controller-id";
     
     public static readonly STATUSBAR_ID_SELECTED_CONFIG = "selectedConfig";
     public static readonly STATUSBAR_ID_RECORD_STATUS = "recordStatus";

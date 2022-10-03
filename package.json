@@ -30,7 +30,8 @@
     "onView:query",
     "onView:execute",
     "onView:sign",
-    "onLanguage:rust"
+    "onLanguage:rust",
+    "onNotebook:cw-notebook"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -402,6 +403,21 @@
         "key": "ctrl+shift+a"
       }
     ],
+    "languages": [
+      {
+        "id": "cw-notebook",
+        "aliases": [
+          "CW Notebook"
+        ],
+        "extensions": [
+          ".cwnotebook"
+        ],
+        "icon": {
+          "light": "media/icon.svg",
+          "dark": "media/icon.svg"
+        }
+      }
+    ],
     "menus": {
       "explorer/context": [
         {
@@ -519,6 +535,17 @@
         }
       ]
     },
+    "notebooks": [
+      {
+        "type": "cw-notebook",
+        "displayName": "cw-notebook",
+        "selector": [
+          {
+            "filenamePattern": "*.cwnotebook"
+          }
+        ]
+      }
+    ],
     "snippets": [
       {
         "language": "rust",
@@ -624,6 +651,7 @@
     "@cosmjs/faucet-client": "^0.28.4",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.28.4",
-    "clipboardy": "^3.0.0"
+    "clipboardy": "^3.0.0",
+    "toml": "^3.0.0"
   }
 }
