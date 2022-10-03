@@ -54,7 +54,6 @@ export class CWNotebookController {
     private _executionOrder = 0;
 
     // custom config per notebook to keep notebook as self contained as possible
-    // todo - if no config use cosmwasm-vm
     private _clientConfig = {
         mnemonic: "",
         contractAddress: "",

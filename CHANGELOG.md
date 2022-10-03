@@ -18,6 +18,24 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Security 
 -->
 
+
+## [Unreleased]
+
+### Added
+
+- Support for CW notebooks - Can run queries and execute txs from the notebook cell. Can connect to any chain with the config loaded as part of the toml cell.
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security 
+
+
 ## [v1.2.1] - 25 September 2022
 
 ### Fixed
