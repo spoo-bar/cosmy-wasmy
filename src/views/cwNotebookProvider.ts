@@ -1,7 +1,8 @@
 import { TextDecoder, TextEncoder } from 'util';
 import * as vscode from 'vscode';
-var toml = require('toml');
+import { Constants } from '../constants';
 import { SmartExecutor } from "../helpers/cosmwasm/SmartExecutor";
+var toml = require('toml');
 
 interface RawNotebookCell {
     language: string;
@@ -43,9 +44,9 @@ export class CWSerializer implements vscode.NotebookSerializer {
     }
 }
 
-export class CWController {
-    readonly controllerId = 'cw-notebook-controller-id';
-    readonly notebookType = 'cw-notebook';
+export class CWNotebookController {
+    readonly controllerId = Constants.VIEWS_NOTEBOOK_CONTROLLER;
+    readonly notebookType = Constants.VIEWS_NOTEBOOK;
     readonly label = 'CW Notebook';
     readonly supportedLanguages = ['json', 'toml'];
 
@@ -53,6 +54,7 @@ export class CWController {
     private _executionOrder = 0;
 
     // custom config per notebook to keep notebook as self contained as possible
+    // todo - if no config use cosmwasm-vm
     private _clientConfig = {
         mnemonic: "",
         contractAddress: "",
@@ -87,14 +89,12 @@ export class CWController {
         execution.executionOrder = ++this._executionOrder;
         execution.start(Date.now()); // Keep track of elapsed time to execute cell.
 
-        /* Do some execution here; not implemented */
-
         try {
             let lang = cell.document.languageId;
             let input = cell.document.getText()
+            // if the cell is json, assume its a smart contract input and try to execute it
             if (lang == "json") {
                 let json = JSON.parse(input);
-
                 let response = await this.executor.SmartCall(this._clientConfig.contractAddress, json, this._clientConfig.mnemonic)
 
                 if (response.isSuccess) {
@@ -112,11 +112,12 @@ export class CWController {
                     ]);
                 }
             }
+            // if the cell is toml, assume it is the config to connect to chain to execute contracts
             else if (lang == "toml") {
                 let configParsed = toml.parse(input);
                 this._clientConfig = configParsed.config;
                 await this.executor.SetupAccount(this._clientConfig.mnemonic, this._clientConfig.addressPrefix);
-                await this.executor.SetupClient(this._clientConfig.rpcEndpoint);
+                await this.executor.SetupClient(this._clientConfig.rpcEndpoint, this._clientConfig.gasPrice);
 
                 execution.replaceOutput([new vscode.NotebookCellOutput([
                     vscode.NotebookCellOutputItem.text("💾 Loaded the above data to notebook state")
