@@ -1,6 +1,7 @@
+import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import init, { InitOutput, vm_instantiate } from '../cosmwasm-vm/cosmwebwasm';
+import init, { InitOutput, vm_execute, vm_instantiate } from '../cosmwasm-vm/cosmwebwasm';
 
 
 // This controller for the cw notebook supports connecting the notebook to an exiting chain and run queries and execute msgs against that
@@ -20,7 +21,8 @@ export class NotebookCosmwasmController {
     readonly sender = 0xc0dec0de;
     readonly address = 0xcafebabe;
 
-    private state: any;
+    private state: string;
+    private decoder = new TextDecoder();
 
 
     constructor() {
@@ -40,7 +42,7 @@ export class NotebookCosmwasmController {
         vscode.workspace.fs.readFile(vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, wasm)).then(content => {
             this.wasmBinary = content;
 
-            this.state = {
+            const initState = {
                 storage: {},
                 codes: {
                     [this.codeId]: Array.from(this.wasmBinary),
@@ -57,7 +59,8 @@ export class NotebookCosmwasmController {
                 gas: {
                     checkpoints: [10000000000000],
                 },
-            }
+            };
+            this.state = JSON.stringify(initState);
 
         });
     }
@@ -75,21 +78,39 @@ export class NotebookCosmwasmController {
 
         try {
             let input = cell.document.getText();
+            const workspaceFolder = vscode.workspace.workspaceFolders[0];
 
             let json = JSON.parse(input);
+            const call = Object.keys(json)[0];
 
+            const querySchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "query_msg.json");
+            const queryContent = this.decoder.decode(await vscode.workspace.fs.readFile(querySchema));
+            const queries = JSON.parse(queryContent).oneOf.map(q => q.required[0]);
+            if (queries.some(q => q == call)) {
 
-            const { state, events } = vm_instantiate(this.sender, this.address, [], JSON.stringify(this.state), this.wasmBinary, JSON.stringify(json))
-            normalize(state);
-            execution.replaceOutput([
-                new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.json(events)
-                ])
-            ]);
-            this.state = state;
+            }
 
+            const executeSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "execute_msg.json");
+            const executeContent = this.decoder.decode(await vscode.workspace.fs.readFile(executeSchema));
+            const execs = JSON.parse(executeContent).oneOf.map(e => e.required[0]);
+            if (execs.some(e => e == call)) {
 
+            }
 
+            const instantiateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "instantiate_msg.json");
+            const instantiateContent = this.decoder.decode(await vscode.workspace.fs.readFile(instantiateSchema));
+            const instantiateMsg = JSON.parse(instantiateContent);
+            if (instantiateMsg.required[0] == call) {
+                const { state, events } = vm_instantiate(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json))
+                normalize(state);
+                this.state = JSON.stringify(state);
+
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.json(events)
+                    ])
+                ]); 
+            }
         }
         catch (error) {
             execution.replaceOutput([
