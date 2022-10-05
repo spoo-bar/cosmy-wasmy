@@ -1,10 +1,10 @@
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import init, { InitOutput, vm_execute, vm_instantiate, vm_query } from '../cosmwasm-vm/cosmwebwasm';
+import init, { vm_execute, vm_instantiate, vm_query } from '../cosmwasm-vm/cosmwebwasm';
 
 
-// This controller for the cw notebook supports connecting the notebook to an exiting chain and run queries and execute msgs against that
+// This controller for the cw notebook supports connecting the notebook to cosmwasm vm (which runs in the extension) and run queries and execute msgs against that
 export class NotebookCosmwasmController {
     readonly controllerId = "cosmwasm-notebook";
     readonly notebookType = Constants.VIEWS_NOTEBOOK;
@@ -14,12 +14,11 @@ export class NotebookCosmwasmController {
     private readonly _controller: vscode.NotebookController;
     private _executionOrder = 0;
 
-    private vmInit: InitOutput;
     private wasmBinary: Uint8Array;
 
-    readonly codeId = 0x1337;
-    readonly sender = 0xc0dec0de;
-    readonly address = 0xcafebabe;
+    readonly codeId = 0x1;
+    readonly sender = 0x123;
+    readonly address = 0xabc;
 
     private state: string;
     private decoder = new TextDecoder();
@@ -35,13 +34,11 @@ export class NotebookCosmwasmController {
         this._controller.supportedLanguages = this.supportedLanguages;
         this._controller.supportsExecutionOrder = true;
         this._controller.executeHandler = this._execute.bind(this);
-        init().then(r => {
-            this.vmInit = r;
-        })
+
+        init().then(r => { });
         let wasm = "cosmy_wasmy_test.wasm";
         vscode.workspace.fs.readFile(vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, wasm)).then(content => {
             this.wasmBinary = content;
-
             const initState = {
                 storage: {},
                 codes: {
@@ -51,7 +48,7 @@ export class NotebookCosmwasmController {
                     [this.address]: {
                         code_id: this.codeId,
                         admin: null,
-                        label: '',
+                        label: 'CW Notebook Contract - ' + wasm,
                     },
                 },
                 next_account_id: this.address + 1,
@@ -61,7 +58,6 @@ export class NotebookCosmwasmController {
                 },
             };
             this.state = JSON.stringify(initState);
-
         });
     }
 
@@ -78,60 +74,58 @@ export class NotebookCosmwasmController {
 
         try {
             let input = cell.document.getText();
-            const workspaceFolder = vscode.workspace.workspaceFolders[0];
-
             let json = JSON.parse(input);
             const call = Object.keys(json)[0];
 
-            const querySchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "query_msg.json");
-            const queryContent = this.decoder.decode(await vscode.workspace.fs.readFile(querySchema));
-            const queries = JSON.parse(queryContent).oneOf.map(q => q.required[0]);
-            if (queries.some(q => q == call)) {
+            const op = await this.identifyOperation(call);
+            switch (op) {
+                case Operation.Initialize: {
+                    const { state, events } = vm_instantiate(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json))
+                    this.state = this.normalizeState(state);
 
-                const responseB = vm_query(this.sender, this.address, [], this.state, this.wasmBinary, {
-                    wasm: {
-                        smart: {
-                            contract_addr: String(this.address),
-                            msg: Buffer.from(JSON.stringify(json)).toString('base64')
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.json(events)
+                        ])
+                    ]);
+                    break;
+                };
+                case Operation.Query: {
+                    const responseB = vm_query(this.sender, this.address, [], this.state, this.wasmBinary, {
+                        wasm: {
+                            smart: {
+                                contract_addr: String(this.address),
+                                msg: Buffer.from(JSON.stringify(json)).toString('base64')
+                            }
                         }
-                    }
-                });
-                const response = Buffer.from(responseB, 'base64').toString();
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.json(JSON.parse(response))
-                    ])
-                ]);
+                    });
+                    const response = Buffer.from(responseB, 'base64').toString();
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.json(JSON.parse(response))
+                        ])
+                    ]);
+                    break;
+                };
+                case Operation.Tx: {
+                    const { state: state, events: events } = vm_execute(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json));
+                    this.state = this.normalizeState(state);
 
-            }
-
-            const executeSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "execute_msg.json");
-            const executeContent = this.decoder.decode(await vscode.workspace.fs.readFile(executeSchema));
-            const execs = JSON.parse(executeContent).oneOf.map(e => e.required[0]);
-            if (execs.some(e => e == call)) {
-
-                const { state: state, events: events } = vm_execute(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json));
-                this.state = this.normalizeState(state);
-
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.json(events)
-                    ])
-                ]);
-            }
-
-            const instantiateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "instantiate_msg.json");
-            const instantiateContent = this.decoder.decode(await vscode.workspace.fs.readFile(instantiateSchema));
-            const instantiateMsg = JSON.parse(instantiateContent);
-            if (instantiateMsg.required[0] == call) {
-                const { state, events } = vm_instantiate(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json))
-                this.state = this.normalizeState(state);
-
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.json(events)
-                    ])
-                ]);
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.json(events)
+                        ])
+                    ]);
+                    break;
+                };
+                case Operation.Unknown:
+                default: {
+                    execution.replaceOutput([
+                        new vscode.NotebookCellOutput([
+                            vscode.NotebookCellOutputItem.error(new Error("Could not find any matching query or msg endpoint for given input: " + call))
+                        ])
+                    ]);
+                }
             }
         }
         catch (error) {
@@ -145,8 +139,7 @@ export class NotebookCosmwasmController {
         execution.end(true, Date.now());
     }
 
-    dispose(): any {
-    }
+    dispose(): any { }
 
     private normalizeState(state: any) {
         state.codes = Object.fromEntries(state.codes);
@@ -163,7 +156,40 @@ export class NotebookCosmwasmController {
                     }]
                 )
             );
-            return JSON.stringify(state);
-
+        return JSON.stringify(state);
     }
+
+    private async identifyOperation(call: string): Promise<Operation> {
+        const workspaceFolder = vscode.workspace.workspaceFolders[0];
+
+        const querySchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "query_msg.json");
+        const queryContent = this.decoder.decode(await vscode.workspace.fs.readFile(querySchema));
+        const queries = JSON.parse(queryContent).oneOf.map(q => q.required[0]);
+        if (queries.some(q => q == call)) {
+            return Operation.Query;
+        }
+
+        const executeSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "execute_msg.json");
+        const executeContent = this.decoder.decode(await vscode.workspace.fs.readFile(executeSchema));
+        const execs = JSON.parse(executeContent).oneOf.map(e => e.required[0]);
+        if (execs.some(e => e == call)) {
+            return Operation.Tx;
+        }
+
+        const instantiateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "instantiate_msg.json");
+        const instantiateContent = this.decoder.decode(await vscode.workspace.fs.readFile(instantiateSchema));
+        const instantiateMsg = JSON.parse(instantiateContent);
+        if (instantiateMsg.required[0] == call) {
+            return Operation.Initialize;
+        }
+
+        return Operation.Unknown;
+    }
+}
+
+enum Operation {
+    Initialize,
+    Query,
+    Tx,
+    Unknown
 }
