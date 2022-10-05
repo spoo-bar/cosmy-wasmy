@@ -1,7 +1,7 @@
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import init, { InitOutput, vm_execute, vm_instantiate } from '../cosmwasm-vm/cosmwebwasm';
+import init, { InitOutput, vm_execute, vm_instantiate, vm_query } from '../cosmwasm-vm/cosmwebwasm';
 
 
 // This controller for the cw notebook supports connecting the notebook to an exiting chain and run queries and execute msgs against that
@@ -88,6 +88,21 @@ export class NotebookCosmwasmController {
             const queries = JSON.parse(queryContent).oneOf.map(q => q.required[0]);
             if (queries.some(q => q == call)) {
 
+                const responseB = vm_query(this.sender, this.address, [], this.state, this.wasmBinary, {
+                    wasm: {
+                        smart: {
+                            contract_addr: String(this.address),
+                            msg: Buffer.from(JSON.stringify(json)).toString('base64')
+                        }
+                    }
+                });
+                const response = Buffer.from(responseB, 'base64').toString();
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.json(JSON.parse(response))
+                    ])
+                ]);
+
             }
 
             const executeSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "execute_msg.json");
@@ -95,6 +110,14 @@ export class NotebookCosmwasmController {
             const execs = JSON.parse(executeContent).oneOf.map(e => e.required[0]);
             if (execs.some(e => e == call)) {
 
+                const { state: state, events: events } = vm_execute(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json));
+                this.state = this.normalizeState(state);
+
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.json(events)
+                    ])
+                ]);
             }
 
             const instantiateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "instantiate_msg.json");
@@ -102,14 +125,13 @@ export class NotebookCosmwasmController {
             const instantiateMsg = JSON.parse(instantiateContent);
             if (instantiateMsg.required[0] == call) {
                 const { state, events } = vm_instantiate(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json))
-                normalize(state);
-                this.state = JSON.stringify(state);
+                this.state = this.normalizeState(state);
 
                 execution.replaceOutput([
                     new vscode.NotebookCellOutput([
                         vscode.NotebookCellOutputItem.json(events)
                     ])
-                ]); 
+                ]);
             }
         }
         catch (error) {
@@ -125,22 +147,23 @@ export class NotebookCosmwasmController {
 
     dispose(): any {
     }
-}
 
-function normalize(state) {
-    state.codes = Object.fromEntries(state.codes);
-    state.contracts = Object.fromEntries(state.contracts);
-    state.storage = Object.fromEntries(state.storage);
-    state.storage =
-        Object.fromEntries(
-            Object.entries(state.storage).map(
-                ([k, v]) => [k, {
-                    // @ts-ignore
-                    data: Object.fromEntries(v.data),
-                    // @ts-ignore
-                    iterators: Object.fromEntries(v.iterators)
-                }]
-            )
-        );
+    private normalizeState(state: any) {
+        state.codes = Object.fromEntries(state.codes);
+        state.contracts = Object.fromEntries(state.contracts);
+        state.storage = Object.fromEntries(state.storage);
+        state.storage =
+            Object.fromEntries(
+                Object.entries(state.storage).map(
+                    ([k, v]) => [k, {
+                        // @ts-ignore
+                        data: Object.fromEntries(v.data),
+                        // @ts-ignore
+                        iterators: Object.fromEntries(v.iterators)
+                    }]
+                )
+            );
+            return JSON.stringify(state);
 
+    }
 }
