@@ -36,30 +36,42 @@ export class NotebookCosmwasmController {
         this._controller.executeHandler = this._execute.bind(this);
 
         init().then(r => { });
-        let wasm = "cosmy_wasmy_test.wasm";
-        vscode.workspace.fs.readFile(vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, wasm)).then(content => {
-            this.wasmBinary = content;
-            const initState = {
-                storage: {},
-                codes: {
-                    [this.codeId]: Array.from(this.wasmBinary),
-                },
-                contracts: {
-                    [this.address]: {
-                        code_id: this.codeId,
-                        admin: null,
-                        label: 'CW Notebook Contract - ' + wasm,
+
+        const projectFolder = vscode.workspace.workspaceFolders[0].uri;
+        vscode.workspace.fs.readDirectory(projectFolder).then(files => {
+            const wasmFile = files.filter(f => f[0].endsWith(".wasm"));
+            if (wasmFile.length < 1) {
+                return vscode.window.showErrorMessage("Did not find any wasm binary in the root of the repository");
+            }
+            if (wasmFile.length > 1) {
+                return vscode.window.showErrorMessage("Found too many wasm binaries in the root of the repository. Please keep only one for use with cw notebook");
+            }
+            let wasm = vscode.Uri.joinPath(projectFolder, wasmFile[0][0]);
+            vscode.workspace.fs.readFile(wasm).then(content => {
+                this.wasmBinary = content;
+                const initState = {
+                    storage: {},
+                    codes: {
+                        [this.codeId]: Array.from(this.wasmBinary),
                     },
-                },
-                next_account_id: this.address + 1,
-                transaction_depth: 0,
-                gas: {
-                    checkpoints: [10000000000000],
-                },
-            };
-            this.state = JSON.stringify(initState);
-        });
+                    contracts: {
+                        [this.address]: {
+                            code_id: this.codeId,
+                            admin: null,
+                            label: 'CW Notebook Contract - ' + wasm,
+                        },
+                    },
+                    next_account_id: this.address + 1,
+                    transaction_depth: 0,
+                    gas: {
+                        checkpoints: [10000000000000],
+                    },
+                };
+                this.state = JSON.stringify(initState);
+            });
+        })
     }
+
 
     private _execute(cells: vscode.NotebookCell[], _notebook: vscode.NotebookDocument, _controller: vscode.NotebookController): void {
         for (let cell of cells) {
@@ -76,6 +88,10 @@ export class NotebookCosmwasmController {
             let input = cell.document.getText();
             let json = JSON.parse(input);
             const call = Object.keys(json)[0];
+
+            if(!this.wasmBinary) {
+                throw new Error("Could not fetch the wasm binary")
+            }
 
             const op = await this.identifyOperation(call);
             switch (op) {
