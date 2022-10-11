@@ -6,7 +6,7 @@ import init, { vm_execute, vm_instantiate, vm_query } from '../cosmwasm-vm/cosmw
 
 // This controller for the cw notebook supports connecting the notebook to cosmwasm vm (which runs in the extension) and run queries and execute msgs against that
 export class NotebookCosmwasmController {
-    readonly controllerId = "cosmwasm-notebook";
+    readonly controllerId = Constants.VIEWS_NOTEBOOK_CW_VM_CONTROLLER;
     readonly notebookType = Constants.VIEWS_NOTEBOOK;
     readonly label = 'cosmwasm vm';
     readonly supportedLanguages = ['json'];
