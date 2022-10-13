@@ -83,6 +83,6 @@ export class Views {
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
         context.subscriptions.push(vscode.workspace.registerNotebookSerializer(Constants.VIEWS_NOTEBOOK, new CWSerializer()));
-        context.subscriptions.push(new NotebookChainController(), new NotebookCosmwasmController());
+        context.subscriptions.push(new NotebookCosmwasmController());
     }
 }
