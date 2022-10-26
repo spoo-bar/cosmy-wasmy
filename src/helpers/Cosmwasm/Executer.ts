@@ -91,7 +91,7 @@ export class Executer {
                     vscode.commands.executeCommand("simpleBrowser.api.open", vscode.Uri.parse(explorerUrl));
                 }
                 else {
-                    vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx + "](" + explorerUrl + ")", true).value);
+                    vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx.response.transactionHash + "](" + explorerUrl + ")", true).value);
                 }
                 return Promise.resolve();
             }
