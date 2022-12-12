@@ -23,7 +23,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Added
 
-- Support for CW notebooks - Can run queries and execute txs from the notebook cell. Can connect to any chain with the config loaded as part of the toml cell.
+- Support for CW notebooks - Can instantiate contract, run queries and execute txs from the notebook cell within the cosmwasm virtual machine kernel. 
 
 ### Changed
 
