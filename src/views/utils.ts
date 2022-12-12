@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Workspace } from '../helpers/workspace';
-import { CWNotebookController, CWSerializer } from './cwNotebookProvider';
+import { CWSerializer } from './cwNotebookProvider';
+import { NotebookChainController } from "../notebook/chainEnvController";
 import { InitializeViewProvider } from './initializeViewProvider';
 import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
 import { SignProvider } from './signProvider';
 import { TxProvider } from './txProvider';
+import { NotebookCosmwasmController } from '../notebook/cosmwasmVmController';
 
 export class Utils {
 
@@ -81,6 +83,6 @@ export class Views {
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
         context.subscriptions.push(vscode.workspace.registerNotebookSerializer(Constants.VIEWS_NOTEBOOK, new CWSerializer()));
-        context.subscriptions.push(new CWNotebookController());
+        context.subscriptions.push(new NotebookCosmwasmController());
     }
 }
