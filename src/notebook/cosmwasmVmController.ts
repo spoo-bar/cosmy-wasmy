@@ -1,16 +1,16 @@
+import path = require('path');
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import init, { vm_execute, vm_instantiate, vm_query } from '../cosmwasm-vm/cosmwebwasm';
-var toml = require('toml');
 
 
 // This controller for the cw notebook supports connecting the notebook to cosmwasm vm (which runs in the extension) and run queries and execute msgs against that
 export class NotebookCosmwasmController {
     readonly controllerId = Constants.VIEWS_NOTEBOOK_CW_VM_CONTROLLER;
     readonly notebookType = Constants.VIEWS_NOTEBOOK;
-    readonly label = 'cosmwasm vm';
-    readonly supportedLanguages = ['json', 'toml'];
+    readonly label = 'cosmwasm-vm';
+    readonly supportedLanguages = ['json'];
 
     private readonly _controller: vscode.NotebookController;
     private _executionOrder = 0;
@@ -18,8 +18,8 @@ export class NotebookCosmwasmController {
     private wasmBinary: Uint8Array;
 
     readonly codeId = 0x1;
-    readonly sender = 0x123;
-    readonly address = 0xabc;
+    readonly sender = 0x1;
+    readonly address = 0x1;
 
     private state: string;
     private decoder = new TextDecoder();
@@ -39,52 +39,16 @@ export class NotebookCosmwasmController {
 
         init().then(r => { });
 
-        // this._controller.
-        // let configParsed = toml.parse(input);
-
-        const projectFolder = vscode.workspace.workspaceFolders[0].uri;
-        vscode.workspace.fs.readDirectory(projectFolder).then(files => {
-            const wasmFile = files.filter(f => f[0].endsWith(".wasm"));
-            if (wasmFile.length < 1) {
-                return vscode.window.showErrorMessage("Did not find any wasm binary in the root of the repository");
-            }
-            if (wasmFile.length > 1) {
-                return vscode.window.showErrorMessage("Found too many wasm binaries in the root of the repository. Please keep only one for use with cw notebook");
-            }
-            let wasm = vscode.Uri.joinPath(projectFolder, wasmFile[0][0]);
-            vscode.workspace.fs.readFile(wasm).then(content => {
-                this.wasmBinary = content;
-                const initState = {
-                    storage: {},
-                    codes: {
-                        [this.codeId]: Array.from(this.wasmBinary),
-                    },
-                    contracts: {
-                        [this.address]: {
-                            code_id: this.codeId,
-                            admin: null,
-                            label: 'CW Notebook Contract - ' + wasm,
-                        },
-                    },
-                    next_account_id: this.address + 1,
-                    transaction_depth: 0,
-                    gas: {
-                        checkpoints: [10000000000000],
-                    },
-                };
-                this.state = JSON.stringify(initState);
-            });
-        })
     }
 
 
-    private async _execute(cells: vscode.NotebookCell[], _notebook: vscode.NotebookDocument, _controller: vscode.NotebookController): Promise<void> {
+    private async _execute(cells: vscode.NotebookCell[], notebook: vscode.NotebookDocument, _controller: vscode.NotebookController): Promise<void> {
         for (let cell of cells) {
-            await this._doExecution(cell);
+            await this._doExecution(cell, notebook);
         }
     }
 
-    private async _doExecution(cell: vscode.NotebookCell): Promise<void> {
+    private async _doExecution(cell: vscode.NotebookCell, notebook: vscode.NotebookDocument): Promise<void> {
         const execution = this._controller.createNotebookCellExecution(cell);
         execution.executionOrder = ++this._executionOrder;
         execution.start(Date.now()); // Keep track of elapsed time to execute cell.
@@ -95,13 +59,10 @@ export class NotebookCosmwasmController {
                 let json = JSON.parse(input);
                 const call = Object.keys(json)[0];
 
-                if (!this.wasmBinary) {
-                    throw new Error("Could not fetch the wasm binary")
-                }
-
                 const op = await this.identifyOperation(call);
                 switch (op) {
                     case Operation.Initialize: {
+                        await this.prepStateForInstantiate(notebook);
                         const { state, events } = vm_instantiate(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json))
                         this.state = this.normalizeState(state);
 
@@ -113,6 +74,9 @@ export class NotebookCosmwasmController {
                         break;
                     };
                     case Operation.Query: {
+                        if (!this.wasmBinary) {
+                            throw new Error("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook")
+                        }
                         const responseB = vm_query(this.sender, this.address, [], this.state, this.wasmBinary, {
                             wasm: {
                                 smart: {
@@ -130,6 +94,9 @@ export class NotebookCosmwasmController {
                         break;
                     };
                     case Operation.Tx: {
+                        if (!this.wasmBinary) {
+                            throw new Error("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook")
+                        }
                         const { state: state, events: events } = vm_execute(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json));
                         this.state = this.normalizeState(state);
 
@@ -150,7 +117,6 @@ export class NotebookCosmwasmController {
                     }
                 }
             }
-            
         }
         catch (error) {
             execution.replaceOutput([
@@ -164,6 +130,37 @@ export class NotebookCosmwasmController {
     }
 
     dispose(): any { }
+
+    private async prepStateForInstantiate(notebook: vscode.NotebookDocument) {
+        const folder = vscode.Uri.parse(path.dirname(notebook.uri.path));
+        const files = await vscode.workspace.fs.readDirectory(folder);
+        const wasmFile = files.filter(f => f[0].endsWith(".wasm"));
+        if (wasmFile.length < 1) {
+            return vscode.window.showErrorMessage("Did not find any wasm binary in folder of the CW notebook");
+        }
+        let wasm = vscode.Uri.joinPath(folder, wasmFile[0][0]);
+        const content = await vscode.workspace.fs.readFile(wasm);
+        this.wasmBinary = content;
+        const initState = {
+            storage: {},
+            codes: {
+                [this.codeId]: Array.from(this.wasmBinary),
+            },
+            contracts: {
+                [this.address]: {
+                    code_id: this.codeId,
+                    admin: null,
+                    label: 'CW Notebook Contract - ' + wasm,
+                },
+            },
+            next_account_id: this.address + 1,
+            transaction_depth: 0,
+            gas: {
+                checkpoints: [10000000000000],
+            },
+        };
+        this.state = JSON.stringify(initState);
+    }
 
     private normalizeState(state: any) {
         state.codes = Object.fromEntries(state.codes);
