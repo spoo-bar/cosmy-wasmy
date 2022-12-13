@@ -52,7 +52,7 @@ export class Executer {
         });
     }
 
-    public Execute(input: any, location: vscode.ProgressLocation | { viewId: string }) {
+    public Execute(value: any, location: vscode.ProgressLocation | { viewId: string }) {
         const account = Workspace.GetSelectedAccount();
         if (!account) {
             vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
@@ -64,16 +64,16 @@ export class Executer {
             return;
         }
         try {
-            JSON.parse(input);
+            JSON.parse(value.input);
         } catch {
             vscode.window.showErrorMessage("The input is not valid JSON");
             return;
         }
 
-        const req = JSON.parse(input);
+        const req = JSON.parse(value.input);
 
         if (this.useHistoryHandler) {
-            HistoryHandler.RecordAction(this.context, contract, Action.Tx, input);
+            HistoryHandler.RecordAction(this.context, contract, Action.Tx, value);
         }
 
         vscode.window.withProgress({
@@ -83,7 +83,7 @@ export class Executer {
         }, async (progress, token) => {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
-            const tx = await Cosmwasm.Execute(account, contract.contractAddress, req);
+            const tx = await Cosmwasm.Execute(account, contract.contractAddress, req, "Sent from cosmy-wasmy", value.funds);
             const url = global.workspaceChain.txExplorerLink;
             if (tx.isSuccess && url) {
                 const explorerUrl = url.replace("${txHash}", tx.response.transactionHash);

@@ -1,6 +1,6 @@
 import { CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { Coin, DirectSecp256k1HdWallet, parseCoins } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
@@ -71,10 +71,11 @@ export class Cosmwasm {
 		}
 	}
 
-    public static async Execute(account: Account, contract: string, req: any) {
+    public static async Execute(account: Account, contract: string, req: any, memo: string, fundsStr: string) {
 		try {
             let client = await Cosmwasm.GetSigningClient();
-			let response = await client.execute(account.address, contract, req, "auto");
+            let funds = parseCoins(fundsStr);
+			let response = await client.execute(account.address, contract, req, "auto", memo, funds);
 			ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
             return {
                 isSuccess: true,

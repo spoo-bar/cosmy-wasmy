@@ -52,13 +52,18 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
+				<input id="funds-text" placeholder="10ujunox"></input>
 				<button id="exec-button">Execute</button>
 				<script>
 					(function () {
 						const vscode = acquireVsCodeApi();
 						document.querySelector('#exec-button').addEventListener('click', () => {
 							const input = document.getElementById('input-text').value;
-							vscode.postMessage({ type: 'exec-text', value: input });
+							const funds = document.getElementById('funds-text').value;
+							vscode.postMessage({ type: 'exec-text', value: {
+								input: input,
+								funds: funds
+							}});
 						});
 					}());
 				</script>
