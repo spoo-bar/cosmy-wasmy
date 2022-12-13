@@ -646,11 +646,11 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "@cosmjs/amino": "^0.28.4",
-    "@cosmjs/cosmwasm-stargate": "^0.28.4",
-    "@cosmjs/faucet-client": "^0.28.4",
+    "@cosmjs/amino": "^0.29.5",
+    "@cosmjs/cosmwasm-stargate": "^0.29.5",
+    "@cosmjs/faucet-client": "^0.29.5",
     "@cosmjs/launchpad": "^0.27.1",
-    "@cosmjs/proto-signing": "^0.28.4",
+    "@cosmjs/proto-signing": "^0.29.5",
     "clipboardy": "^3.0.0",
     "toml": "^3.0.0"
   }
