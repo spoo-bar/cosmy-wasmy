@@ -23,9 +23,12 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Added
 
-- Support for CW notebooks - Can instantiate contract, run queries and execute txs from the notebook cell within the cosmwasm virtual machine kernel. 
+- Support for CW notebooks - Can instantiate contract, run queries and execute txs from the notebook cell within the cosmwasm virtual machine kernel.
+- Added support for `SigningCosmWasmClient.executeMultiple` in API
 
 ### Changed
+
+- Upgraded @cosmjs libraries to `0.29.5`.
 
 ### Deprecated
 

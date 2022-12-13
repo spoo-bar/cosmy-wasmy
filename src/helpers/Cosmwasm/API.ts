@@ -1,4 +1,4 @@
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
@@ -83,6 +83,25 @@ export class Cosmwasm {
 		}
 		catch (err: any) {
 			ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+            return {
+                isSuccess: false,
+                response: err
+            };
+		}
+	}
+
+    public static async ExecuteMultiple(account: Account, txs: ExecuteInstruction[]) {
+		try {
+            let client = await Cosmwasm.GetSigningClient();
+			let response = await client.executeMultiple(account.address, txs,"auto");
+			ResponseHandler.OutputSuccess(JSON.stringify(txs, null, 4), JSON.stringify(response, null, 4), "Tx");
+            return {
+                isSuccess: true,
+                response: response
+            };
+		}
+		catch (err: any) {
+			ResponseHandler.OutputError(JSON.stringify(txs, null, 4), err, "Tx");
             return {
                 isSuccess: false,
                 response: err
