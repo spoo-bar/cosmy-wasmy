@@ -104,6 +104,7 @@ export class CosmwasmHistoryView {
               <th>Type</th>
               <th>Label</th>
               <th>Input Data</th>
+              <th>Input Funds</th>
               <th>Contract Address</th>
           </tr>`;
             content += this.getTableData();
@@ -116,6 +117,16 @@ export class CosmwasmHistoryView {
         let tableContent = "";
 
         this.history.forEach((item, i) => {
+            let inputData = item.inputData;
+            let inputFunds = "";
+            const data = JSON.parse(JSON.stringify(item.inputData));
+            if(data.input) {
+                inputData = data.input;
+            }
+            if(data.funds) {
+                inputFunds = data.funds;
+            }
+            
             tableContent += "<tr>";
             tableContent += "<td class=\"line-num\">" + i + "</td>";
             tableContent += "<td><button id=\"" + i + "\" class=\"tertiary\">▶</button></td>";
@@ -127,7 +138,8 @@ export class CosmwasmHistoryView {
             else {
                 tableContent += "<td><span class=\"error\"><i>Contract not found in imported contracts.</i></span></td>";
             }
-            tableContent += "<td>" + item.inputData + "</td>";
+            tableContent += "<td>" + inputData + "</td>";
+            tableContent += "<td>" + inputFunds + "</td>";
             tableContent += "<td>" + item.contractAddr + "</td>";
             tableContent += "</tr>";
         });
