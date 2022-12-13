@@ -34,6 +34,8 @@ export class TxProvider implements vscode.WebviewViewProvider {
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 
+		const denom = global.workspaceChain.chainDenom;
+
 		return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -52,7 +54,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
-				<input id="funds-text" placeholder="10ujunox"></input>
+				<input id="funds-text" placeholder="10${denom}"></input>
 				<button id="exec-button">Execute</button>
 				<script>
 					(function () {
