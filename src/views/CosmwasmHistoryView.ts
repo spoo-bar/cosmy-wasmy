@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { Cosmwasm } from '../helpers/cosmwasm/api';
 import { Executer } from '../helpers/cosmwasm/executer';
 import { Action, History, HistoryHandler } from '../helpers/extensionData/historyHandler';
 import { Workspace } from '../helpers/workspace';
@@ -39,13 +38,21 @@ export class CosmwasmHistoryView {
                                 this.executer.Execute(action.inputData, vscode.ProgressLocation.Notification)
                                 break;
                             }
-                            default: {}
+                            default: { }
                         }
                     }
                     else {
                         vscode.window.showErrorMessage("Contract not found in imported contracts. Try importing the address again and running the query");
                     }
-
+                    break;
+                };
+                case 'clear': { 
+                    vscode.window.showInformationMessage("Clear");
+                    break;
+                }
+                case 'export': { 
+                    vscode.window.showInformationMessage("Export");
+                    break;
                 }
             }
         })
@@ -69,6 +76,13 @@ export class CosmwasmHistoryView {
           function post(e) {
               vscode.postMessage({ type: 'exec', value: e.target.id });
           }
+          function clearHistory(e) {
+            vscode.postMessage({ type: 'clear', value: e.target.id });
+          }
+          function exportHistory(e) {
+            vscode.postMessage({ type: 'export', value: e.target.id });
+          }
+
           var buttonArray = document.getElementsByClassName('tertiary');
           for(i = 0; i < buttonArray.length; i++)
           {
@@ -79,6 +93,19 @@ export class CosmwasmHistoryView {
                   if (document.attachEvent) {
                       buttonArray[i].attachEvent("onclick", post);
                   }
+              }
+          }
+
+          var clearBtn = document.getElementById('clear-btn');
+          var exportBtn = document.getElementById('export-btn');
+          if (document.addEventListener) {
+            clearBtn.addEventListener("click", clearHistory);
+            exportBtn.addEventListener("click", exportHistory);
+          } 
+          else { 
+              if (document.attachEvent) {
+                clearBtn.attachEvent("onclick", clearHistory);
+                exportBtn.attachEvent("onclick", exportHistory);
               }
           }
       }());
@@ -97,18 +124,22 @@ export class CosmwasmHistoryView {
             content += "The history seems to be empty. Run some queries and txs to record history."
         } else {
             content += `<div style="overflow-x:auto;">      
-        <table>
-          <tr>
-              <th class="line-num">#</th>
-              <th>Run</th>
-              <th>Type</th>
-              <th>Label</th>
-              <th>Input Data</th>
-              <th>Input Funds</th>
-              <th>Contract Address</th>
-          </tr>`;
+            <table>
+            <tr>
+                <th class="line-num">#</th>
+                <th>Run</th>
+                <th>Type</th>
+                <th>Label</th>
+                <th>Input Data</th>
+                <th>Input Funds</th>
+                <th>Contract Address</th>
+            </tr>`;
             content += this.getTableData();
-            content += "</table></div>"
+            content += "</table></div><br />";
+            content += `<div style="margin:auto; width: 100%; text-align: center;">
+                <button id="clear-btn" class="secondary" style="padding: 0.7rem; width: 49%;">Clear History</button>  
+                <button id="export-btn" class="secondary" style="padding: 0.7rem; width: 49%;">Export History as JSON</button>
+            </div><br />`;
         }
         return content;
     }
@@ -120,13 +151,13 @@ export class CosmwasmHistoryView {
             let inputData = item.inputData;
             let inputFunds = "";
             const data = JSON.parse(JSON.stringify(item.inputData));
-            if(data.input) {
+            if (data.input) {
                 inputData = data.input;
             }
-            if(data.funds) {
+            if (data.funds) {
                 inputFunds = data.funds;
             }
-            
+
             tableContent += "<tr>";
             tableContent += "<td class=\"line-num\">" + i + "</td>";
             tableContent += "<td><button id=\"" + i + "\" class=\"tertiary\">▶</button></td>";
