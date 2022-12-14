@@ -18,6 +18,10 @@ export class HistoryHandler {
         }
     }
 
+    public static ClearHistory(context: vscode.Memento) {
+        ExtData.SaveHistory(context, []);
+    }
+
     private static SaveHistory(context: vscode.Memento, history: History) {
         let histories = this.GetHistory(context);
         histories.push(history);

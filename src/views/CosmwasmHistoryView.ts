@@ -46,18 +46,25 @@ export class CosmwasmHistoryView {
                     }
                     break;
                 };
-                case 'clear': { 
-                    vscode.window.showInformationMessage("Clear");
+                case 'clear': {
+                    HistoryHandler.ClearHistory(this.context);
+                    vscode.window.showInformationMessage("Successfully deleted the CosmWasm history. Reopen the page.");
                     break;
                 }
-                case 'export': { 
-                    vscode.window.showInformationMessage("Export");
+                case 'export': {
+                    vscode.commands.executeCommand('cosmy-wasmy.export').then(() => {
+                    });
                     break;
                 }
             }
         })
 
-        webview.html = `<!DOCTYPE html>
+        webview.html = this.getWebview(webview, styleResetUri, styleVSCodeUri, styleMainUri);
+        return
+    }
+
+    private getWebview(webview: vscode.Webview, styleResetUri: vscode.Uri, styleVSCodeUri: vscode.Uri, styleMainUri: vscode.Uri): string {
+        return `<!DOCTYPE html>
       <html lang="en">
       <head>
           <meta charset="UTF-8">
@@ -112,7 +119,6 @@ export class CosmwasmHistoryView {
       </script>
       </body>
       </html>`;
-        return
     }
 
     private getViewContent() {
