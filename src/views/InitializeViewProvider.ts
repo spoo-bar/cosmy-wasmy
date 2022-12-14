@@ -4,6 +4,7 @@ import { Constants } from '../constants';
 import { Account } from '../models/account';
 import { ResponseHandler } from '../helpers/responseHandler';
 import { Cosmwasm } from '../helpers/cosmwasm/api';
+import { Coin, parseCoins } from '@cosmjs/launchpad';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {
@@ -62,9 +63,10 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
 
                 let codeId = Number(data.value.codeid);
                 let label = data.value.label;
+                let funds = parseCoins(data.value.funds);
 
                 try {
-                    let res = await this.instantiateContract(account, codeId, req, label);
+                    let res = await this.instantiateContract(account, codeId, req, label, funds);
                     ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
                     if (data.value.import) {
                         await vscode.commands.executeCommand('cosmy-wasmy.addContract', res.contractAddress);
@@ -80,10 +82,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
         });
     }
 
-    private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any) {
+    private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any, funds: Coin[]) {
             let client = await Cosmwasm.GetSigningClient();
             let res = await client.instantiate(account.address, codeId, req, label, "auto", {
                 admin: account.address,
+                funds: funds,
+                memo: "Initialized from cosmy-wasmy"
             });
             return res;
         }
@@ -93,6 +97,8 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
         const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
         const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
         const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+
+        const denom = global.workspaceChain.chainDenom;
 
         return `<!DOCTYPE html>
 			<html lang="en">
@@ -113,6 +119,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
 			<body>
                 <input type="number" id="codeid-text" placeholder="CodeId"></input>
                 <input type="text" id="label-text" placeholder="Contract Label"></input>
+                <input id="funds-text" placeholder="10${denom}"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
 				<button id="exec-button">Initialize</button>
                 <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">Initialize + Import</button>
@@ -124,10 +131,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                         const inputText = document.getElementById('input-text').value;
                         const codeId = document.getElementById('codeid-text').value;
                         const labelText = document.getElementById('label-text').value;
+                        const funds = document.getElementById('funds-text').value;
                         vscode.postMessage({ type: 'exec-text', value: {
                             codeid: codeId,
                             label: labelText,
-                            input: inputText
+                            input: inputText,
+                            funds: funds
                         }});
                     });
 
@@ -135,10 +144,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                         const inputText = document.getElementById('input-text').value;
                         const codeId = document.getElementById('codeid-text').value;
                         const labelText = document.getElementById('label-text').value;
+                        const funds = document.getElementById('funds-text').value;
                         vscode.postMessage({ type: 'exec-text', value: {
                             codeid: codeId,
                             label: labelText,
                             input: inputText,
+                            funds: funds,
                             import: true
                         }});
                     });
