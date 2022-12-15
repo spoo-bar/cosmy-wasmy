@@ -1,5 +1,6 @@
 import { TextEncoder } from 'util';
 import * as vscode from 'vscode';
+var toml = require('toml');
 
 export class FileWatcher {
     public static Register() {
@@ -7,18 +8,18 @@ export class FileWatcher {
         const pattern = new vscode.RelativePattern(vscode.workspace.workspaceFolders[0], schemaFile);
         global.schemaFileWatch = vscode.workspace.createFileSystemWatcher(pattern, false, false, true);
         global.schemaFileWatch.onDidChange(() => {
-            vscode.window.showInformationMessage("change")
             generateSchemaFiles();
         });
         global.schemaFileWatch.onDidCreate(() => {
-            vscode.window.showInformationMessage("create")
+            generateSchemaFiles();
         });
 
         function generateSchemaFiles() {
             // executing after 6 secs cuz when event is hit, the file contents are still old 👎🏻
             // normal text change and save works fine, but the cargo schema updating the contract.json seems to not show updated file
             setTimeout(async function () {
-                const schemaUri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", "counter.json")
+                const contractName = await getContractName();
+                const schemaUri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
                 const doc = await vscode.workspace.openTextDocument(schemaUri);
                 const schema = JSON.parse(doc.getText());
 
@@ -30,6 +31,14 @@ export class FileWatcher {
                 }
                 if (schema.sudo) {
                     generateSudoSchema(schema);
+                }
+
+                async function getContractName() {
+                    const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
+                    const doc = await vscode.workspace.openTextDocument(cargoToml);
+                    const cargo = toml.parse(doc.getText());
+                    const contractName = cargo.package.name;
+                    return contractName;
                 }
 
                 function generateInstantiateSchema(schema: any) {
