@@ -3,8 +3,9 @@ import * as vscode from 'vscode';
 var toml = require('toml');
 
 export class FileWatcher {
-    public static Register() {
-        const schemaFile = "schema/counter.json";
+    public static async Register() {
+        const contractName = await getContractName();
+        const schemaFile = "schema/" + contractName + ".json";
         const pattern = new vscode.RelativePattern(vscode.workspace.workspaceFolders[0], schemaFile);
         global.schemaFileWatch = vscode.workspace.createFileSystemWatcher(pattern, false, false, true);
         global.schemaFileWatch.onDidChange(() => {
@@ -31,14 +32,6 @@ export class FileWatcher {
                 }
                 if (schema.sudo) {
                     generateSudoSchema(schema);
-                }
-
-                async function getContractName() {
-                    const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
-                    const doc = await vscode.workspace.openTextDocument(cargoToml);
-                    const cargo = toml.parse(doc.getText());
-                    const contractName = cargo.package.name;
-                    return contractName;
                 }
 
                 function generateInstantiateSchema(schema: any) {
@@ -72,4 +65,12 @@ export class FileWatcher {
             }, 6000);
         }
     }
+}
+
+async function getContractName() {
+    const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
+    const doc = await vscode.workspace.openTextDocument(cargoToml);
+    const cargo = toml.parse(doc.getText());
+    const contractName = cargo.package.name;
+    return contractName;
 }
