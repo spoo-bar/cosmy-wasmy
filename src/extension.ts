@@ -6,6 +6,8 @@ import { Contract } from './models/contract';
 import { Commands } from './commands/command';
 import { Utils, Views } from './views/utils';
 import { Workspace } from './helpers/workspace';
+import { TextEncoder } from 'util';
+import { FileWatcher } from './helpers/fileWatcher';
 
 
 // this method is called when your extension is activated
@@ -18,6 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	Commands.Register(context);
 	Views.Register(context);
+	FileWatcher.Register();
 
 	const rustLangExtension = vscode.extensions.getExtension('rust-lang.rust-analyzer');
 	if (!rustLangExtension) {
@@ -30,4 +33,5 @@ export async function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
+	global.schemaFileWatch.dispose();
 }
