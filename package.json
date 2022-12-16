@@ -149,6 +149,12 @@
         "icon": "$(cloud-upload)"
       },
       {
+        "command": "cosmy-wasmy.wasmInteract",
+        "title": "Interact with the contract in a virtual machine",
+        "category": "Cosmy Wasmy",
+        "icon": "$(server-process)"
+      },
+      {
         "command": "cosmy-wasmy.history",
         "title": "Show Cosmwasm History",
         "category": "Cosmy Wasmy",
@@ -423,6 +429,10 @@
         {
           "command": "cosmy-wasmy.upload",
           "when": "resourceExtname == .wasm"
+        },
+        {
+          "command": "cosmy-wasmy.wasmInteract",
+          "when": "resourceExtname == .wasm"
         }
       ],
       "editor/context": [
@@ -440,6 +450,11 @@
       "editor/title": [
         {
           "command": "cosmy-wasmy.upload",
+          "when": "resourceExtname == .wasm",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.wasmInteract",
           "when": "resourceExtname == .wasm",
           "group": "navigation"
         },
