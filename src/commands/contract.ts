@@ -187,8 +187,8 @@ export class ContractCmds {
 	}
 
     private static registerWasmVMCmd(context: vscode.ExtensionContext) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', () => {
-			WasmVmPanel.render(context.extensionUri);
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', (wasm: vscode.Uri) => {
+			WasmVmPanel.render(context.extensionUri, wasm);
 		});
 
 		context.subscriptions.push(disposable);
