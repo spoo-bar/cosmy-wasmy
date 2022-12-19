@@ -3,6 +3,7 @@ import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
 import { Contract } from '../models/contract';
 import { ContractDataProvider } from '../views/contractDataProvider';
+import { WasmVmPanel } from '../views/WasmVmPanel';
 
 export class ContractCmds {
     public static async Register(context: vscode.ExtensionContext) {
@@ -13,6 +14,7 @@ export class ContractCmds {
         this.registerClearContractAdminCmd(context);
         this.registerAddContractCommentCmd(context, contractViewProvider);
 		this.registerUploadContractCmd(context);
+		this.registerWasmVMCmd(context);
     }
     
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
@@ -179,6 +181,14 @@ export class ContractCmds {
 					}
 				})
 			}
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+    private static registerWasmVMCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', () => {
+			WasmVmPanel.render(context.extensionUri);
 		});
 
 		context.subscriptions.push(disposable);

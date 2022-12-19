@@ -666,6 +666,7 @@
     "@cosmjs/faucet-client": "^0.29.5",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.29.5",
+    "@vscode/webview-ui-toolkit": "^1.2.0",
     "clipboardy": "^3.0.0",
     "cross-fetch": "^3.1.5",
     "toml": "^3.0.0"
