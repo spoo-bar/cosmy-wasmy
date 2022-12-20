@@ -187,8 +187,18 @@ export class ContractCmds {
 	}
 
     private static registerWasmVMCmd(context: vscode.ExtensionContext) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', (wasm: vscode.Uri) => {
-			WasmVmPanel.render(context.extensionUri, wasm);
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', async (wasm: vscode.Uri) => {
+			const panel = vscode.window.createWebviewPanel(
+				'wasm-vm',
+				'contract.wasm',
+				vscode.ViewColumn.Active,
+				{
+					enableScripts: true,
+				}
+			);
+			const wasmBinary = await vscode.workspace.fs.readFile(wasm)
+			let view = new WasmVmPanel(panel, wasmBinary);
+			await view.getWebviewContent(context.extensionUri);
 		});
 
 		context.subscriptions.push(disposable);

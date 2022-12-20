@@ -1,58 +1,40 @@
 import * as vscode from "vscode";
+import { CWSimulateApp } from '@terran-one/cw-simulate';
+import { parseCoins } from "@cosmjs/launchpad";
+
 
 export class WasmVmPanel {
     public static currentPanel: WasmVmPanel | undefined;
     private readonly _panel: vscode.WebviewPanel;
     private _disposables: vscode.Disposable[] = [];
 
-    private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+    private readonly _wasmBinary: Uint8Array;
+    private readonly _app: CWSimulateApp;
+
+    constructor(panel: vscode.WebviewPanel, wasm: Uint8Array) {
         this._panel = panel;
-        this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
+        this._wasmBinary = wasm;
+        this._app = new CWSimulateApp({
+            chainId: 'cosmy-wasmy-1',
+            bech32Prefix: 'test'
+        });
+
         this._setWebviewMessageListener(this._panel.webview);
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     }
 
-    public static render(extensionUri: vscode.Uri, wasm: vscode.Uri) {
-        if (WasmVmPanel.currentPanel) {
-            WasmVmPanel.currentPanel._panel.reveal(vscode.ViewColumn.One);
-        } else {
-            const panel = vscode.window.createWebviewPanel("hello-world", "Hello World", vscode.ViewColumn.One, {
-                enableScripts: true,
-            });
-
-            WasmVmPanel.currentPanel = new WasmVmPanel(panel, extensionUri);
-        }
-    }
-
-    private _setWebviewMessageListener(webview: vscode.Webview) {
-        webview.onDidReceiveMessage(
-          (message: any) => {
-            const command = message.command;
-            const text = message.text;
-    
-            switch (command) {
-              case "hello":
-                vscode.window.showInformationMessage(text);
-                return;
-            }
-          },
-          undefined,
-          this._disposables
-        );
-      }
-
-    private _getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri) {
-        const toolkitUri = this.getUri(webview, extensionUri, [
+    public async getWebviewContent(extensionUri: vscode.Uri) {
+        const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
             "webview-ui-toolkit",
             "dist",
-            "toolkit.js", // A toolkit.min.js file is also available
+            "toolkit.min.js", // A toolkit.min.js file is also available
         ]);
+        const mainUri = this.getUri(this._panel.webview, extensionUri, ["media", "wasm-vm.js"]);
+        const contractName = "counter.wasm";
 
-        const mainUri = this.getUri(webview, extensionUri, ["media", "wasm-vm.js"]);
-
-        return /*html*/ `
+        this._panel.webview.html = /*html*/ `
         <!DOCTYPE html>
         <html lang="en">
           <head>
@@ -63,16 +45,14 @@ export class WasmVmPanel {
             <title>Hello World!</title>
           </head>
           <body>
-            <h1>counter.json</h1>
+            <h1>${contractName}</h1>
             <h3>Simulating in CosmWasm VM</h3>
             <vscode-divider></vscode-divider>
-            <vscode-panels aria-label="Defalt">
+            <vscode-panels aria-label="Default">
                 <vscode-panel-tab id="tab-1">SETUP</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                <vscode-text-field placeholder="321" style="margin-right:20px;">Code ID</vscode-text-field> 
-                <vscode-text-field placeholder="juno1kpjz6jsyxg0wd5r5hhyquawgt3zva34msdvwue" size="50">Contract Address</vscode-text-field>
-                <br />
-                <vscode-button id="howdy" style="margin:1rem;">Howdy!</vscode-button>
+                <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">Chain ID</vscode-text-field> 
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">Chain prefix</vscode-text-field>
                 </vscode-panel-view>
             </vscode-panels>
             <br />
@@ -94,10 +74,11 @@ export class WasmVmPanel {
                     <vscode-button style="margin:1.5rem;">Query</vscode-button>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-3">
-                    <vscode-text-field placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
-                    <vscode-text-field placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
-                    <vscode-text-area style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Text Area Label</vscode-text-area>
-                    <vscode-button style="margin:1.5rem;">Instantiate</vscode-button>
+                    <vscode-text-field id="instantiateSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
+                    <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">Contract Label</vscode-text-field> 
+                    <vscode-text-field id="instantiateFunds" placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
+                    <vscode-text-area id="instantiateInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
+                    <vscode-button id="instantiateBtn" style="margin:1.5rem;">Instantiate</vscode-button>
             </vscode-panel-view>
             </vscode-panels>
             <br />
@@ -107,7 +88,7 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-1">LOG</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">STATE</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                <vscode-data-grid id="basic-grid" aria-label="Default"></vscode-data-grid>
+                <vscode-data-grid id="vm-responses-grid" aria-label="Default" grid-template-columns="5% 5% 20% 35% 35%"></vscode-data-grid>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-text-area>Text Area Label</vscode-text-area>
@@ -116,6 +97,32 @@ export class WasmVmPanel {
           </body>
         </html>
       `;
+        return;
+    }
+
+    private _setWebviewMessageListener(webview: vscode.Webview) {
+        webview.onDidReceiveMessage(
+            async (message: any) => {
+                const command = message.command;
+                const value = message.value;
+
+                switch (command) {
+                    case "instantiate":
+                        await this.initializeContract(value);
+                        return;
+                }
+            },
+            undefined,
+            this._disposables
+        );
+    }
+
+    private async initializeContract(value: any) {
+        const codeId = this._app.wasm.create(value.senderAddr, this._wasmBinary);
+        let funds = parseCoins(value.funds);
+        let input = JSON.parse(value.input);
+        let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, codeId, input, value.label);
+        this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
     }
 
     private getUri(webview: vscode.Webview, extensionUri: vscode.Uri, pathList: string[]) {
