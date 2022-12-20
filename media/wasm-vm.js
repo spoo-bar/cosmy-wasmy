@@ -5,7 +5,10 @@ var responses = [];
 
 function main() {
   const instantiateButton = document.getElementById("instantiateBtn");
-  instantiateButton.addEventListener("click", handleHowdyClick);
+  instantiateButton.addEventListener("click", handleInstantiateClick);
+
+  const executeButton = document.getElementById("executeBtn");
+  executeButton.addEventListener("click", handleExecuteClick);
 
   document.getElementById('vm-responses-grid').rowsData = [];
 
@@ -24,6 +27,10 @@ function main() {
 
     switch (message.command) {
       case 'instantiate-res':
+        responses.push(message.value);
+        displayResponseDataGrid();
+        break;
+      case 'execute-res':
         responses.push(message.value);
         displayResponseDataGrid();
         break;
@@ -51,7 +58,7 @@ function displayResponseDataGrid() {
   }
 }
 
-function handleHowdyClick() {
+function handleInstantiateClick() {
   const instantiateSenderAddr = document.getElementById("instantiateSenderAddr").value;
   const instantiateLabel = document.getElementById("instantiateLabel").value;
   const instantiateFunds = document.getElementById("instantiateFunds").value;
@@ -64,6 +71,23 @@ function handleHowdyClick() {
       label: instantiateLabel,
       funds: instantiateFunds,
       input: instantiateInput
+    },
+  });
+}
+
+function handleExecuteClick() {
+  const executeContractAddr = document.getElementById("executeContractAddr").value;
+  const executeSenderAddr = document.getElementById("executeSenderAddr").value;
+  const executeFunds = document.getElementById("executeFunds").value;
+  const executeInput = document.getElementById("executeInput").value;
+
+  vscode.postMessage({
+    command: "execute",
+    value: {
+      ContractAddr: executeContractAddr,
+      senderAddr: executeSenderAddr,
+      funds: executeFunds,
+      input: executeInput
     },
   });
 }

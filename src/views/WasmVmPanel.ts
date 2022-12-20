@@ -10,6 +10,7 @@ export class WasmVmPanel {
 
     private readonly _wasmBinary: Uint8Array;
     private readonly _app: CWSimulateApp;
+    private readonly _codeId: number;
 
     constructor(panel: vscode.WebviewPanel, wasm: Uint8Array) {
         this._panel = panel;
@@ -18,6 +19,7 @@ export class WasmVmPanel {
             chainId: 'cosmy-wasmy-1',
             bech32Prefix: 'test'
         });
+        this._codeId = this._app.wasm.create('', this._wasmBinary);
 
         this._setWebviewMessageListener(this._panel.webview);
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -63,10 +65,11 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">QUERY</vscode-panel-tab>
                 <vscode-panel-tab id="tab-3">INSTANTIATE</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                    <vscode-text-field placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
-                    <vscode-text-field placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
-                    <vscode-text-area style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Text Area Label</vscode-text-area>
-                    <vscode-button style="margin:1.5rem;">Execute</vscode-button>
+                    <vscode-text-field id="executeContractAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">Contract Address</vscode-text-field> 
+                    <vscode-text-field id="executeSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">Sender Address</vscode-text-field> 
+                    <vscode-text-field id="executeFunds" placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
+                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Text Area Label</vscode-text-area>
+                    <vscode-button id="executeBtn" style="margin:1.5rem;">Execute</vscode-button>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                     <vscode-text-field placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
@@ -110,6 +113,9 @@ export class WasmVmPanel {
                     case "instantiate":
                         await this.initializeContract(value);
                         return;
+                    case "execute":
+                        await this.executeContract(value);
+                        return;
                 }
             },
             undefined,
@@ -118,11 +124,17 @@ export class WasmVmPanel {
     }
 
     private async initializeContract(value: any) {
-        const codeId = this._app.wasm.create(value.senderAddr, this._wasmBinary);
         let funds = parseCoins(value.funds);
         let input = JSON.parse(value.input);
-        let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, codeId, input, value.label);
+        let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, this._codeId, input, value.label);
         this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
+    }
+
+    private async executeContract(value: any) {
+        let funds = parseCoins(value.funds);
+        let input = JSON.parse(value.input);
+        let result = await this._app.wasm.executeContract(value.senderAddr, funds, value.ContractAddr, input);
+        this._panel.webview.postMessage({ command: 'execute-res', value: result });
     }
 
     private getUri(webview: vscode.Webview, extensionUri: vscode.Uri, pathList: string[]) {
