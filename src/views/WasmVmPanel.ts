@@ -52,9 +52,13 @@ export class WasmVmPanel {
             <vscode-divider></vscode-divider>
             <vscode-panels aria-label="Default">
                 <vscode-panel-tab id="tab-1">SETUP</vscode-panel-tab>
+                <vscode-panel-tab id="tab-2">CONTRACTS</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">Chain ID</vscode-text-field> 
                 <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">Chain prefix</vscode-text-field>
+                </vscode-panel-view>
+                <vscode-panel-view id="view-2">
+                <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
                 </vscode-panel-view>
             </vscode-panels>
             <br />
@@ -132,6 +136,13 @@ export class WasmVmPanel {
         let input = JSON.parse(value.input);
         let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, this._codeId, input, value.label);
         this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
+        if(result.ok && typeof result.val !== 'string') {
+            const contractAddress = result.val.events[0].attributes[0].value;
+            this._panel.webview.postMessage({ command: 'append-contract', value: {
+                label: value.label,
+                address: contractAddress
+            } });
+        }
     }
 
     private async executeContract(value: any) {

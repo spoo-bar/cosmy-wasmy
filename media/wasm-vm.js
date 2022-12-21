@@ -23,6 +23,13 @@ function main() {
     { title: 'Value', columnDataKey: 'Header5' },
   ];
 
+  document.getElementById('contracts-grid').rowsData = [{}];
+  document.getElementById('contracts-grid').columnDefinitions = [
+    { title: '#', columnDataKey: 'Header1' },
+    { title: 'Label', columnDataKey: 'Header3' },
+    { title: 'Address', columnDataKey: 'Header4' },
+  ];
+
   // Handle the message inside the webview
   window.addEventListener('message', event => {
 
@@ -41,6 +48,9 @@ function main() {
         break;
       case 'query-res':
         document.getElementById('response').value = JSON.stringify(message.value.val, undefined, 2);
+        break;
+      case 'append-contract':
+        document.getElementById('contracts-grid').rowsData.push({ Header3: message.value.label, Header4: message.value.address});
         break;
     }
   });
