@@ -68,14 +68,14 @@ export class WasmVmPanel {
                     <vscode-text-field id="executeContractAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">Contract Address</vscode-text-field> 
                     <vscode-text-field id="executeSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">Sender Address</vscode-text-field> 
                     <vscode-text-field id="executeFunds" placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
-                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Text Area Label</vscode-text-area>
+                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
                     <vscode-button id="executeBtn" style="margin:1.5rem;">Execute</vscode-button>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-text-field placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
-                    <vscode-text-area style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Text Area Label</vscode-text-area>
-                    <vscode-button style="margin:1.5rem;">Query</vscode-button>
-                </vscode-panel-view>
+                    <vscode-text-field id="queryContractAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Contract Address</vscode-text-field> 
+                    <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
+                    <vscode-button id="queryBtn" style="margin:1.5rem;">Query</vscode-button>
+                    </vscode-panel-view>
                 <vscode-panel-view id="view-3">
                     <vscode-text-field id="instantiateSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
                     <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">Contract Label</vscode-text-field> 
@@ -84,6 +84,7 @@ export class WasmVmPanel {
                     <vscode-button id="instantiateBtn" style="margin:1.5rem;">Instantiate</vscode-button>
             </vscode-panel-view>
             </vscode-panels>
+            <vscode-text-area id="response" style="width: 90%" disabled>Response</vscode-text-area>
             <br />
                 <vscode-divider></vscode-divider>
             <br />
@@ -116,6 +117,9 @@ export class WasmVmPanel {
                     case "execute":
                         await this.executeContract(value);
                         return;
+                    case "query":
+                        await this.queryContract(value);
+                        return;
                 }
             },
             undefined,
@@ -135,6 +139,12 @@ export class WasmVmPanel {
         let input = JSON.parse(value.input);
         let result = await this._app.wasm.executeContract(value.senderAddr, funds, value.ContractAddr, input);
         this._panel.webview.postMessage({ command: 'execute-res', value: result });
+    }
+
+    private async queryContract(value: any) {
+        let input = JSON.parse(value.input);
+        let result = await this._app.wasm.query(value.ContractAddr, input);
+        this._panel.webview.postMessage({ command: 'query-res', value: result });
     }
 
     private getUri(webview: vscode.Webview, extensionUri: vscode.Uri, pathList: string[]) {

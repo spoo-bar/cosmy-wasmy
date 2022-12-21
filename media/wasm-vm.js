@@ -10,6 +10,9 @@ function main() {
   const executeButton = document.getElementById("executeBtn");
   executeButton.addEventListener("click", handleExecuteClick);
 
+  const queryButton = document.getElementById("queryBtn");
+  queryButton.addEventListener("click", handleQueryClick);
+
   document.getElementById('vm-responses-grid').rowsData = [];
 
   document.getElementById('vm-responses-grid').columnDefinitions = [
@@ -29,10 +32,15 @@ function main() {
       case 'instantiate-res':
         responses.push(message.value);
         displayResponseDataGrid();
+        document.getElementById('response').value = JSON.stringify(message.value.val.data, undefined, 2);
         break;
       case 'execute-res':
         responses.push(message.value);
         displayResponseDataGrid();
+        document.getElementById('response').value = JSON.stringify(message.value.val.data, undefined, 2);
+        break;
+      case 'query-res':
+        document.getElementById('response').value = JSON.stringify(message.value.val, undefined, 2);
         break;
     }
   });
@@ -88,6 +96,19 @@ function handleExecuteClick() {
       senderAddr: executeSenderAddr,
       funds: executeFunds,
       input: executeInput
+    },
+  });
+}
+
+function handleQueryClick() {
+  const queryContractAddr = document.getElementById("queryContractAddr").value; 
+  const queryInput = document.getElementById("queryInput").value;
+
+  vscode.postMessage({
+    command: "query",
+    value: {
+      ContractAddr: queryContractAddr,
+      input: queryInput
     },
   });
 }
