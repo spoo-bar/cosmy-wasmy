@@ -13,8 +13,7 @@ function main() {
   const queryButton = document.getElementById("queryBtn");
   queryButton.addEventListener("click", handleQueryClick);
 
-  document.getElementById('vm-responses-grid').rowsData = [];
-
+  document.getElementById('vm-responses-grid').rowsData = [{}];
   document.getElementById('vm-responses-grid').columnDefinitions = [
     { title: '#', columnDataKey: 'Header1' },
     { title: '✅', columnDataKey: 'Header2' },

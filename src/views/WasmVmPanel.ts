@@ -94,12 +94,8 @@ export class WasmVmPanel {
             <br />
             <vscode-panels aria-label="Default">
                 <vscode-panel-tab id="tab-1">LOG</vscode-panel-tab>
-                <vscode-panel-tab id="tab-2">STATE</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-data-grid id="vm-responses-grid" aria-label="Default" grid-template-columns="5% 5% 20% 35% 35%"></vscode-data-grid>
-                </vscode-panel-view>
-                <vscode-panel-view id="view-2">
-                <vscode-text-area>Text Area Label</vscode-text-area>
                 </vscode-panel-view>
             </vscode-panels>
           </body>

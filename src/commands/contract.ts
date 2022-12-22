@@ -194,6 +194,7 @@ export class ContractCmds {
 				vscode.ViewColumn.Active,
 				{
 					enableScripts: true,
+					retainContextWhenHidden: true
 				}
 			);
 			const wasmBinary = await vscode.workspace.fs.readFile(wasm)
