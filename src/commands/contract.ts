@@ -1,8 +1,10 @@
+import path = require('path');
 import * as vscode from 'vscode';
 import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
 import { Contract } from '../models/contract';
 import { ContractDataProvider } from '../views/contractDataProvider';
+import { WasmVmPanel } from '../views/WasmVmPanel';
 
 export class ContractCmds {
     public static async Register(context: vscode.ExtensionContext) {
@@ -13,6 +15,7 @@ export class ContractCmds {
         this.registerClearContractAdminCmd(context);
         this.registerAddContractCommentCmd(context, contractViewProvider);
 		this.registerUploadContractCmd(context);
+		this.registerWasmVMCmd(context);
     }
     
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
@@ -179,6 +182,26 @@ export class ContractCmds {
 					}
 				})
 			}
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
+    private static registerWasmVMCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', async (wasm: vscode.Uri) => {
+			const contractName = path.basename(wasm.toString());
+			const panel = vscode.window.createWebviewPanel(
+				'wasm-vm',
+				contractName,
+				vscode.ViewColumn.Active,
+				{
+					enableScripts: true,
+					retainContextWhenHidden: true,
+				}
+			);
+			const wasmBinary = await vscode.workspace.fs.readFile(wasm)
+			let view = new WasmVmPanel(panel, wasmBinary);
+			await view.getWebviewContent(context.extensionUri);
 		});
 
 		context.subscriptions.push(disposable);

@@ -144,9 +144,15 @@
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Upload contract",
+        "title": "Upload Contract",
         "category": "Cosmy Wasmy",
         "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "cosmy-wasmy.wasmInteract",
+        "title": "Load in Virtual Machine",
+        "category": "Cosmy Wasmy",
+        "icon": "$(server-process)"
       },
       {
         "command": "cosmy-wasmy.history",
@@ -423,6 +429,10 @@
         {
           "command": "cosmy-wasmy.upload",
           "when": "resourceExtname == .wasm"
+        },
+        {
+          "command": "cosmy-wasmy.wasmInteract",
+          "when": "resourceExtname == .wasm"
         }
       ],
       "editor/context": [
@@ -440,6 +450,11 @@
       "editor/title": [
         {
           "command": "cosmy-wasmy.upload",
+          "when": "resourceExtname == .wasm",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.wasmInteract",
           "when": "resourceExtname == .wasm",
           "group": "navigation"
         },
@@ -651,6 +666,8 @@
     "@cosmjs/faucet-client": "^0.29.5",
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.29.5",
+    "@terran-one/cw-simulate": "^2.8.0",
+    "@vscode/webview-ui-toolkit": "^1.2.0",
     "clipboardy": "^3.0.0",
     "cross-fetch": "^3.1.5",
     "toml": "^3.0.0"
