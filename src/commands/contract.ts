@@ -1,3 +1,4 @@
+import path = require('path');
 import * as vscode from 'vscode';
 import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
@@ -188,13 +189,14 @@ export class ContractCmds {
 
     private static registerWasmVMCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', async (wasm: vscode.Uri) => {
+			const contractName = path.basename(wasm.toString());
 			const panel = vscode.window.createWebviewPanel(
 				'wasm-vm',
-				'contract.wasm',
+				contractName,
 				vscode.ViewColumn.Active,
 				{
 					enableScripts: true,
-					retainContextWhenHidden: true
+					retainContextWhenHidden: true,
 				}
 			);
 			const wasmBinary = await vscode.workspace.fs.readFile(wasm)

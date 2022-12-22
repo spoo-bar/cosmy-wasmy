@@ -28,6 +28,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Can now send funds while executing a contract and while initializing a contract 💰
 - Added `Clear History` button and `Export History as JSON` button to CosmWasm history view
 - Auto-generate old-style contract schema when `cargo schema` is run
+- Load a wasm binary in a CosmWasm VM. Supports instantiate, query and execute. Uses `@terran-one/cw-simulate`. Absolute GOATS those peeps 🎉
 
 ### Changed
 

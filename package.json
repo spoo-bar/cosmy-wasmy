@@ -144,13 +144,13 @@
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Upload contract",
+        "title": "Upload Contract",
         "category": "Cosmy Wasmy",
         "icon": "$(cloud-upload)"
       },
       {
         "command": "cosmy-wasmy.wasmInteract",
-        "title": "Interact with the contract in a virtual machine",
+        "title": "Load in Virtual Machine",
         "category": "Cosmy Wasmy",
         "icon": "$(server-process)"
       },

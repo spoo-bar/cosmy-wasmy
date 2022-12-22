@@ -34,7 +34,7 @@ export class WasmVmPanel {
             "toolkit.min.js", // A toolkit.min.js file is also available
         ]);
         const mainUri = this.getUri(this._panel.webview, extensionUri, ["media", "wasm-vm.js"]);
-        const contractName = "counter.wasm";
+        const contractName = this._panel.title;
 
         this._panel.webview.html = /*html*/ `
         <!DOCTYPE html>
@@ -44,7 +44,7 @@ export class WasmVmPanel {
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <script type="module" src="${toolkitUri}"></script>
             <script type="module" src="${mainUri}"></script>
-            <title>Hello World!</title>
+            <title>${contractName}</title>
           </head>
           <body>
             <h1>${contractName}</h1>
@@ -69,21 +69,21 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">QUERY</vscode-panel-tab>
                 <vscode-panel-tab id="tab-3">INSTANTIATE</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                    <vscode-text-field id="executeContractAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">Contract Address</vscode-text-field> 
-                    <vscode-text-field id="executeSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">Sender Address</vscode-text-field> 
-                    <vscode-text-field id="executeFunds" placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
+                    <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">Contract Address</vscode-text-field> 
+                    <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">Sender Address</vscode-text-field> 
+                    <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
                     <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
                     <vscode-button id="executeBtn" style="margin:1.5rem;">Execute</vscode-button>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-text-field id="queryContractAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Contract Address</vscode-text-field> 
+                    <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Contract Address</vscode-text-field> 
                     <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
                     <vscode-button id="queryBtn" style="margin:1.5rem;">Query</vscode-button>
                     </vscode-panel-view>
                 <vscode-panel-view id="view-3">
-                    <vscode-text-field id="instantiateSenderAddr" placeholder="juno1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
+                    <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
                     <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">Contract Label</vscode-text-field> 
-                    <vscode-text-field id="instantiateFunds" placeholder="10ujunox" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
+                    <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
                     <vscode-text-area id="instantiateInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
                     <vscode-button id="instantiateBtn" style="margin:1.5rem;">Instantiate</vscode-button>
             </vscode-panel-view>

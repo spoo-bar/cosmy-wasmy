@@ -31,9 +31,7 @@ function main() {
 
   // Handle the message inside the webview
   window.addEventListener('message', event => {
-
-    const message = event.data; // The JSON data our extension sent
-
+    const message = event.data; // The JSON data the extension sent
     switch (message.command) {
       case 'instantiate-res':
         responses.push(message.value);
@@ -49,7 +47,8 @@ function main() {
         document.getElementById('response').value = JSON.stringify(message.value.val, undefined, 2);
         break;
       case 'append-contract':
-        document.getElementById('contracts-grid').rowsData.push({ Header3: message.value.label, Header4: message.value.address});
+        const length = document.getElementById('contracts-grid').rowsData.length;
+        document.getElementById('contracts-grid').rowsData.push({ Header1: length, Header3: message.value.label, Header4: message.value.address});
         break;
     }
   });
