@@ -58,8 +58,9 @@ function main() {
 
 function displayResponseDataGrid() {
   document.getElementById('vm-responses-grid').rowsData = [];
-  let count = 1;
-  for (const message of responses) {
+  let count = responses.length;
+  const reverseArr = responses.slice().reverse();
+  for (const message of reverseArr) {
     if (message.ok && !message.err) {
       document.getElementById('vm-responses-grid').rowsData.push({ Header1: count, Header2: '🎉' });
       for (const event of message.val.events) {
@@ -71,7 +72,7 @@ function displayResponseDataGrid() {
     else {
       document.getElementById('vm-responses-grid').rowsData.push({ Header1: count, Header2: '❌', Header3: message.val, Header4: message._stack });
     }
-    count += 1;
+    count -= 1;
   }
 }
 
