@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import clipboard from 'clipboardy';
 import { Constants } from '../constants';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
@@ -129,7 +128,7 @@ export class AccountCmds {
 				address = (item as Contract).contractAddress;
 			}
 			if (address) {
-				clipboard.write(address).then(() => {
+				vscode.env.clipboard.writeText(address).then(() => {
 					vscode.window.showInformationMessage("Copied to clipboard: " + address);
 				});
 			}
@@ -143,7 +142,7 @@ export class AccountCmds {
 	private static registerCopyMnemonicCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: Account) => {
 			if (item.mnemonic) {
-				clipboard.write(item.mnemonic).then(() => {
+				vscode.env.clipboard.writeText(item.mnemonic).then(() => {
 					vscode.window.showInformationMessage("Copied to clipboard: " + item.mnemonic);
 				});
 			}

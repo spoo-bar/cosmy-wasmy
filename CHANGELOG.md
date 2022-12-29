@@ -41,6 +41,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Fixed
 
 - After Executor refactor, the tx link in the dialog after tx execution success was showing json obj instead of tx hash
+- Using vscode native clipboard instead of `clipboardy`, which was not working when used in Windows + WSL.
 
 ### Security 
 
