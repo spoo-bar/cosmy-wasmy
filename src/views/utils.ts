@@ -2,13 +2,15 @@ import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Workspace } from '../helpers/workspace';
 import { CWSerializer } from './cwNotebookProvider';
-import { NotebookChainController } from "../notebook/chainEnvController";
 import { InitializeViewProvider } from './initializeViewProvider';
 import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
 import { SignProvider } from './signProvider';
 import { TxProvider } from './txProvider';
 import { NotebookCosmwasmController } from '../notebook/cosmwasmVmController';
+import { TextDecoder } from 'util';
+import { Account } from '../models/account';
+var toml = require('toml');
 
 export class Utils {
 
@@ -58,6 +60,32 @@ export class Utils {
         }
         else {
             vscode.commands.executeCommand('setContext', 'showOpenInExplorer', false);
+        }
+    }
+
+    public static async BeakerAutoSync(context: vscode.ExtensionContext) {
+        if (Workspace.GetBeakerAutosync()) {
+            const files = await vscode.workspace.fs.readDirectory(vscode.workspace.workspaceFolders[0].uri);
+            const beakerFile = files.filter(f => f[0].toLowerCase() === "beaker.toml");
+            if (beakerFile && beakerFile.length == 1) {
+                const beakerFilePath = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Beaker.toml");
+                const fileBuf = await vscode.workspace.fs.readFile(beakerFilePath);
+                const content = toml.parse(new TextDecoder().decode(fileBuf));
+                const beakerAccounts = content.accounts;
+                const accountNames = Object.keys(beakerAccounts);
+                for (const accountName of accountNames) {
+                    const account = beakerAccounts[accountName];
+                    if (account.mnemonic && account.mnemonic.length > 0) {
+                        const a = new Account(accountName, account.mnemonic)
+                        if (!Account.AccountLabelExists(context.globalState, accountName) 
+                        && !Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
+                            Account.AddAccount(context.globalState, a);
+                        }
+                    }
+                }
+                const accounts = await Account.GetAccounts(context.globalState);
+                accountViewProvider.refresh(accounts);
+            }
         }
     }
 }

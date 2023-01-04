@@ -8,6 +8,7 @@ export class Constants {
     public static readonly CONFIGURATION_COSMWASM_RESPONSE_VIEW = "cosmywasmy.cosmwasmResponseView";
     public static readonly CONFIGURATION_HISTORY_STORED = "cosmywasmy.maxHistoryStored";
     public static readonly CONFIGURATION_OPEN_TX_IN_VSCODE = "cosmywasmy.openTxExplorerInVscode";
+    public static readonly CONFIGURATION_BEAKER_AUTOSYNC = "beaker.autosync";
     
     public static readonly VIEWS_ACCOUNT = "account";
     public static readonly VIEWS_CONTRACT = "contract";
