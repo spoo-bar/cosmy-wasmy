@@ -1,14 +1,16 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Workspace } from '../helpers/workspace';
+import { ChainConfig, Workspace } from '../helpers/workspace';
 import { CWSerializer } from './cwNotebookProvider';
-import { NotebookChainController } from "../notebook/chainEnvController";
 import { InitializeViewProvider } from './initializeViewProvider';
 import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
 import { SignProvider } from './signProvider';
 import { TxProvider } from './txProvider';
 import { NotebookCosmwasmController } from '../notebook/cosmwasmVmController';
+import { TextDecoder } from 'util';
+import { Account } from '../models/account';
+var toml = require('toml');
 
 export class Utils {
 
@@ -59,6 +61,87 @@ export class Utils {
         else {
             vscode.commands.executeCommand('setContext', 'showOpenInExplorer', false);
         }
+    }
+
+    public static async BeakerAutoSync(context: vscode.ExtensionContext) {
+        if (Workspace.GetBeakerAutosync()) {
+            const files = await vscode.workspace.fs.readDirectory(vscode.workspace.workspaceFolders[0].uri);
+            const beakerFile = files.filter(f => f[0].toLowerCase() === "beaker.toml");
+            if (beakerFile && beakerFile.length == 1) {
+                const beakerFilePath = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Beaker.toml");
+                const fileBuf = await vscode.workspace.fs.readFile(beakerFilePath);
+                const content = toml.parse(new TextDecoder().decode(fileBuf));
+
+                Utils.syncAccounts(content, context);
+                Utils.syncChains(content);
+            }
+        }
+    }
+
+    private static syncChains(content: any) {
+        const beakerNetworks = content.networks;
+        const networkNames = Object.keys(beakerNetworks);
+        for (const networkName of networkNames) {
+            const network = beakerNetworks[networkName];
+            let chainConfig = new ChainConfig();
+            chainConfig.configName = networkName;
+            chainConfig.chainId = network.chain_id;
+            chainConfig.chainEnvironment = "beaker";
+            chainConfig.addressPrefix = content.account_prefix;
+            chainConfig.rpcEndpoint = network.rpc_endpoint;
+            chainConfig.defaultGasPrice = this.getGasPriceAmount(content.gas_price);
+            chainConfig.chainDenom = this.getGasPriceDenom(content.gas_price);
+            Workspace.AddChainConfig(chainConfig);
+        }
+    }
+
+    private static async syncAccounts(content: any, context: vscode.ExtensionContext) {
+        const beakerAccounts = content.accounts;
+        const accountNames = Object.keys(beakerAccounts);
+        for (const accountName of accountNames) {
+            const account = beakerAccounts[accountName];
+            if (account.mnemonic && account.mnemonic.length > 0) {
+                const a = new Account(accountName, account.mnemonic);
+                if (!Account.AccountLabelExists(context.globalState, accountName)
+                    && !Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
+                    Account.AddAccount(context.globalState, a);
+                }
+            }
+        }
+        const accounts = await Account.GetAccounts(context.globalState);
+        accountViewProvider.refresh(accounts);
+    }
+
+    private static getGasPriceAmount(gas_price: string): string {
+        let m;
+        let amount = "";
+        const regex = /[0-9]*\.?[0-9]+/gm;
+        while ((m = regex.exec(gas_price)) !== null) {
+            if (m.index === regex.lastIndex) {
+                regex.lastIndex++;
+            }
+
+            m.forEach((match, groupIndex) => {
+                amount = match;
+            });
+        }
+        return amount;
+    }
+
+    private static getGasPriceDenom(gas_price: string): string {
+        let m;
+        let denom = "";
+        const regex = /[a-zA-Z]+/gm;
+        while ((m = regex.exec(gas_price)) !== null) {
+            if (m.index === regex.lastIndex) {
+                regex.lastIndex++;
+            }
+
+            m.forEach((match, groupIndex) => {
+                denom = match;
+            });
+        }
+        return denom;
     }
 }
 

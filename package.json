@@ -379,6 +379,12 @@
             "order": 5,
             "default": false,
             "scope": "resource"
+          },
+          "beaker.autosync": {
+            "type": "boolean",
+            "markdownDescription": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy.",
+            "default": true,
+            "scope": "machine"
           }
         }
       }

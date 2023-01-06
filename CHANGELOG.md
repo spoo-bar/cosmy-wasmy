@@ -25,10 +25,11 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 - Support for CW notebooks - Can instantiate contract, run queries and execute txs from the notebook cell within the cosmwasm virtual machine kernel.
 - Added support for `SigningCosmWasmClient.executeMultiple` in API
-- Can now send funds while executing a contract and while initializing a contract 💰
+- Closed [#15](https://github.com/spoo-bar/cosmy-wasmy/issues/15) - Can now send funds while executing a contract and while initializing a contract 💰
 - Added `Clear History` button and `Export History as JSON` button to CosmWasm history view
 - Auto-generate old-style contract schema when `cargo schema` is run
 - Load a wasm binary in a CosmWasm VM. Supports instantiate, query and execute. Uses `@terran-one/cw-simulate`. Absolute GOATS those peeps 🎉
+- [Beaker](https://github.com/osmosis-labs/beaker) integration - autosync accounts and chain configs if Beaker.toml is found in the repository. Configured in the setting `beaker.autosync`
 
 ### Changed
 

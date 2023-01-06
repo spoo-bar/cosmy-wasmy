@@ -37,7 +37,8 @@ export class Commands {
 				})
 				chainConfigs.filter(c => c.chainEnvironment == "localnet").forEach(c => chainPicks.push({
 					label: c.configName,
-					detail: c.chainId
+					detail: c.chainId,
+					description: ""
 				}));
 				chainPicks.push({
 					label: "Testnet",
@@ -45,7 +46,17 @@ export class Commands {
 				})
 				chainConfigs.filter(c => c.chainEnvironment == "testnet").forEach(c => chainPicks.push({
 					label: c.configName,
-					detail: c.chainId
+					detail: c.chainId,
+					description: ""
+				}));
+				chainPicks.push({
+					label: "Imported from Beaker",
+					kind: vscode.QuickPickItemKind.Separator
+				})
+				chainConfigs.filter(c => c.chainEnvironment == "beaker").forEach(c => chainPicks.push({
+					label: c.configName,
+					detail: c.chainId,
+					description: "$(beaker)"
 				}));
 				chainPicks.push({
 					label: "Mainnet",
@@ -53,9 +64,10 @@ export class Commands {
 				})
 				chainConfigs.filter(c => c.chainEnvironment == "mainnet").forEach(c => chainPicks.push({
 					label: c.configName,
-					detail: c.chainId
+					detail: c.chainId,
+					description: ""
 				}));
-				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description = " (currently selected) ")
+				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description += " (currently selected) ")
 				vscode.window.showQuickPick(chainPicks, {
 					canPickMany: false,
 					title: "Select a new chain config",

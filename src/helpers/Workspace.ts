@@ -76,9 +76,22 @@ export class Workspace {
         return vscode.workspace.getConfiguration().get<boolean>(Constants.CONFIGURATION_OPEN_TX_IN_VSCODE, false);
     }
 
+    public static GetBeakerAutosync(): boolean {
+        return vscode.workspace.getConfiguration().get<boolean>(Constants.CONFIGURATION_BEAKER_AUTOSYNC, false);
+    }
+
     public static GetChainConfigs(): ChainConfig[] | undefined {
         const configs = vscode.workspace.getConfiguration().get<ChainConfig[]>(Constants.CONFIGURATION_CHAINS);
         return configs;
+    }
+
+    public static AddChainConfig(chainConfig: ChainConfig) {
+        const configs = this.GetChainConfigs();
+        if(configs.some(c => c.chainId == chainConfig.chainId)) {
+            return; // dont fail silently in the future. but now only way to add is through beaker so its fine
+        }
+        configs.push(chainConfig);
+        vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAINS, configs, vscode.ConfigurationTarget.Global)
     }
 
     private static GetChainConfig(chainConfigName: string): ChainConfig {

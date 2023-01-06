@@ -56,7 +56,10 @@ export class CosmwasmCmds {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.execCosmwasm', (jsonFile: vscode.Uri) => {
 			if (jsonFile) {
 				vscode.workspace.openTextDocument(jsonFile).then((document) => {
-					let jsonInput = document.getText();
+					let jsonInput = {
+						input: document.getText(),
+						funds: "",
+					};
 					const cosmwasmExecutor = new Executer(context.globalState, true);
 					cosmwasmExecutor.Execute(jsonInput, vscode.ProgressLocation.Notification);
 				});
