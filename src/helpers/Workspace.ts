@@ -85,6 +85,15 @@ export class Workspace {
         return configs;
     }
 
+    public static AddChainConfig(chainConfig: ChainConfig) {
+        const configs = this.GetChainConfigs();
+        if(configs.some(c => c.chainId == chainConfig.chainId)) {
+            return; // dont fail silently in the future. but now only way to add is through beaker so its fine
+        }
+        configs.push(chainConfig);
+        vscode.workspace.getConfiguration().update(Constants.CONFIGURATION_CHAINS, configs, vscode.ConfigurationTarget.Global)
+    }
+
     private static GetChainConfig(chainConfigName: string): ChainConfig {
         const configs = this.GetChainConfigs();
         if (configs) {
