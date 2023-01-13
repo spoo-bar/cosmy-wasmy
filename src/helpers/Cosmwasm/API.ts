@@ -1,4 +1,4 @@
-import { CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
+import { CodeDetails, CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Coin, DirectSecp256k1HdWallet, parseCoins } from "@cosmjs/proto-signing";
 import { GasPrice } from '@cosmjs/stargate';
@@ -29,6 +29,12 @@ export class CosmwasmAPI {
         let faucet = new FaucetClient(faucetEndpoint);
         let denom = global.workspaceChain.chainDenom;
         await faucet.credit(address, denom);
+    }
+
+    public static async GetCodeDetails(codeId: number): Promise<CodeDetails> {
+        let client = await Cosmwasm.GetQueryClient();
+        const codeDetails = await client.getCodeDetails(codeId);
+        return codeDetails;
     }
 }
 

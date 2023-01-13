@@ -4,6 +4,7 @@ import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
 import { Contract } from '../models/contract';
 import { ContractDataProvider } from '../views/contractDataProvider';
+import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
 import { WasmVmPanel } from '../views/WasmVmPanel';
 
 export class ContractCmds {
@@ -16,6 +17,7 @@ export class ContractCmds {
         this.registerAddContractCommentCmd(context, contractViewProvider);
 		this.registerUploadContractCmd(context);
 		this.registerWasmVMCmd(context);
+		this.registerGetContractChecksumCmd(context);
     }
     
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
@@ -204,6 +206,19 @@ export class ContractCmds {
 			await view.getWebviewContent(context.extensionUri);
 		});
 
+		context.subscriptions.push(disposable);
+	}
+
+	private static registerGetContractChecksumCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.getContractChecksum', async (contract: Contract) => {
+			const codeId = contract.codeId;
+			const codeDetails = await CosmwasmAPI.GetCodeDetails(codeId);
+			const output = {
+				codeId: codeId,
+				checksum: codeDetails.checksum
+			};
+			CosmwasmTerminal.output(JSON.stringify(output, undefined, 4));
+		});
 		context.subscriptions.push(disposable);
 	}
 }
