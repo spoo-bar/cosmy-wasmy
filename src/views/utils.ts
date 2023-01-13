@@ -69,13 +69,17 @@ export class Utils {
             const beakerFile = files.filter(f => f[0].toLowerCase() === "beaker.toml");
             if (beakerFile && beakerFile.length == 1) {
                 const beakerFilePath = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Beaker.toml");
-                const fileBuf = await vscode.workspace.fs.readFile(beakerFilePath);
-                const content = toml.parse(new TextDecoder().decode(fileBuf));
-
-                Utils.syncAccounts(content, context);
-                Utils.syncChains(content);
+                await Utils.BeakerSync(beakerFilePath, context);
             }
         }
+    }
+
+    public static async BeakerSync(beakerFilePath: vscode.Uri, context: vscode.ExtensionContext) {
+        const fileBuf = await vscode.workspace.fs.readFile(beakerFilePath);
+        const content = toml.parse(new TextDecoder().decode(fileBuf));
+
+        Utils.syncAccounts(content, context);
+        Utils.syncChains(content);
     }
 
     private static syncChains(content: any) {

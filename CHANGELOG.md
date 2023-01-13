@@ -29,7 +29,9 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Added `Clear History` button and `Export History as JSON` button to CosmWasm history view
 - Auto-generate old-style contract schema when `cargo schema` is run
 - Load a wasm binary in a CosmWasm VM. Supports instantiate, query and execute. Uses `@terran-one/cw-simulate`. Absolute GOATS those peeps 🎉
-- [Beaker](https://github.com/osmosis-labs/beaker) integration - autosync accounts and chain configs if Beaker.toml is found in the repository. Configured in the setting `beaker.autosync`
+- [Beaker](https://github.com/osmosis-labs/beaker) integration 
+    - autosync accounts and chain configs if Beaker.toml is found in the repository. Configured in the setting `beaker.autosync`
+    - right click on `Beaker.toml` allows to manually sync the accounts and chain configs from the selected file 
 
 ### Changed
 
