@@ -184,6 +184,11 @@
         "title": "Execute Tx",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
+      },
+      {
+        "command": "cosmy-wasmy.beakerTomlSync",
+        "title": "Sync Beaker config",
+        "category": "Cosmy Wasmy"
       }
     ],
     "configuration": [
@@ -439,6 +444,10 @@
         {
           "command": "cosmy-wasmy.wasmInteract",
           "when": "resourceExtname == .wasm"
+        },
+        {
+          "command": "cosmy-wasmy.beakerTomlSync",
+          "when": "resourceFilename == Beaker.toml"
         }
       ],
       "editor/context": [

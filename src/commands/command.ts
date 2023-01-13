@@ -23,6 +23,7 @@ export class Commands {
 		CosmwasmCmds.Register(context);
 
 		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);	
+		this.syncBeakerTomlCmd(context);
 		//this.registerRecordCWCmd(context);		
 	}
 
@@ -109,6 +110,16 @@ export class Commands {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.recordCW', () => {
 			Workspace.ToggleRecordCW();
 			Utils.ShowRecordStatusItem();
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static syncBeakerTomlCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.beakerTomlSync', async (item: vscode.Uri) => {
+			if (item) {
+				await Utils.BeakerSync(item, context);
+				vscode.window.showInformationMessage("Finished syncing accounts and chains from Beaker.toml")
+			}
 		});
 		context.subscriptions.push(disposable);
 	}
