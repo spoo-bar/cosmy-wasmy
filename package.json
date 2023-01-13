@@ -108,6 +108,12 @@
         "enablement": "viewItem == contract"
       },
       {
+        "command": "cosmy-wasmy.getContractChecksum",
+        "title": "Display Checksum",
+        "category": "Cosmy Wasmy",
+        "enablement": "viewItem == contract"
+      },
+      {
         "command": "cosmy-wasmy.reloadConfig",
         "title": "Reload Chain Config",
         "category": "Cosmy Wasmy"
@@ -552,6 +558,11 @@
           "command": "cosmy-wasmy.clearContractAdmin",
           "when": "view == contract",
           "group": "modify"
+        },
+        {
+          "command": "cosmy-wasmy.getContractChecksum",
+          "when": "view == contract",
+          "group": "details"
         },
         {
           "command": "cosmy-wasmy.deleteAccount",

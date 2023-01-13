@@ -32,6 +32,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - [Beaker](https://github.com/osmosis-labs/beaker) integration 
     - autosync accounts and chain configs if Beaker.toml is found in the repository. Configured in the setting `beaker.autosync`
     - right click on `Beaker.toml` allows to manually sync the accounts and chain configs from the selected file 
+- Contract context menu action to fetch and show a selected on-chain contract checksum
 
 ### Changed
 
