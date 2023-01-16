@@ -18,6 +18,7 @@ export class ContractCmds {
 		this.registerUploadContractCmd(context);
 		this.registerWasmVMCmd(context);
 		this.registerGetContractChecksumCmd(context);
+		this.registerDownloadContractBinaryCmd(context);
     }
     
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
@@ -218,6 +219,23 @@ export class ContractCmds {
 				checksum: codeDetails.checksum
 			};
 			CosmwasmTerminal.output(JSON.stringify(output, undefined, 4));
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static registerDownloadContractBinaryCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.downloadContractBinary', async (contract: Contract) => {
+			const codeId = contract.codeId;
+			const codeDetails = await CosmwasmAPI.GetCodeDetails(codeId);
+			const binary = codeDetails.data;
+			if(vscode.workspace.fs.isWritableFileSystem) {
+				const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, contract.contractAddress + ".wasm");
+				await vscode.workspace.fs.writeFile(uri, binary);
+				vscode.window.showInformationMessage("Downloaded " + contract.label + " as " + contract.contractAddress + ".wasm")
+			}
+			else {
+				vscode.window.showErrorMessage("The current workspace is not writeable. Could not download the binary as a file.")
+			}
 		});
 		context.subscriptions.push(disposable);
 	}

@@ -114,6 +114,12 @@
         "enablement": "viewItem == contract"
       },
       {
+        "command": "cosmy-wasmy.downloadContractBinary",
+        "title": "Download Contract Binary",
+        "category": "Cosmy Wasmy",
+        "enablement": "viewItem == contract"
+      },
+      {
         "command": "cosmy-wasmy.reloadConfig",
         "title": "Reload Chain Config",
         "category": "Cosmy Wasmy"
@@ -561,6 +567,11 @@
         },
         {
           "command": "cosmy-wasmy.getContractChecksum",
+          "when": "view == contract",
+          "group": "details"
+        },
+        {
+          "command": "cosmy-wasmy.downloadContractBinary",
           "when": "view == contract",
           "group": "details"
         },
