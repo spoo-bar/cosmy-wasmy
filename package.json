@@ -34,17 +34,18 @@
     "onNotebook:cw-notebook"
   ],
   "main": "./dist/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
         "command": "cosmy-wasmy.addAccount",
-        "title": "Add Account",
+        "title": "%cosmy-wasmy.addAccount.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.requestFunds",
-        "title": "Request Funds",
+        "title": "%cosmy-wasmy.requestFunds.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": {
@@ -54,152 +55,152 @@
       },
       {
         "command": "cosmy-wasmy.openInExplorer",
-        "title": "Open In Explorer",
+        "title": "%cosmy-wasmy.openInExplorer.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": "$(link-external)"
       },
       {
         "command": "cosmy-wasmy.copyAddress",
-        "title": "Copy Address",
+        "title": "%cosmy-wasmy.copyAddress.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account || viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.copyMnemonic",
-        "title": "Copy Mnemonic",
+        "title": "%cosmy-wasmy.copyMnemonic.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.deleteAccount",
-        "title": "Delete Account",
+        "title": "%cosmy-wasmy.deleteAccount.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.refreshAccount",
-        "title": "Refresh Account View",
+        "title": "%cosmy-wasmy.refreshAccount.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(refresh)"
       },
       {
         "command": "cosmy-wasmy.addContract",
-        "title": "Import Contract",
+        "title": "%cosmy-wasmy.addContract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
-        "title": "Delete Contract",
+        "title": "%cosmy-wasmy.deleteContract.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.updateContractAdmin",
-        "title": "Update Admin",
+        "title": "%cosmy-wasmy.updateContractAdmin.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.clearContractAdmin",
-        "title": "Clear Admin",
+        "title": "%cosmy-wasmy.clearContractAdmin.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.getContractChecksum",
-        "title": "Display Checksum",
+        "title": "%cosmy-wasmy.getContractChecksum.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.downloadContractBinary",
-        "title": "Download Contract Binary",
+        "title": "%cosmy-wasmy.downloadContractBinary.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.reloadConfig",
-        "title": "Reload Chain Config",
+        "title": "%cosmy-wasmy.reloadConfig.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.resetData",
-        "title": "Reset Data",
+        "title": "%cosmy-wasmy.resetData.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.build",
-        "title": "Build",
+        "title": "%cosmy-wasmy.build.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.runUnitTests",
-        "title": "Run Unit Tests",
+        "title": "%cosmy-wasmy.runUnitTests.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.optimizeContract",
-        "title": "Optimize Contract",
+        "title": "%cosmy-wasmy.optimizeContract.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.generateSchema",
-        "title": "Generate Schema",
+        "title": "%cosmy-wasmy.generateSchema.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.setupDevEnv",
-        "title": "Setup Dev Environment",
+        "title": "%cosmy-wasmy.setupDevEnv.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Upload Contract",
+        "title": "%cosmy-wasmy.upload.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(cloud-upload)"
       },
       {
         "command": "cosmy-wasmy.wasmInteract",
-        "title": "Load in Virtual Machine",
+        "title": "%cosmy-wasmy.wasmInteract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(server-process)"
       },
       {
         "command": "cosmy-wasmy.history",
-        "title": "Show Cosmwasm History",
+        "title": "%cosmy-wasmy.history.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(history)"
       },
       {
         "command": "cosmy-wasmy.export",
-        "title": "Export accounts, contracts and history as JSON",
+        "title": "%cosmy-wasmy.export.title%",
         "category": "Cosmy Wasmy",
         "shortTitle": "Export Cosmy Wasmy data"
       },
       {
         "command": "cosmy-wasmy.addComments",
-        "title": "Add comments/notes for the contract",
+        "title": "%cosmy-wasmy.addComments.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(comment)",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.queryCosmwasm",
-        "title": "Run Query",
+        "title": "%cosmy-wasmy.queryCosmwasm.title%",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.execCosmwasm",
-        "title": "Execute Tx",
+        "title": "%cosmy-wasmy.execCosmwasm.title%",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.beakerTomlSync",
-        "title": "Sync Beaker config",
+        "title": "%cosmy-wasmy.beakerTomlSync.title%",
         "category": "Cosmy Wasmy"
       }
     ],
@@ -704,6 +705,8 @@
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.29.5",
     "@terran-one/cw-simulate": "^2.8.0",
+    "@vscode/l10n": "^0.0.10",
+    "@vscode/l10n-dev": "^0.0.22",
     "@vscode/webview-ui-toolkit": "^1.2.0",
     "cross-fetch": "^3.1.5",
     "toml": "^3.0.0"
