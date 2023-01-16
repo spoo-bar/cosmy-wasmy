@@ -22,7 +22,9 @@ The extension by default connects to the Juno `uni-5` testnet. You can go to the
 
 ## Warnings
 
-*  The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`
+*  The seedphrases are stored in plaintext within vscode. 
+
+`DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`
 
 ## Docs
 
