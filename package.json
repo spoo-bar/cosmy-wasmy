@@ -210,76 +210,76 @@
         "properties": {
           "cosmywasmy.chainConfigName": {
             "type": "string",
-            "markdownDescription": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
+            "markdownDescription": "%cosmywasmy.chainConfigName.desc%",
             "scope": "resource",
             "order": 0,
             "default": "Juno UNI-5 testnet",
-            "deprecationMessage": "This property is not used anymore in fetching the workspace chain config. Click on the Status bar item to select the chain config you require."
+            "deprecationMessage": "%cosmywasmy.chainConfigName.deprecationDesc%"
           },
           "cosmywasmy.chains": {
             "type": "array",
-            "markdownDescription": "List of chain configs",
+            "markdownDescription": "%cosmywasmy.chains.desc%",
             "scope": "application",
             "order": 1,
             "minItems": 1,
             "editPresentation": "multilineText",
             "items": {
               "type": "object",
-              "title": "Chain Info",
+              "title": "%cosmywasmy.chains.items.title%",
               "properties": {
                 "configName": {
                   "type": "string",
-                  "description": "User friendly name for the saved network config. Use as input to `cosmywasmy.chainConfigName` to select this config to be used in the workspace."
+                  "description": "%cosmywasmy.chains.items.configName.desc%"
                 },
                 "chainId": {
                   "type": "string",
-                  "description": "Chain ID"
+                  "description": "%cosmywasmy.chains.items.chainId.desc%"
                 },
                 "chainEnvironment": {
                   "type": "string",
-                  "description": "Is the chain localnet, testnet or (god forbid 😨) mainnet",
+                  "description": "%cosmywasmy.chains.items.chainEnvironment.desc%",
                   "enum": [
                     "localnet",
                     "testnet",
                     "mainnet"
                   ],
                   "enumDescriptions": [
-                    "The chain is running locally on your system",
-                    "The chain is a testnet chain",
-                    "The chain is mainnet. DO NOT CONNECT MAINNETS to the extension unless you are super sure you know what you are doing. The extension saves the seed phrase in plain text."
+                    "%cosmywasmy.chains.items.chainEnvironment.localnet.desc%",
+                    "%cosmywasmy.chains.items.chainEnvironment.testnet.desc%",
+                    "%cosmywasmy.chains.items.chainEnvironment.mainnet.desc%"
                   ],
                   "default": "testnet"
                 },
                 "addressPrefix": {
                   "type": "string",
-                  "description": "Prefix used by the chain"
+                  "description": "%cosmywasmy.chains.items.addressPrefix.desc%"
                 },
                 "rpcEndpoint": {
                   "type": "string",
-                  "description": "RPC address and port where the chain RPC server listens on"
+                  "description": "%cosmywasmy.chains.items.rpcEndpoint.desc%"
                 },
                 "defaultGasPrice": {
                   "type": "string",
-                  "description": "default amount of gas to be used as the gas limit for a transaction."
+                  "description": "%cosmywasmy.chains.items.defaultGasPrice.desc%"
                 },
                 "chainDenom": {
                   "type": "string",
-                  "description": "the micro denom used to pay for gas and to track account balance"
+                  "description": "%cosmywasmy.chains.items.chainDenom.desc%"
                 },
                 "faucetEndpoint": {
                   "type": "string",
-                  "description": "Faucet address and port to request funds"
+                  "description": "%cosmywasmy.chains.items.faucetEndpoint.desc%"
                 },
                 "accountExplorerLink": {
                   "type": "string",
-                  "description": "Block explorer url which includes '${accountAddress}' text to generate account url",
+                  "description": "%cosmywasmy.chains.items.accountExplorerLink.desc%",
                   "examples": [
                     "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
                   ]
                 },
                 "txExplorerLink": {
                   "type": "string",
-                  "description": "Block explorer url which includes '${txHash}' text to generate tx url",
+                  "description": "%cosmywasmy.chains.items.txExplorerLink.desc%",
                   "examples": [
                     "https://testnet.mintscan.io/juno-testnet/txs/${txHash}"
                   ]
@@ -358,13 +358,13 @@
               "None"
             ],
             "enumDescriptions": [
-              "Sort the Smart Contracts alphabetically by their label",
-              "Sort the Smart Contracts by the Code ID",
-              "No explicit sorting - Maintains the order the contracts were imported in"
+              "%cosmywasmy.contractSortOrder.alphabetical.desc%",
+              "%cosmywasmy.contractSortOrder.codeId.desc%",
+              "%cosmywasmy.contractSortOrder.none.desc%"
             ],
             "order": 2,
             "default": "None",
-            "description": "Controls the sorting order of the Smart Contracts in the Contract view",
+            "description": "%cosmywasmy.contractSortOrder.desc%",
             "scope": "resource"
           },
           "cosmywasmy.cosmwasmResponseView": {
@@ -374,17 +374,17 @@
               "Terminal"
             ],
             "enumDescriptions": [
-              "Open a new dummy doc with response",
-              "A seperate output channel by Cosmy Wasmy in the Output view"
+              "%cosmywasmy.cosmwasmResponseView.newFile.desc%",
+              "%cosmywasmy.cosmwasmResponseView.terminal.desc%"
             ],
             "order": 3,
             "default": "Terminal",
-            "description": "Controls where the smart contract interactions should be displayed",
+            "description": "%cosmywasmy.cosmwasmResponseView.desc%",
             "scope": "resource"
           },
           "cosmywasmy.maxHistoryStored": {
             "type": "number",
-            "markdownDescription": "Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored.",
+            "markdownDescription": "%cosmywasmy.maxHistoryStored.desc%",
             "order": 4,
             "default": 20,
             "minimum": 0,
@@ -393,14 +393,14 @@
           },
           "cosmywasmy.openTxExplorerInVscode": {
             "type": "boolean",
-            "markdownDescription": "If this setting is set, and the current chain config has `txExplorerLink` value set, on the successful execution of a msg, the tx explorer link opens automatically within vscode in simple browser.",
+            "markdownDescription": "%cosmywasmy.openTxExplorerInVscode.desc%",
             "order": 5,
             "default": false,
             "scope": "resource"
           },
           "beaker.autosync": {
             "type": "boolean",
-            "markdownDescription": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy.",
+            "markdownDescription": "%beaker.autosync.desc%",
             "default": true,
             "scope": "machine"
           }
