@@ -54,5 +54,8 @@
     "cosmywasmy.cosmwasmResponseView.terminal.desc": "A seperate output channel by Cosmy Wasmy in the Output view",
     "cosmywasmy.maxHistoryStored.desc": "Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored",
     "cosmywasmy.openTxExplorerInVscode.desc": "If this setting is set, and the current chain config has `txExplorerLink` value set, on the successful execution of a msg, the tx explorer link opens automatically within vscode in simple browser",
-    "beaker.autosync.desc": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy"
+    "beaker.autosync.desc": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy",
+
+    "cosmywasmy.viewsWelcome.account.desc": "⚠️ Looks like there are no accounts set up. \n [Add an account](command:cosmy-wasmy.addAccount)",
+    "cosmywasmy.viewsWelcome.contract.desc": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)"
 }

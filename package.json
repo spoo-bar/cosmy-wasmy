@@ -663,11 +663,11 @@
     "viewsWelcome": [
       {
         "view": "account",
-        "contents": "⚠️ Looks like there are no accounts set up. \n [Add an account](command:cosmy-wasmy.addAccount)"
+        "contents": "%cosmywasmy.viewsWelcome.account.desc%"
       },
       {
         "view": "contract",
-        "contents": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)"
+        "contents": "%cosmywasmy.viewsWelcome.contract.desc%"
       }
     ]
   },
