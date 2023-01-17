@@ -8,19 +8,19 @@ import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
 import { WasmVmPanel } from '../views/WasmVmPanel';
 
 export class ContractCmds {
-    public static async Register(context: vscode.ExtensionContext) {
-        this.registerAddContractCmd(context, contractViewProvider);
-        this.registerSelectContractCmd(context);
-        this.registerDeleteContractCmd(context, contractViewProvider);
-        this.registerUpdateContractAdminCmd(context);
-        this.registerClearContractAdminCmd(context);
-        this.registerAddContractCommentCmd(context, contractViewProvider);
+	public static async Register(context: vscode.ExtensionContext) {
+		this.registerAddContractCmd(context, contractViewProvider);
+		this.registerSelectContractCmd(context);
+		this.registerDeleteContractCmd(context, contractViewProvider);
+		this.registerUpdateContractAdminCmd(context);
+		this.registerClearContractAdminCmd(context);
+		this.registerAddContractCommentCmd(context, contractViewProvider);
 		this.registerUploadContractCmd(context);
 		this.registerWasmVMCmd(context);
 		this.registerGetContractChecksumCmd(context);
 		this.registerDownloadContractBinaryCmd(context);
-    }
-    
+	}
+
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', (contractAddr: string) => {
 			if (contractAddr) {
@@ -28,8 +28,8 @@ export class ContractCmds {
 			}
 			else {
 				vscode.window.showInputBox({
-					title: "Contract Address",
-					placeHolder: "Cosmwasm contract address"
+					title: vscode.l10n.t("Contract Address"),
+					placeHolder: vscode.l10n.t("Cosmwasm contract address")
 				}).then(contractAddrInput => {
 					if (contractAddrInput) {
 						importContract(contractAddrInput);
@@ -43,7 +43,9 @@ export class ContractCmds {
 			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
 				vscode.window.withProgress({
 					location: vscode.ProgressLocation.Notification,
-					title: "Fetching the details for the contract - " + contractAddr,
+					title: vscode.l10n.t("Fetching the details for the contract - {addr}", {
+						addr: contractAddr
+					}),
 					cancellable: false
 				}, (progress, token) => {
 					token.onCancellationRequested(() => { });
@@ -51,19 +53,27 @@ export class ContractCmds {
 					return new Promise((resolve, reject) => {
 						CosmwasmAPI.GetContract(contractAddr).then(contract => {
 							Contract.AddContract(context.globalState, contract);
-							vscode.window.showInformationMessage("Added new contract: " + contract.codeId + ": " + contract.label);
+							vscode.window.showInformationMessage(vscode.l10n.t("Added new contract: {codeId} - {label}", {
+								codeId: contract.codeId,
+								label: contract.label
+							}));
 							const contracts = Contract.GetContracts(context.globalState);
 							contractViewProvider.refresh(contracts);
 							resolve(contract);
 						}).catch(err => {
-							vscode.window.showErrorMessage("Could not import contract: " + contractAddr + " - " + err);
+							vscode.window.showErrorMessage(vscode.l10n.t("Could not import contract: {addr} - {err}", {
+								addr: contractAddr,
+								err: err
+							}));
 							reject(err);
 						});
 					});
 				});
 			}
 			else {
-				vscode.window.showErrorMessage("Contract has already been imported: " + contractAddr);
+				vscode.window.showErrorMessage(vscode.l10n.t("Contract has already been imported: {addr}", {
+					addr: contractAddr
+				}));
 			}
 		}
 	}
@@ -78,14 +88,18 @@ export class ContractCmds {
 	private static registerDeleteContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteContract', (item: Contract) => {
 			vscode.window.showQuickPick(["Yes", "No"], {
-				title: "Are you sure you want to delete the contract " + item.label + " ?",
-				placeHolder: "Are you sure you want to delete the contract " + item.label + " ?",
+				title: vscode.l10n.t("Are you sure you want to delete the contract {label}?", {
+					label: item.label
+				}),
+				placeHolder: vscode.l10n.t("Are you sure you want to delete the contract {label} ?", {
+					label: item.label
+				}),
 			}).then(resp => {
 				if (resp && resp.toLowerCase() === "yes") {
 					Contract.DeleteContract(context.globalState, item)
 					var contracts = Contract.GetContracts(context.globalState);
 					contractViewProvider.refresh(contracts);
-					vscode.window.showInformationMessage("Deleted contract: " + item.label);
+					vscode.window.showInformationMessage(vscode.l10n.t("Deleted contract: {label}", { label: item.label }));
 				}
 			})
 		});
@@ -95,18 +109,18 @@ export class ContractCmds {
 	private static registerUpdateContractAdminCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.updateContractAdmin', (contract: Contract) => {
 			vscode.window.showInputBox({
-				title: "New contract admin address",
-				prompt: "New contract admin address"
+				title: vscode.l10n.t("New contract admin address"),
+				prompt: vscode.l10n.t("New contract admin address")
 			}).then(input => {
 				if (input) {
 					const account = Workspace.GetSelectedAccount();
 					if (!account) {
-						vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+						vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
 						return;
 					}
 					vscode.window.withProgress({
 						location: vscode.ProgressLocation.Notification,
-						title: "Updating contract admin on the contract - " + contract.label,
+						title: vscode.l10n.t("Updating contract admin on the contract - {label}", { label: contract.label }),
 						cancellable: false
 					}, (progress, token) => {
 						token.onCancellationRequested(() => { });
@@ -125,12 +139,12 @@ export class ContractCmds {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.clearContractAdmin', (contract: Contract) => {
 			const account = Workspace.GetSelectedAccount();
 			if (!account) {
-				vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+				vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
 				return;
 			}
 			vscode.window.withProgress({
 				location: vscode.ProgressLocation.Notification,
-				title: "Clearing contract admin on the contract - " + contract.label,
+				title: vscode.l10n.t("Clearing contract admin on the contract - {label}", { label: contract.label }),
 				cancellable: false
 			}, (progress, token) => {
 				token.onCancellationRequested(() => { });
@@ -147,15 +161,15 @@ export class ContractCmds {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addComments', (contract: Contract) => {
 			if (contract) {
 				vscode.window.showInputBox({
-					title: "Add comments/notes for the contract",
-					prompt: "Comments/notes added here will show up as you hover on the contract in the sidebar. This is purely to help with development and is not stored on-chain in any way",
+					title: vscode.l10n.t("Add comments/notes for the contract"),
+					prompt: vscode.l10n.t("Comments/notes added here will show up as you hover on the contract in the sidebar. This is purely to help with development and is not stored on-chain in any way"),
 					value: contract.notes
 				}).then(input => {
 					if (input) {
 						contract.notes = input;
 						Contract.UpdateContract(context.globalState, contract);
 						contractViewProvider.refresh(Contract.GetContracts(context.globalState));
-						vscode.window.showInformationMessage("Stored notes/comments for " + contract.label);
+						vscode.window.showInformationMessage(vscode.l10n.t("Stored notes/comments for {label}", { label: contract.label }));
 					}
 				});
 			}
@@ -163,7 +177,7 @@ export class ContractCmds {
 		context.subscriptions.push(disposable);
 	}
 
-    private static registerUploadContractCmd(context: vscode.ExtensionContext) {
+	private static registerUploadContractCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.upload', (item: vscode.Uri) => {
 			if (item) {
 				Contract.Upload(item)
@@ -173,8 +187,8 @@ export class ContractCmds {
 					canSelectFiles: true,
 					canSelectFolders: false,
 					canSelectMany: false,
-					title: "title",
-					openLabel: "label",
+					title: vscode.l10n.t("Select Wasm file"),
+					openLabel: vscode.l10n.t("Upload"),
 					filters: {
 						'Cosmwasm Contract': ['wasm']
 					}
@@ -190,7 +204,7 @@ export class ContractCmds {
 		context.subscriptions.push(disposable);
 	}
 
-    private static registerWasmVMCmd(context: vscode.ExtensionContext) {
+	private static registerWasmVMCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.wasmInteract', async (wasm: vscode.Uri) => {
 			const contractName = path.basename(wasm.toString());
 			const panel = vscode.window.createWebviewPanel(
@@ -228,13 +242,16 @@ export class ContractCmds {
 			const codeId = contract.codeId;
 			const codeDetails = await CosmwasmAPI.GetCodeDetails(codeId);
 			const binary = codeDetails.data;
-			if(vscode.workspace.fs.isWritableFileSystem) {
+			if (vscode.workspace.fs.isWritableFileSystem) {
 				const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, contract.contractAddress + ".wasm");
 				await vscode.workspace.fs.writeFile(uri, binary);
-				vscode.window.showInformationMessage("Downloaded " + contract.label + " as " + contract.contractAddress + ".wasm")
+				vscode.window.showInformationMessage(vscode.l10n.t("Downloaded {label} as {addr}.wasm", {
+					label: contract.label,
+					addr: contract.contractAddress
+				}))
 			}
 			else {
-				vscode.window.showErrorMessage("The current workspace is not writeable. Could not download the binary as a file.")
+				vscode.window.showErrorMessage(vscode.l10n.t("The current workspace is not writeable. Could not download the binary as a file."))
 			}
 		});
 		context.subscriptions.push(disposable);

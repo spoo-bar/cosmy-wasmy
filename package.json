@@ -9,7 +9,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/spoo-bar/cosmy-wasmy",
   "engines": {
-    "vscode": "^1.67.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Testing",
@@ -686,7 +686,7 @@
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
     "@types/node": "14.x",
-    "@types/vscode": "^1.67.0",
+    "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@vscode/test-electron": "^2.1.3",

@@ -18,11 +18,11 @@ export class Commands {
 
 		AccountCmds.Register(context);
 		ContractCmds.Register(context);
-		TerminalCmds.Register(context);	
+		TerminalCmds.Register(context);
 		WorkspaceDataCmds.Register(context);
 		CosmwasmCmds.Register(context);
 
-		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);	
+		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);
 		this.syncBeakerTomlCmd(context);
 		//this.registerRecordCWCmd(context);		
 	}
@@ -68,16 +68,17 @@ export class Commands {
 					detail: c.chainId,
 					description: ""
 				}));
-				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description += " (currently selected) ")
+				const currentlySelectedText = vscode.l10n.t("currently selected")
+				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description += " ( " + currentlySelectedText + ") ")
 				vscode.window.showQuickPick(chainPicks, {
 					canPickMany: false,
-					title: "Select a new chain config",
+					title: vscode.l10n.t("Select a new chain config"),
 					placeHolder: global.workspaceChain.configName
 				}).then(async select => {
 					if (select) {
 						vscode.window.withProgress({
 							location: vscode.ProgressLocation.Notification,
-							title: "Loading chain - " + select.label,
+							title: vscode.l10n.t("Loading chain - {label}", { label: select.label }),
 							cancellable: false
 						}, async (progress, token) => {
 							token.onCancellationRequested(() => { });
@@ -93,7 +94,7 @@ export class Commands {
 							contractViewProvider.refresh(contracts);
 
 							Utils.UpdateConnectedChainStatusItem();
-							vscode.window.showInformationMessage(select.label + " has been loaded to the workspace.");
+							vscode.window.showInformationMessage(vscode.l10n.t("{label} has been loaded to the workspace.", { label: select.label }));
 						});
 					}
 				})
@@ -118,7 +119,7 @@ export class Commands {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.beakerTomlSync', async (item: vscode.Uri) => {
 			if (item) {
 				await Utils.BeakerSync(item, context);
-				vscode.window.showInformationMessage("Finished syncing accounts and chains from Beaker.toml")
+				vscode.window.showInformationMessage(vscode.l10n.t("Finished syncing accounts and chains from Beaker.toml"))
 			}
 		});
 		context.subscriptions.push(disposable);

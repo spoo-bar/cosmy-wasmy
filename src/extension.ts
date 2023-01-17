@@ -6,7 +6,6 @@ import { Contract } from './models/contract';
 import { Commands } from './commands/command';
 import { Utils, Views } from './views/utils';
 import { Workspace } from './helpers/workspace';
-import { TextEncoder } from 'util';
 import { FileWatcher } from './helpers/fileWatcher';
 
 
@@ -17,7 +16,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	global.workspaceChain = Workspace.GetWorkspaceChainConfig();
 	Utils.CreateConnectedChainStatusItem();
 	Utils.BeakerAutoSync(context);
-	//Utils.ShowRecordStatusItem();
 
 	Commands.Register(context);
 	Views.Register(context);
@@ -25,7 +23,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const rustLangExtension = vscode.extensions.getExtension('rust-lang.rust-analyzer');
 	if (!rustLangExtension) {
-		vscode.window.showWarningMessage(new vscode.MarkdownString("We recommend to install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extention while working with Rust on vscode.").value)
+		const message = vscode.l10n.t('We recommend to install the {extension} extention while working with Rust on vscode.', {
+			extension: "[rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)"
+		});
+		vscode.window.showWarningMessage(new vscode.MarkdownString(message).value)
 	}
 
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));

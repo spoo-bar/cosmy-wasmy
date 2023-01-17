@@ -23,24 +23,24 @@ export class AccountCmds {
 	private static registerAddAccountCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAccount', () => {
 			vscode.window.showInputBox({
-				title: "Account Label",
-				value: "testAccount",
+				title: vscode.l10n.t("Account Label"),
+				value: vscode.l10n.t("testAccount"),
 			}).then(accountLabel => {
 				if (accountLabel) {
 					if (!Account.AccountLabelExists(context.globalState, accountLabel)) {
-						const options = ["Generate seed phrase for me (Recommended)", "I have a seed phrase"];
+						const options = [vscode.l10n.t("Generate seed phrase for me (Recommended)"), vscode.l10n.t("I have a seed phrase")];
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
-								if (rr == "Generate seed phrase for me (Recommended)") {
+								if (rr == vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
 									DirectSecp256k1HdWallet.generate(24).then(wallet => {
 										const account = new Account(accountLabel, wallet.mnemonic)
 										saveNewAccount(account);
 									});
 								}
-								if (rr == "I have a seed phrase") {
+								if (rr == vscode.l10n.t("I have a seed phrase")) {
 									vscode.window.showInputBox({
-										title: "Account Mnemonic",
-										placeHolder: "Ensure this is not your main account seed phrase. This info is stored in plain text in vscode."
+										title: vscode.l10n.t("Account Mnemonic"),
+										placeHolder: vscode.l10n.t("Ensure this is not your main account seed phrase. This info is stored in plain text in vscode.")
 									}).then(mnemonic => {
 										if (mnemonic) {
 											const account = new Account(accountLabel, mnemonic)
@@ -52,7 +52,7 @@ export class AccountCmds {
 						});
 					}
 					else {
-						vscode.window.showErrorMessage("Account label \"" + accountLabel + "\" is already taken. Choose a new one.");
+						vscode.window.showErrorMessage(vscode.l10n.t("Account label \"{label}\" is already taken. Choose a new one.", { label: accountLabel }));
 					}
 				}
 			})
@@ -63,12 +63,12 @@ export class AccountCmds {
 		async function saveNewAccount(account: Account) {
 			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
 				Account.AddAccount(context.globalState, account);
-				vscode.window.showInformationMessage("Added new account: " + account.label);
+				vscode.window.showInformationMessage(vscode.l10n.t("Added new account: {label}", { label: account.label }));
 				const accounts = await Account.GetAccounts(context.globalState);
 				accountViewProvider.refresh(accounts);
 			}
 			else {
-				vscode.window.showErrorMessage(account.label + " - Account with given seed phrase is already imported.");
+				vscode.window.showErrorMessage(vscode.l10n.t("{label} - Account with given seed phrase is already imported.", { label: account.label }));
 			}
 		}
 	}
@@ -81,7 +81,7 @@ export class AccountCmds {
 						location: {
 							viewId: Constants.VIEWS_ACCOUNT
 						},
-						title: "Requesting funds from faucet",
+						title: vscode.l10n.t("Requesting funds from faucet"),
 						cancellable: false
 					}, (progress, token) => {
 						token.onCancellationRequested(() => { });
@@ -89,20 +89,20 @@ export class AccountCmds {
 						return new Promise(async (resolve, reject) => {
 							try {
 								await CosmwasmAPI.RequestFunds(item.address);
-								vscode.window.showInformationMessage("Funds updated! 🤑🤑");
+								vscode.window.showInformationMessage(vscode.l10n.t("Funds updated! 🤑🤑"));
 								var accounts = await Account.GetAccounts(context.globalState);
 								accountViewProvider.refresh(accounts);
 								resolve(undefined);
 							}
 							catch (err: any) {
-								vscode.window.showErrorMessage("Woopsie! Could not add funds 😿 - " + err);
+								vscode.window.showErrorMessage(vscode.l10n.t("Woopsie! Could not add funds 😿 - {err}", { err: err }));
 								reject(err);
 							}
 						});
 					});
 				}
 				else {
-					vscode.window.showErrorMessage("Faucet endpoint has not been set in the chain config settings");
+					vscode.window.showErrorMessage(vscode.l10n.t("Faucet endpoint has not been set in the chain config settings"));
 				}
 			}
 		});
@@ -129,11 +129,11 @@ export class AccountCmds {
 			}
 			if (address) {
 				vscode.env.clipboard.writeText(address).then(() => {
-					vscode.window.showInformationMessage("Copied to clipboard: " + address);
+					vscode.window.showInformationMessage(vscode.l10n.t("Copied to clipboard: {addr}", { addr: address }));
 				});
 			}
 			else {
-				vscode.window.showErrorMessage("Could not copy to clipboard.");
+				vscode.window.showErrorMessage(vscode.l10n.t("Could not copy to clipboard."));
 			}
 		});
 		context.subscriptions.push(disposable);
@@ -143,11 +143,11 @@ export class AccountCmds {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.copyMnemonic', (item: Account) => {
 			if (item.mnemonic) {
 				vscode.env.clipboard.writeText(item.mnemonic).then(() => {
-					vscode.window.showInformationMessage("Copied to clipboard: " + item.mnemonic);
+					vscode.window.showInformationMessage(vscode.l10n.t("Copied to clipboard: {seed}", { seed: item.mnemonic }));
 				});
 			}
 			else {
-				vscode.window.showErrorMessage("Could not copy to clipboard.");
+				vscode.window.showErrorMessage(vscode.l10n.t("Could not copy to clipboard."));
 			}
 		});
 		context.subscriptions.push(disposable);
@@ -156,14 +156,14 @@ export class AccountCmds {
 	private static registerDeleteAddressCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.deleteAccount', (item: Account) => {
 			vscode.window.showQuickPick(["Yes", "No"], {
-				title: "Are you sure you want to delete the account " + item.label + " ?",
-				placeHolder: "Are you sure you want to delete the account " + item.label + " ?",
+				title: vscode.l10n.t("Are you sure you want to delete the account {label}?", { label: item.label }),
+				placeHolder: vscode.l10n.t("Are you sure you want to delete the account {label} ?", { label: item.label }),
 			}).then(async resp => {
 				if (resp && resp.toLowerCase() === "yes") {
 					Account.DeleteAccount(context.globalState, item);
 					var accounts = await Account.GetAccounts(context.globalState);
 					accountViewProvider.refresh(accounts);
-					vscode.window.showInformationMessage("Deleted account: " + item.label);
+					vscode.window.showInformationMessage(vscode.l10n.t("Deleted account: {label}", { label: item.label }));
 				}
 			})
 		});
@@ -181,7 +181,7 @@ export class AccountCmds {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.refreshAccount', async () => {
 			vscode.window.withProgress({
 				location: { viewId: Constants.VIEWS_ACCOUNT },
-				title: "Refreshing account view",
+				title: vscode.l10n.t("Refreshing account view"),
 				cancellable: false
 			}, async (progress, token) => {
 				token.onCancellationRequested(() => { });

@@ -5,20 +5,22 @@ import { Workspace } from '../helpers/workspace';
 import { CosmwasmHistoryView } from '../views/cosmwasmHistoryView';
 
 export class CosmwasmCmds {
-    public static async Register(context: vscode.ExtensionContext) {
-        this.registerQueryHistoryCmd(context);
-        this.registerQueryCosmwasmCmd(context);
+	public static async Register(context: vscode.ExtensionContext) {
+		this.registerQueryHistoryCmd(context);
+		this.registerQueryCosmwasmCmd(context);
 		this.registerTxCosmwasmCmd(context);
-    }
-    private static registerQueryHistoryCmd(context: vscode.ExtensionContext) {
+	}
+	private static registerQueryHistoryCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.history', () => {
 			if (Workspace.GetCosmwasmQueriesStored() == 0) {
-				vscode.window.showErrorMessage("Feature disabled: Cosmwasm Query History. In the settings, set `" + Constants.CONFIGURATION_HISTORY_STORED + "` to a non-zero value.")
+				vscode.window.showErrorMessage(vscode.l10n.t("Feature disabled: Cosmwasm Query History. In the settings, set `{config}` to a non-zero value.", {
+					config: Constants.CONFIGURATION_HISTORY_STORED
+				}))
 			}
 			else {
 				const panel = vscode.window.createWebviewPanel(
 					'history', // Identifies the type of the webview. Used internally
-					'Cosmwasm History', // Title of the panel displayed to the user
+					vscode.l10n.t('Cosmwasm History'), // Title of the panel displayed to the user
 					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
 					{
 						enableScripts: true
@@ -31,7 +33,7 @@ export class CosmwasmCmds {
 		context.subscriptions.push(disposable);
 	}
 
-    private static registerQueryCosmwasmCmd(context: vscode.ExtensionContext) {
+	private static registerQueryCosmwasmCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.queryCosmwasm', (jsonFile: vscode.Uri) => {
 			if (jsonFile) {
 				vscode.workspace.openTextDocument(jsonFile).then((document) => {
