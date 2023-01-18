@@ -60,61 +60,61 @@ export class Cosmwasm {
     }
 
     public static async Query(contract: string, query: any) {
-		try {
-			let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract, query);
-			ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
+        try {
+            let resp = await (await Cosmwasm.GetQueryClient()).queryContractSmart(contract, query);
+            ResponseHandler.OutputSuccess(JSON.stringify(query, null, 4), JSON.stringify(resp, null, 4), "Query");
             return {
                 isSuccess: true,
                 response: resp
             };
-		}
-		catch (err: any) {
-			ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
             return {
                 isSuccess: false,
                 response: err
             };
-		}
-	}
+        }
+    }
 
     public static async Execute(account: Account, contract: string, req: any, memo: string, fundsStr: string) {
-		try {
+        try {
             let client = await Cosmwasm.GetSigningClient();
             let funds = parseCoins(fundsStr);
-			let response = await client.execute(account.address, contract, req, "auto", memo, funds);
-			ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
+            let response = await client.execute(account.address, contract, req, "auto", memo, funds);
+            ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(response, null, 4), "Tx");
             return {
                 isSuccess: true,
                 response: response
             };
-		}
-		catch (err: any) {
-			ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
             return {
                 isSuccess: false,
                 response: err
             };
-		}
-	}
+        }
+    }
 
     public static async ExecuteMultiple(account: Account, txs: ExecuteInstruction[]) {
-		try {
+        try {
             let client = await Cosmwasm.GetSigningClient();
-			let response = await client.executeMultiple(account.address, txs,"auto");
-			ResponseHandler.OutputSuccess(JSON.stringify(txs, null, 4), JSON.stringify(response, null, 4), "Tx");
+            let response = await client.executeMultiple(account.address, txs, "auto");
+            ResponseHandler.OutputSuccess(JSON.stringify(txs, null, 4), JSON.stringify(response, null, 4), "Tx");
             return {
                 isSuccess: true,
                 response: response
             };
-		}
-		catch (err: any) {
-			ResponseHandler.OutputError(JSON.stringify(txs, null, 4), err, "Tx");
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(txs, null, 4), err, "Tx");
             return {
                 isSuccess: false,
                 response: err
             };
-		}
-	}
+        }
+    }
 
     public static async UpdateAdmin(account: Account, contract: Contract, newAdmin: string, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
         const input = {
@@ -124,15 +124,15 @@ export class Cosmwasm {
         };
         try {
             let client = await Cosmwasm.GetSigningClient();
-			let response = await client.updateAdmin(account.address, contract.contractAddress, newAdmin, "auto");
-			ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Update Admin");
-			resolve(undefined);
-		}
-		catch (err: any) {
-			ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Update Admin");
-			reject(undefined);
-		}
-	}
+            let response = await client.updateAdmin(account.address, contract.contractAddress, newAdmin, "auto");
+            ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Update Admin");
+            resolve(undefined);
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Update Admin");
+            reject(undefined);
+        }
+    }
 
     public static async ClearAdmin(account: Account, contract: Contract, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
         const input = {
@@ -141,13 +141,13 @@ export class Cosmwasm {
         };
         try {
             let client = await Cosmwasm.GetSigningClient();
-			let response = await client.clearAdmin(account.address, contract.contractAddress, "auto");
-			ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Clear Admin");
-			resolve(undefined);
-		}
-		catch (err: any) {
-			ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Clear Admin");
-			reject(undefined);
-		}
-	}
+            let response = await client.clearAdmin(account.address, contract.contractAddress, "auto");
+            ResponseHandler.OutputSuccess(JSON.stringify(input, null, 4), JSON.stringify(response, null, 4), "Clear Admin");
+            resolve(undefined);
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(input, null, 4), err, "Clear Admin");
+            reject(undefined);
+        }
+    }
 }

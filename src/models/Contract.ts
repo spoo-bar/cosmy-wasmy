@@ -59,14 +59,14 @@ export class Contract extends vscode.TreeItem {
     public static async Upload(wasmFile: vscode.Uri) {
         const account = Workspace.GetSelectedAccount();
         if (!account) {
-            vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+            vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
             return;
         }
 
         const file = await vscode.workspace.fs.readFile(wasmFile)
         vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: "Uploading the contract",
+            title: vscode.l10n.t("Uploading the contract"),
             cancellable: false
         }, (progress, token) => {
             token.onCancellationRequested(() => { });
@@ -75,11 +75,11 @@ export class Contract extends vscode.TreeItem {
                 try {
                     let client = await Cosmwasm.GetSigningClient();
                     let res = await client.upload(account.address, file, "auto");
-                    ResponseHandler.OutputSuccess(wasmFile.fsPath, JSON.stringify(res, null, 4), "Smart Contract Upload");
+                    ResponseHandler.OutputSuccess(wasmFile.fsPath, JSON.stringify(res, null, 4), vscode.l10n.t("Smart Contract Upload"));
                     resolve(undefined);
                 }
                 catch (err: any) {
-                    ResponseHandler.OutputError(wasmFile.fsPath, err, "Smart Contract Upload");
+                    ResponseHandler.OutputError(wasmFile.fsPath, err, vscode.l10n.t("Smart Contract Upload"));
                     reject(undefined);
                 }
             })

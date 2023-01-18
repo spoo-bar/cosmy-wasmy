@@ -6,7 +6,7 @@ import { ChainConfig, Workspace } from '../workspace';
 
 export class CWRecord {
 
-    public static RecordInteraction(input: {data: string, timestamp: Date}, output: {data: string, timestamp: Date}) {
+    public static RecordInteraction(input: { data: string, timestamp: Date }, output: { data: string, timestamp: Date }) {
         let interaction = new Interaction();
         interaction.account = Workspace.GetSelectedAccount();
         interaction.contract = Workspace.GetSelectedContract();

@@ -54,7 +54,7 @@ export class Workspace {
             }
             return this.GetChainConfig(configName);
         }
-        throw new Error("Chain settings have not been configured. Please set them up in File > Preferences > Settings > Cosmy Wasmy.");
+        throw new Error(vscode.l10n.t("Chain settings have not been configured. Please set them up in File > Preferences > Settings > Cosmy Wasmy."));
     }
 
     public static GetContractSortOrder(): ContractSortOrder {
@@ -99,7 +99,10 @@ export class Workspace {
         if (configs) {
             const selectedChains = configs.filter(c => c.configName.toLowerCase() === chainConfigName.toLowerCase());
             if (!selectedChains || selectedChains.length === 0) {
-                vscode.window.showErrorMessage("Currently selected chain is '" + chainConfigName + "' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '" + configs[0].configName + "'");
+                vscode.window.showErrorMessage(vscode.l10n.t("Currently selected chain is '{chain}' but no chain config with that name was found in the configured chains. \n Selecting fallback chain '{defaultChain}'", {
+                    chain: chainConfigName,
+                    defaultChain: configs[0].configName
+                }));
                 return configs[0];
             }
             const selecetdChain = selectedChains[0];
@@ -133,28 +136,28 @@ export class ChainConfig {
 
     public Validate() {
         if (!this) {
-            throw new Error("Chain config is null");
+            throw new Error(vscode.l10n.t("Chain config is null"));
         }
         if (!this.configName || this.configName === " ") {
-            throw new Error("Chain config name is empty");
+            throw new Error(vscode.l10n.t("Chain config name is empty"));
         }
         if (!this.chainId || this.chainId === " ") {
-            throw new Error("Chain ID is empty");
+            throw new Error(vscode.l10n.t("Chain ID is empty"));
         }
         if (!this.addressPrefix || this.addressPrefix === " ") {
-            throw new Error("Chain address prefix is empty");
+            throw new Error(vscode.l10n.t("Chain address prefix is empty"));
         }
         if (!this.rpcEndpoint || this.rpcEndpoint === " ") {
-            throw new Error("Chain RPC endpoint is empty");
+            throw new Error(vscode.l10n.t("Chain RPC endpoint is empty"));
         }
         else {
             const url = new URL(this.rpcEndpoint);
         }
         if (!this.defaultGasPrice || this.defaultGasPrice === " ") {
-            throw new Error("Default Gas Price is empty");
+            throw new Error(vscode.l10n.t("Default Gas Price is empty"));
         }
         if (!this.chainDenom || this.chainDenom === " ") {
-            throw new Error("Chain denom is empty");
+            throw new Error(vscode.l10n.t("Chain denom is empty"));
         }
         return;
     }
