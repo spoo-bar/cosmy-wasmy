@@ -48,14 +48,14 @@ export class WasmVmPanel {
           </head>
           <body>
             <h1>${contractName}</h1>
-            <h3>Simulating in CosmWasm VM</h3>
+            <h3>${vscode.l10n.t("Simulating in CosmWasm VM")}</h3>
             <vscode-divider></vscode-divider>
             <vscode-panels aria-label="Default">
-                <vscode-panel-tab id="tab-1">SETUP</vscode-panel-tab>
-                <vscode-panel-tab id="tab-2">CONTRACTS</vscode-panel-tab>
+                <vscode-panel-tab id="tab-1">${vscode.l10n.t("SETUP")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">Chain ID</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">Chain prefix</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
@@ -65,35 +65,35 @@ export class WasmVmPanel {
             <vscode-divider></vscode-divider>
             <br />
             <vscode-panels activeid="tab-3" aria-label="Default">
-                <vscode-panel-tab id="tab-1">EXECUTE</vscode-panel-tab>
-                <vscode-panel-tab id="tab-2">QUERY</vscode-panel-tab>
-                <vscode-panel-tab id="tab-3">INSTANTIATE</vscode-panel-tab>
+                <vscode-panel-tab id="tab-1">${vscode.l10n.t("EXECUTE")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-2">${vscode.l10n.t("QUERY")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-3">${vscode.l10n.t("INSTANTIATE")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                    <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">Contract Address</vscode-text-field> 
-                    <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">Sender Address</vscode-text-field> 
-                    <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
-                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
-                    <vscode-button id="executeBtn" style="margin:1.5rem;">Execute</vscode-button>
+                    <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                    <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                    <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
+                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
+                    <vscode-button id="executeBtn" style="margin:1.5rem;">${vscode.l10n.t("Execute")}</vscode-button>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Contract Address</vscode-text-field> 
-                    <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
-                    <vscode-button id="queryBtn" style="margin:1.5rem;">Query</vscode-button>
+                    <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                    <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
+                    <vscode-button id="queryBtn" style="margin:1.5rem;">${vscode.l10n.t("Query")}</vscode-button>
                     </vscode-panel-view>
                 <vscode-panel-view id="view-3">
-                    <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">Sender Address</vscode-text-field> 
-                    <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">Contract Label</vscode-text-field> 
-                    <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">Funds</vscode-text-field> 
-                    <vscode-text-area id="instantiateInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">Input</vscode-text-area>
-                    <vscode-button id="instantiateBtn" style="margin:1.5rem;">Instantiate</vscode-button>
+                    <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                    <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">${vscode.l10n.t("Contract Label")}</vscode-text-field> 
+                    <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
+                    <vscode-text-area id="instantiateInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
+                    <vscode-button id="instantiateBtn" style="margin:1.5rem;">${vscode.l10n.t("Instantiate")}</vscode-button>
             </vscode-panel-view>
             </vscode-panels>
-            <vscode-text-area id="response" style="width: 90%" disabled>Response</vscode-text-area>
+            <vscode-text-area id="response" style="width: 90%" disabled>${vscode.l10n.t("Response")}</vscode-text-area>
             <br />
                 <vscode-divider></vscode-divider>
             <br />
             <vscode-panels aria-label="Default">
-                <vscode-panel-tab id="tab-1">LOG</vscode-panel-tab>
+                <vscode-panel-tab id="tab-1">${vscode.l10n.t("LOG")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-data-grid id="vm-responses-grid" aria-label="Default" grid-template-columns="5% 5% 20% 35% 35%"></vscode-data-grid>
                 </vscode-panel-view>
@@ -132,12 +132,14 @@ export class WasmVmPanel {
         let input = JSON.parse(value.input);
         let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, this._codeId, input, value.label);
         this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
-        if(result.ok && typeof result.val !== 'string') {
+        if (result.ok && typeof result.val !== 'string') {
             const contractAddress = result.val.events[0].attributes[0].value;
-            this._panel.webview.postMessage({ command: 'append-contract', value: {
-                label: value.label,
-                address: contractAddress
-            } });
+            this._panel.webview.postMessage({
+                command: 'append-contract', value: {
+                    label: value.label,
+                    address: contractAddress
+                }
+            });
         }
     }
 

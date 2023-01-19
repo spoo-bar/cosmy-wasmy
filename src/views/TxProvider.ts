@@ -21,7 +21,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						new Executer(this.context, true).Execute(data.value, {viewId: Constants.VIEWS_EXECUTE});
+						new Executer(this.context, true).Execute(data.value, { viewId: Constants.VIEWS_EXECUTE });
 						break;
 					}
 			}
@@ -55,7 +55,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 			<body>
 				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
 				<input id="funds-text" placeholder="10${denom}"></input>
-				<button id="exec-button">Execute</button>
+				<button id="exec-button">${vscode.l10n.t("Execute")}</button>
 				<script>
 					(function () {
 						const vscode = acquireVsCodeApi();

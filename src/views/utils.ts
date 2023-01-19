@@ -19,9 +19,9 @@ export class Utils {
 
     public static CreateConnectedChainStatusItem() {
         this.selectedChain = vscode.window.createStatusBarItem(Constants.STATUSBAR_ID_SELECTED_CONFIG, vscode.StatusBarAlignment.Left);
-        this.selectedChain.tooltip = "Select a different Chain";
+        this.selectedChain.tooltip = vscode.l10n.t("Select a different Chain");
         this.selectedChain.command = "cosmy-wasmy.reloadConfig";
-        this.selectedChain.text = "$(debug-disconnect) Not connected to any chain";
+        this.selectedChain.text = "$(debug-disconnect) " + vscode.l10n.t("Not connected to any chain");
         this.UpdateConnectedChainStatusItem();
     }
 

@@ -33,7 +33,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 	private async sign(data: any) {
 		const account = Workspace.GetSelectedAccount();
 		if (!account) {
-			vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+			vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
 			return;
 		}
 		try {
@@ -94,7 +94,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text" placeholder="{'cosmy':'wasmy'}"></textarea>
-				<button id="exec-button">Sign</button>
+				<button id="exec-button">${vscode.l10n.t("Sign")}</button>
 				<script>
 					(function () {
 						const vscode = acquireVsCodeApi();

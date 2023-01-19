@@ -35,13 +35,15 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Contract view 
     - context menu action to fetch and show a selected on-chain contract checksum
     - context menu action to download the selected on-chain contract binary to local workspace
-
+- Enable Localization support. Makes it easier for new languages to be supported.
 
 ### Changed
 
 - Upgraded @cosmjs libraries to `0.29.5`.
 
 ### Deprecated
+
+- Deprecated support for vscode versions below `1.74.0`. Due to l10n dependency which is used for localization.
 
 ### Removed
 

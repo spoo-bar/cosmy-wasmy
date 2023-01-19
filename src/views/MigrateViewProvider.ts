@@ -27,16 +27,16 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 					{
 						const account = Workspace.GetSelectedAccount();
 						if (!account) {
-							vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+							vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
 						}
 						const contract = Workspace.GetSelectedContract();
 						if (!contract) {
-							vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+							vscode.window.showErrorMessage(vscode.l10n.t("No contract selected. Select a contract in the Contracts view."));
 						}
 						try {
 							JSON.parse(data.value);
 						} catch {
-							vscode.window.showErrorMessage("The input is not valid JSON");
+							vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
 							return;
 						}
 						this.executeMigrate(data, contract, account);
@@ -50,7 +50,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 		const req = JSON.parse(data.value);
 		vscode.window.withProgress({
 			location: { viewId: Constants.VIEWS_MIGRATE },
-			title: "Migrating the contract - " + contract.label,
+			title: vscode.l10n.t("Migrating the contract - {label}", { label: contract.label }),
 			cancellable: false
 		}, (progress, token) => {
 			token.onCancellationRequested(() => { });
@@ -94,7 +94,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text" placeholder="{'payout':{}}"></textarea>
-				<button id="exec-button">Migrate</button>
+				<button id="exec-button">${vscode.l10n.t("Migrate")}</button>
 				<script>
 					(function () {
 						const vscode = acquireVsCodeApi();

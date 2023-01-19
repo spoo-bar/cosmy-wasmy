@@ -26,35 +26,35 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                     {
                         const account = Workspace.GetSelectedAccount();
                         if (!account) {
-                            vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+                            vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
                             return;
                         }
                         if (!data.value.codeid) {
-                            vscode.window.showErrorMessage("CodeId is not specified");
+                            vscode.window.showErrorMessage(vscode.l10n.t("CodeId is not specified"));
                             return;
                         }
                         if (!data.value.label) {
-                            vscode.window.showErrorMessage("No label provided for the contract");
+                            vscode.window.showErrorMessage(vscode.l10n.t("No label provided for the contract"));
                             return;
                         }
                         try {
                             JSON.parse(data.value.input);
                         } catch {
-                            vscode.window.showErrorMessage("The input is not valid JSON");
+                            vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
                             return;
                         }
                         this.executeInitiate(data, account);
                         break;
                     }
             }
-        });        
+        });
     }
 
     private executeInitiate(data: any, account: Account) {
         const req = JSON.parse(data.value.input);
         vscode.window.withProgress({
             location: { viewId: Constants.VIEWS_INITIALIZE },
-            title: "Initializing the contract",
+            title: vscode.l10n.t("Initializing the contract"),
             cancellable: false
         }, (progress, token) => {
             token.onCancellationRequested(() => { });
@@ -83,14 +83,14 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
     }
 
     private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any, funds: Coin[]) {
-            let client = await Cosmwasm.GetSigningClient();
-            let res = await client.instantiate(account.address, codeId, req, label, "auto", {
-                admin: account.address,
-                funds: funds,
-                memo: "Initialized from cosmy-wasmy"
-            });
-            return res;
-        }
+        let client = await Cosmwasm.GetSigningClient();
+        let res = await client.instantiate(account.address, codeId, req, label, "auto", {
+            admin: account.address,
+            funds: funds,
+            memo: "Initialized from cosmy-wasmy"
+        });
+        return res;
+    }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
 
@@ -121,8 +121,8 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 <input type="text" id="label-text" placeholder="Contract Label"></input>
                 <input id="funds-text" placeholder="10${denom}"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
-				<button id="exec-button">Initialize</button>
-                <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">Initialize + Import</button>
+				<button id="exec-button">${vscode.l10n.t("Initialize")}</button>
+                <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">${vscode.l10n.t("Initialize")} + ${vscode.l10n.t("Import")}</button>
 				<script>
                 (function () {
                     const vscode = acquireVsCodeApi();
