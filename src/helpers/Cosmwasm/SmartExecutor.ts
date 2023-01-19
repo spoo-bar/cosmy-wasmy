@@ -100,7 +100,7 @@ export class SmartExecutor {
         // const migrateSchema = vscode.Uri.joinPath(workspaceFolder.uri, "schema", "migrate_msg.json");
         return {
             isSuccess: false,
-            response: new Error("Could not find any matching query or msg endpoint for given input: " + call)
+            response: new Error(vscode.l10n.t("Could not find any matching query or msg endpoint for given input: {call}", { call: call }))
         };
     }
 }

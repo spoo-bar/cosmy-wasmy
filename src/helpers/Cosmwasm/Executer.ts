@@ -19,13 +19,13 @@ export class Executer {
     public Query(input: any, location: vscode.ProgressLocation | { viewId: string }) {
         const contract = Workspace.GetSelectedContract();
         if (!contract) {
-            vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+            vscode.window.showErrorMessage(vscode.l10n.t("No contract selected. Select a contract in the Contracts view."));
             return;
         }
         try {
             JSON.parse(input);
         } catch {
-            vscode.window.showErrorMessage("The input is not valid JSON");
+            vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
             return;
         }
 
@@ -37,7 +37,7 @@ export class Executer {
 
         vscode.window.withProgress({
             location: location,
-            title: "Querying the contract - " + contract.label,
+            title: vscode.l10n.t("Querying the contract - {label}", { label: contract.label }),
             cancellable: false
         }, async (progress, token) => {
             token.onCancellationRequested(() => { });
@@ -55,18 +55,18 @@ export class Executer {
     public Execute(value: any, location: vscode.ProgressLocation | { viewId: string }) {
         const account = Workspace.GetSelectedAccount();
         if (!account) {
-            vscode.window.showErrorMessage("No account selected. Select an account from the Accounts view.");
+            vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
             return;
         }
         const contract = Workspace.GetSelectedContract();
         if (!contract) {
-            vscode.window.showErrorMessage("No contract selected. Select a contract in the Contracts view.");
+            vscode.window.showErrorMessage(vscode.l10n.t("No contract selected. Select a contract in the Contracts view."));
             return;
         }
         try {
             JSON.parse(value.input);
         } catch {
-            vscode.window.showErrorMessage("The input is not valid JSON");
+            vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
             return;
         }
 
@@ -78,7 +78,7 @@ export class Executer {
 
         vscode.window.withProgress({
             location: location,
-            title: "Executing msg on the contract - " + contract.label,
+            title: vscode.l10n.t("Executing msg on the contract - {label}", { label: contract.label }),
             cancellable: false
         }, async (progress, token) => {
             token.onCancellationRequested(() => { });
@@ -91,7 +91,7 @@ export class Executer {
                     vscode.commands.executeCommand("simpleBrowser.api.open", vscode.Uri.parse(explorerUrl));
                 }
                 else {
-                    vscode.window.showInformationMessage(new vscode.MarkdownString("View transaction in explorer - [" + tx.response.transactionHash + "](" + explorerUrl + ")", true).value);
+                    vscode.window.showInformationMessage(new vscode.MarkdownString(vscode.l10n.t("View transaction in explorer") + " - [" + tx.response.transactionHash + "](" + explorerUrl + ")", true).value);
                 }
                 return Promise.resolve();
             }

@@ -9,7 +9,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "repository": "https://github.com/spoo-bar/cosmy-wasmy",
   "engines": {
-    "vscode": "^1.67.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Testing",
@@ -34,17 +34,18 @@
     "onNotebook:cw-notebook"
   ],
   "main": "./dist/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
         "command": "cosmy-wasmy.addAccount",
-        "title": "Add Account",
+        "title": "%cosmy-wasmy.addAccount.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.requestFunds",
-        "title": "Request Funds",
+        "title": "%cosmy-wasmy.requestFunds.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": {
@@ -54,152 +55,152 @@
       },
       {
         "command": "cosmy-wasmy.openInExplorer",
-        "title": "Open In Explorer",
+        "title": "%cosmy-wasmy.openInExplorer.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account",
         "icon": "$(link-external)"
       },
       {
         "command": "cosmy-wasmy.copyAddress",
-        "title": "Copy Address",
+        "title": "%cosmy-wasmy.copyAddress.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account || viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.copyMnemonic",
-        "title": "Copy Mnemonic",
+        "title": "%cosmy-wasmy.copyMnemonic.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.deleteAccount",
-        "title": "Delete Account",
+        "title": "%cosmy-wasmy.deleteAccount.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == account"
       },
       {
         "command": "cosmy-wasmy.refreshAccount",
-        "title": "Refresh Account View",
+        "title": "%cosmy-wasmy.refreshAccount.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(refresh)"
       },
       {
         "command": "cosmy-wasmy.addContract",
-        "title": "Import Contract",
+        "title": "%cosmy-wasmy.addContract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
-        "title": "Delete Contract",
+        "title": "%cosmy-wasmy.deleteContract.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.updateContractAdmin",
-        "title": "Update Admin",
+        "title": "%cosmy-wasmy.updateContractAdmin.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.clearContractAdmin",
-        "title": "Clear Admin",
+        "title": "%cosmy-wasmy.clearContractAdmin.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.getContractChecksum",
-        "title": "Display Checksum",
+        "title": "%cosmy-wasmy.getContractChecksum.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.downloadContractBinary",
-        "title": "Download Contract Binary",
+        "title": "%cosmy-wasmy.downloadContractBinary.title%",
         "category": "Cosmy Wasmy",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.reloadConfig",
-        "title": "Reload Chain Config",
+        "title": "%cosmy-wasmy.reloadConfig.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.resetData",
-        "title": "Reset Data",
+        "title": "%cosmy-wasmy.resetData.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.build",
-        "title": "Build",
+        "title": "%cosmy-wasmy.build.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.runUnitTests",
-        "title": "Run Unit Tests",
+        "title": "%cosmy-wasmy.runUnitTests.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.optimizeContract",
-        "title": "Optimize Contract",
+        "title": "%cosmy-wasmy.optimizeContract.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.generateSchema",
-        "title": "Generate Schema",
+        "title": "%cosmy-wasmy.generateSchema.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.setupDevEnv",
-        "title": "Setup Dev Environment",
+        "title": "%cosmy-wasmy.setupDevEnv.title%",
         "category": "Cosmy Wasmy"
       },
       {
         "command": "cosmy-wasmy.upload",
-        "title": "Upload Contract",
+        "title": "%cosmy-wasmy.upload.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(cloud-upload)"
       },
       {
         "command": "cosmy-wasmy.wasmInteract",
-        "title": "Load in Virtual Machine",
+        "title": "%cosmy-wasmy.wasmInteract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(server-process)"
       },
       {
         "command": "cosmy-wasmy.history",
-        "title": "Show Cosmwasm History",
+        "title": "%cosmy-wasmy.history.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(history)"
       },
       {
         "command": "cosmy-wasmy.export",
-        "title": "Export accounts, contracts and history as JSON",
+        "title": "%cosmy-wasmy.export.title%",
         "category": "Cosmy Wasmy",
         "shortTitle": "Export Cosmy Wasmy data"
       },
       {
         "command": "cosmy-wasmy.addComments",
-        "title": "Add comments/notes for the contract",
+        "title": "%cosmy-wasmy.addComments.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(comment)",
         "enablement": "viewItem == contract"
       },
       {
         "command": "cosmy-wasmy.queryCosmwasm",
-        "title": "Run Query",
+        "title": "%cosmy-wasmy.queryCosmwasm.title%",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.execCosmwasm",
-        "title": "Execute Tx",
+        "title": "%cosmy-wasmy.execCosmwasm.title%",
         "category": "Cosmy Wasmy",
         "enablement": "resourceLangId == json"
       },
       {
         "command": "cosmy-wasmy.beakerTomlSync",
-        "title": "Sync Beaker config",
+        "title": "%cosmy-wasmy.beakerTomlSync.title%",
         "category": "Cosmy Wasmy"
       }
     ],
@@ -209,76 +210,76 @@
         "properties": {
           "cosmywasmy.chainConfigName": {
             "type": "string",
-            "markdownDescription": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
+            "markdownDescription": "%cosmywasmy.chainConfigName.desc%",
             "scope": "resource",
             "order": 0,
             "default": "Juno UNI-5 testnet",
-            "deprecationMessage": "This property is not used anymore in fetching the workspace chain config. Click on the Status bar item to select the chain config you require."
+            "deprecationMessage": "%cosmywasmy.chainConfigName.deprecationDesc%"
           },
           "cosmywasmy.chains": {
             "type": "array",
-            "markdownDescription": "List of chain configs",
+            "markdownDescription": "%cosmywasmy.chains.desc%",
             "scope": "application",
             "order": 1,
             "minItems": 1,
             "editPresentation": "multilineText",
             "items": {
               "type": "object",
-              "title": "Chain Info",
+              "title": "%cosmywasmy.chains.items.title%",
               "properties": {
                 "configName": {
                   "type": "string",
-                  "description": "User friendly name for the saved network config. Use as input to `cosmywasmy.chainConfigName` to select this config to be used in the workspace."
+                  "description": "%cosmywasmy.chains.items.configName.desc%"
                 },
                 "chainId": {
                   "type": "string",
-                  "description": "Chain ID"
+                  "description": "%cosmywasmy.chains.items.chainId.desc%"
                 },
                 "chainEnvironment": {
                   "type": "string",
-                  "description": "Is the chain localnet, testnet or (god forbid 😨) mainnet",
+                  "description": "%cosmywasmy.chains.items.chainEnvironment.desc%",
                   "enum": [
                     "localnet",
                     "testnet",
                     "mainnet"
                   ],
                   "enumDescriptions": [
-                    "The chain is running locally on your system",
-                    "The chain is a testnet chain",
-                    "The chain is mainnet. DO NOT CONNECT MAINNETS to the extension unless you are super sure you know what you are doing. The extension saves the seed phrase in plain text."
+                    "%cosmywasmy.chains.items.chainEnvironment.localnet.desc%",
+                    "%cosmywasmy.chains.items.chainEnvironment.testnet.desc%",
+                    "%cosmywasmy.chains.items.chainEnvironment.mainnet.desc%"
                   ],
                   "default": "testnet"
                 },
                 "addressPrefix": {
                   "type": "string",
-                  "description": "Prefix used by the chain"
+                  "description": "%cosmywasmy.chains.items.addressPrefix.desc%"
                 },
                 "rpcEndpoint": {
                   "type": "string",
-                  "description": "RPC address and port where the chain RPC server listens on"
+                  "description": "%cosmywasmy.chains.items.rpcEndpoint.desc%"
                 },
                 "defaultGasPrice": {
                   "type": "string",
-                  "description": "default amount of gas to be used as the gas limit for a transaction."
+                  "description": "%cosmywasmy.chains.items.defaultGasPrice.desc%"
                 },
                 "chainDenom": {
                   "type": "string",
-                  "description": "the micro denom used to pay for gas and to track account balance"
+                  "description": "%cosmywasmy.chains.items.chainDenom.desc%"
                 },
                 "faucetEndpoint": {
                   "type": "string",
-                  "description": "Faucet address and port to request funds"
+                  "description": "%cosmywasmy.chains.items.faucetEndpoint.desc%"
                 },
                 "accountExplorerLink": {
                   "type": "string",
-                  "description": "Block explorer url which includes '${accountAddress}' text to generate account url",
+                  "description": "%cosmywasmy.chains.items.accountExplorerLink.desc%",
                   "examples": [
                     "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}"
                   ]
                 },
                 "txExplorerLink": {
                   "type": "string",
-                  "description": "Block explorer url which includes '${txHash}' text to generate tx url",
+                  "description": "%cosmywasmy.chains.items.txExplorerLink.desc%",
                   "examples": [
                     "https://testnet.mintscan.io/juno-testnet/txs/${txHash}"
                   ]
@@ -357,13 +358,13 @@
               "None"
             ],
             "enumDescriptions": [
-              "Sort the Smart Contracts alphabetically by their label",
-              "Sort the Smart Contracts by the Code ID",
-              "No explicit sorting - Maintains the order the contracts were imported in"
+              "%cosmywasmy.contractSortOrder.alphabetical.desc%",
+              "%cosmywasmy.contractSortOrder.codeId.desc%",
+              "%cosmywasmy.contractSortOrder.none.desc%"
             ],
             "order": 2,
             "default": "None",
-            "description": "Controls the sorting order of the Smart Contracts in the Contract view",
+            "description": "%cosmywasmy.contractSortOrder.desc%",
             "scope": "resource"
           },
           "cosmywasmy.cosmwasmResponseView": {
@@ -373,17 +374,17 @@
               "Terminal"
             ],
             "enumDescriptions": [
-              "Open a new dummy doc with response",
-              "A seperate output channel by Cosmy Wasmy in the Output view"
+              "%cosmywasmy.cosmwasmResponseView.newFile.desc%",
+              "%cosmywasmy.cosmwasmResponseView.terminal.desc%"
             ],
             "order": 3,
             "default": "Terminal",
-            "description": "Controls where the smart contract interactions should be displayed",
+            "description": "%cosmywasmy.cosmwasmResponseView.desc%",
             "scope": "resource"
           },
           "cosmywasmy.maxHistoryStored": {
             "type": "number",
-            "markdownDescription": "Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored.",
+            "markdownDescription": "%cosmywasmy.maxHistoryStored.desc%",
             "order": 4,
             "default": 20,
             "minimum": 0,
@@ -392,14 +393,14 @@
           },
           "cosmywasmy.openTxExplorerInVscode": {
             "type": "boolean",
-            "markdownDescription": "If this setting is set, and the current chain config has `txExplorerLink` value set, on the successful execution of a msg, the tx explorer link opens automatically within vscode in simple browser.",
+            "markdownDescription": "%cosmywasmy.openTxExplorerInVscode.desc%",
             "order": 5,
             "default": false,
             "scope": "resource"
           },
           "beaker.autosync": {
             "type": "boolean",
-            "markdownDescription": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy.",
+            "markdownDescription": "%beaker.autosync.desc%",
             "default": true,
             "scope": "machine"
           }
@@ -662,11 +663,11 @@
     "viewsWelcome": [
       {
         "view": "account",
-        "contents": "⚠️ Looks like there are no accounts set up. \n [Add an account](command:cosmy-wasmy.addAccount)"
+        "contents": "%cosmywasmy.viewsWelcome.account.desc%"
       },
       {
         "view": "contract",
-        "contents": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)"
+        "contents": "%cosmywasmy.viewsWelcome.contract.desc%"
       }
     ]
   },
@@ -685,7 +686,7 @@
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.1.1",
     "@types/node": "14.x",
-    "@types/vscode": "^1.67.0",
+    "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "@vscode/test-electron": "^2.1.3",
@@ -704,6 +705,8 @@
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/proto-signing": "^0.29.5",
     "@terran-one/cw-simulate": "^2.8.0",
+    "@vscode/l10n": "^0.0.10",
+    "@vscode/l10n-dev": "^0.0.22",
     "@vscode/webview-ui-toolkit": "^1.2.0",
     "cross-fetch": "^3.1.5",
     "toml": "^3.0.0"

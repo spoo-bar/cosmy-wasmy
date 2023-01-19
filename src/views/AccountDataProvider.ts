@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Account } from '../models/account';
-import { Workspace } from '../helpers/workspace';
 
 
 export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
@@ -31,7 +30,7 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 		account.tooltip = account.address;
 		account.contextValue = Constants.VIEWS_ACCOUNT;
 		account.command = {
-			title: "Select Account",
+			title: vscode.l10n.t("Select Account"),
 			command: "cosmy-wasmy.selectAccount",
 			arguments: [account]
 		};

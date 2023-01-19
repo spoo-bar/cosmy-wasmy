@@ -23,7 +23,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'exec-text':
 					{
-						new Executer(this.context, true).Query(data.value, {viewId: Constants.VIEWS_QUERY});
+						new Executer(this.context, true).Query(data.value, { viewId: Constants.VIEWS_QUERY });
 					}
 			}
 		});
@@ -53,7 +53,7 @@ export class QueryProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body>
 				<textarea id="input-text" placeholder="{'get_count':{}}"></textarea>
-				<button id="exec-button">Query</button>
+				<button id="exec-button">${vscode.l10n.t("Query")}</button>
 				<script>
 				(function () {
 					const vscode = acquireVsCodeApi();

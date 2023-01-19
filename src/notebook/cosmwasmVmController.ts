@@ -35,7 +35,7 @@ export class NotebookCosmwasmController {
         this._controller.supportedLanguages = this.supportedLanguages;
         this._controller.supportsExecutionOrder = false;
         this._controller.executeHandler = this._execute.bind(this);
-        this._controller.detail = "Runs the smart contract and its interactions with a cosmwasm virtual machine";
+        this._controller.detail = vscode.l10n.t("Runs the smart contract and its interactions with a cosmwasm virtual machine");
 
         init().then(r => { });
 
@@ -75,7 +75,7 @@ export class NotebookCosmwasmController {
                     };
                     case Operation.Query: {
                         if (!this.wasmBinary) {
-                            throw new Error("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook")
+                            throw new Error(vscode.l10n.t("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook"))
                         }
                         const responseB = vm_query(this.sender, this.address, [], this.state, this.wasmBinary, {
                             wasm: {
@@ -95,7 +95,7 @@ export class NotebookCosmwasmController {
                     };
                     case Operation.Tx: {
                         if (!this.wasmBinary) {
-                            throw new Error("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook")
+                            throw new Error(vscode.l10n.t("Could not fetch the wasm binary. The wasm binary is expected in the same folder as the CW Notebook"))
                         }
                         const { state: state, events: events } = vm_execute(this.sender, this.address, [], this.state, this.wasmBinary, JSON.stringify(json));
                         this.state = this.normalizeState(state);
@@ -111,7 +111,7 @@ export class NotebookCosmwasmController {
                     default: {
                         execution.replaceOutput([
                             new vscode.NotebookCellOutput([
-                                vscode.NotebookCellOutputItem.error(new Error("Could not find any matching query or msg endpoint for given input: " + call))
+                                vscode.NotebookCellOutputItem.error(new Error(vscode.l10n.t("Could not find any matching query or msg endpoint for given input: {call}", { call: call })))
                             ])
                         ]);
                     }
@@ -136,7 +136,7 @@ export class NotebookCosmwasmController {
         const files = await vscode.workspace.fs.readDirectory(folder);
         const wasmFile = files.filter(f => f[0].endsWith(".wasm"));
         if (wasmFile.length < 1) {
-            return vscode.window.showErrorMessage("Did not find any wasm binary in folder of the CW notebook");
+            return vscode.window.showErrorMessage(vscode.l10n.t("Did not find any wasm binary in folder of the CW notebook"));
         }
         let wasm = vscode.Uri.joinPath(folder, wasmFile[0][0]);
         const content = await vscode.workspace.fs.readFile(wasm);

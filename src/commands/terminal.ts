@@ -3,17 +3,17 @@ import { Workspace } from '../helpers/workspace';
 import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
 
 export class TerminalCmds {
-    public static async Register(context: vscode.ExtensionContext) {
+	public static async Register(context: vscode.ExtensionContext) {
 		let terminal = new CosmwasmTerminal();
-        
-        this.registerBuildCmd(context, terminal);
+
+		this.registerBuildCmd(context, terminal);
 		this.registerRunUnitTestsCmd(context, terminal);
 		this.registerOptimizeContractCmd(context, terminal);
 		this.registerGenerateSchemaCmd(context, terminal);
 		this.registerSetUpDevEnvCmd(context, terminal);
-    }
+	}
 
-    private static registerBuildCmd(context: vscode.ExtensionContext, terminal: CosmwasmTerminal) {
+	private static registerBuildCmd(context: vscode.ExtensionContext, terminal: CosmwasmTerminal) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.build', async () => {
 			terminal.build();
 		});

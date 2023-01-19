@@ -42,13 +42,13 @@ export class CosmwasmHistoryView {
                         }
                     }
                     else {
-                        vscode.window.showErrorMessage("Contract not found in imported contracts. Try importing the address again and running the query");
+                        vscode.window.showErrorMessage(vscode.l10n.t("Contract not found in imported contracts. Try importing the address again and running the query"));
                     }
                     break;
                 };
                 case 'clear': {
                     HistoryHandler.ClearHistory(this.context);
-                    vscode.window.showInformationMessage("Successfully deleted the CosmWasm history. Reopen the page.");
+                    vscode.window.showInformationMessage(vscode.l10n.t("Successfully deleted the CosmWasm history. Reopen the page."));
                     break;
                 }
                 case 'export': {
@@ -143,8 +143,8 @@ export class CosmwasmHistoryView {
             content += this.getTableData();
             content += "</table></div><br />";
             content += `<div style="margin:auto; width: 100%; text-align: center;">
-                <button id="clear-btn" class="secondary" style="padding: 0.7rem; width: 49%;">Clear History</button>  
-                <button id="export-btn" class="secondary" style="padding: 0.7rem; width: 49%;">Export History as JSON</button>
+                <button id="clear-btn" class="secondary" style="padding: 0.7rem; width: 49%;">` + vscode.l10n.t("Clear History") + `</button>  
+                <button id="export-btn" class="secondary" style="padding: 0.7rem; width: 49%;">` + vscode.l10n.t("Export History as JSON") + `</button>
             </div><br />`;
         }
         return content;
@@ -173,7 +173,7 @@ export class CosmwasmHistoryView {
                 tableContent += "<td>" + contract.codeId + ": " + contract.label + "</td>";
             }
             else {
-                tableContent += "<td><span class=\"error\"><i>Contract not found in imported contracts.</i></span></td>";
+                tableContent += "<td><span class=\"error\"><i>" + vscode.l10n.t("Contract not found in imported contracts.") + "</i></span></td>";
             }
             tableContent += "<td>" + inputData + "</td>";
             tableContent += "<td>" + inputFunds + "</td>";

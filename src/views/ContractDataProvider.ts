@@ -28,17 +28,17 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 		switch (Workspace.GetContractSortOrder()) {
 
 			case ContractSortOrder.Alphabetical: { formatContractViewItem(); }
-			break;
+				break;
 
 			case ContractSortOrder.CodeId: {
 				if (contract.contractAddress) { formatContractViewItem(); }
 				else { formatContractCodeViewItem(); }
 			}
-			break;
+				break;
 
 			case ContractSortOrder.None:
 			default: { formatContractViewItem(); }
-			break;
+				break;
 		}
 		return contract;
 
@@ -48,31 +48,31 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 			contract.description = contract.contractAddress;
 			contract.tooltip = getContractTooltip();
 			contract.contextValue = Constants.VIEWS_CONTRACT;
-			contract.iconPath = contract.chainConfig == global.workspaceChain.configName ?  "" : new vscode.ThemeIcon("debug-disconnect");
+			contract.iconPath = contract.chainConfig == global.workspaceChain.configName ? "" : new vscode.ThemeIcon("debug-disconnect");
 			contract.command = {
-				title: "Select Contract",
+				title: vscode.l10n.t("Select Contract"),
 				command: "cosmy-wasmy.selectContract",
 				arguments: [contract]
 			};
 		}
 
 		function getContractTooltip(): string | vscode.MarkdownString | undefined {
-			let tooltip = "Address: " + contract.contractAddress;
+			let tooltip = vscode.l10n.t("Address: {contractAddr}", { contractAddr: contract.contractAddress });
 			tooltip += "\n";
-			tooltip += "Creator: " + contract.creator;
-			if(contract.notes && contract.notes.trim().length > 0) {
-				tooltip += "\n\n"  + contract.notes;
+			tooltip += vscode.l10n.t("Creator: {addr}", { addr: contract.creator });
+			if (contract.notes && contract.notes.trim().length > 0) {
+				tooltip += "\n\n" + contract.notes;
 			}
-			if(contract.chainConfig != global.workspaceChain.configName) {
+			if (contract.chainConfig != global.workspaceChain.configName) {
 				tooltip += "\n\n";
-				tooltip += "$(alert) *The imported contracts are not associated with any of the configured chains. Delete and reimport the contract to fix this.*";		
+				tooltip += "$(alert) *" + vscode.l10n.t("The imported contracts are not associated with any of the configured chains. Delete and reimport the contract to fix this.") + "*";
 			}
 			return new vscode.MarkdownString(tooltip, true);
 		}
 
 		function formatContractCodeViewItem() {
 			contract.id = contract.codeId.toString();
-			contract.label = "Code: " + contract.codeId.toString();
+			contract.label = vscode.l10n.t("Code: {codeId}", { codeId: contract.codeId.toString() });
 			contract.description = "";
 			contract.collapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 		}
@@ -80,19 +80,23 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 
 	getChildren(element?: Contract): vscode.ProviderResult<Contract[]> {
 		switch (Workspace.GetContractSortOrder()) {
-			case ContractSortOrder.Alphabetical: { if (!element) { return this.contracts.sort((c1, c2) => 
-				(c1.label.toLowerCase() > c2.label.toLowerCase()) ? 1 : ((c2.label.toLowerCase() > c1.label.toLowerCase()) ? -1 : 0)); } }
-			break;
+			case ContractSortOrder.Alphabetical: {
+				if (!element) {
+					return this.contracts.sort((c1, c2) =>
+						(c1.label.toLowerCase() > c2.label.toLowerCase()) ? 1 : ((c2.label.toLowerCase() > c1.label.toLowerCase()) ? -1 : 0));
+				}
+			}
+				break;
 
 			case ContractSortOrder.CodeId: {
 				if (element) { return this.getContractsByCode(element.codeId); }
 				else { return this.getCodeIds(); }
 			}
-			break;
+				break;
 
 			case ContractSortOrder.None:
 			default: { if (!element) { return this.contracts; } }
-			break;
+				break;
 		}
 	}
 

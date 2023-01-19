@@ -7,10 +7,10 @@ export class CosmwasmTerminal {
 
     constructor() {
     }
-    
+
     private get terminal(): vscode.Terminal {
-        if(!this._terminal) {
-            let terminals = vscode.window.terminals.filter(t => t.name === "Cosmwasm" )
+        if (!this._terminal) {
+            let terminals = vscode.window.terminals.filter(t => t.name === "Cosmwasm")
             if (terminals.length > 0) {
                 this._terminal = terminals[0];
             }
@@ -27,10 +27,10 @@ export class CosmwasmTerminal {
     }
     private set terminal(value: vscode.Terminal) {
         this._terminal = value;
-    }  
+    }
 
     private static get channel(): vscode.OutputChannel {
-        if(!this._channel) {
+        if (!this._channel) {
             this._channel = vscode.window.createOutputChannel("Cosmwasm", "jsonc");
         }
         return this._channel;
