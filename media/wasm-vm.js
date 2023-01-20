@@ -53,6 +53,22 @@ function main() {
     }
   });
 
+  loadDefaultInputs();
+
+}
+
+function loadDefaultInputs() {
+  if(data) {
+    if(data.instantiate) {
+      document.getElementById("instantiateInput").value = data.instantiate;
+    }
+    if(data.execute && data.execute.length > 0) {
+      document.getElementById("executeInput").value = data.execute[0].data;
+    }
+    if(data.query && data.query.length > 0) {
+      document.getElementById("queryInput").value = data.query[0].data;
+    }
+  }
 }
 
 function displayResponseDataGrid() {

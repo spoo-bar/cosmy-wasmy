@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { CWSimulateApp } from '@terran-one/cw-simulate';
 import { parseCoins } from "@cosmjs/launchpad";
+import { JSONSchemaFaker } from "json-schema-faker";
+var toml = require('toml');
 
 
 export class WasmVmPanel {
@@ -26,6 +28,7 @@ export class WasmVmPanel {
     }
 
     public async getWebviewContent(extensionUri: vscode.Uri) {
+        const defaltData = await SampleInput.Load();
         const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
@@ -43,6 +46,9 @@ export class WasmVmPanel {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <script type="module" src="${toolkitUri}"></script>
+            <script>
+                var data = ${JSON.stringify(defaltData)};
+            </script>
             <script type="module" src="${mainUri}"></script>
             <title>${contractName}</title>
           </head>
@@ -127,6 +133,7 @@ export class WasmVmPanel {
         );
     }
 
+
     private async initializeContract(value: any) {
         let funds = parseCoins(value.funds);
         let input = JSON.parse(value.input);
@@ -171,5 +178,70 @@ export class WasmVmPanel {
                 disposable.dispose();
             }
         }
+    }
+
+}
+
+class SampleInput {
+    instantiate: string;
+    query: Input[];
+    execute: Input[];
+
+    static async Load(): Promise<SampleInput> {
+        let sampleInput = new SampleInput();
+        try {
+            const contractName = await SampleInput.getContractName();
+            const schemaFile = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
+            const doc = await vscode.workspace.openTextDocument(schemaFile);
+            const schema = JSON.parse(doc.getText());
+            loadInstantiate();
+            loadExecute();
+            loadQuery();
+
+            function loadQuery() {
+                sampleInput.query = [];
+                for (const query of schema.query.oneOf) {
+                    const endpointName = query.required[0];
+                    const val = JSON.stringify(JSONSchemaFaker.generate(query, {}));
+                    const defaultVal = new Input(endpointName, val);
+                    sampleInput.query.push(defaultVal);
+                }
+            }
+
+            function loadExecute() {
+                sampleInput.execute = [];
+                for (const exec of schema.execute.oneOf) {
+                    const endpointName = exec.required[0];
+                    const val = JSON.stringify(JSONSchemaFaker.generate(exec, {}));
+                    const defaultVal = new Input(endpointName, val);
+                    sampleInput.execute.push(defaultVal);
+                }
+            }
+
+            function loadInstantiate() {
+                sampleInput.instantiate = JSON.stringify(JSONSchemaFaker.generate(schema.instantiate, {}));
+            }
+        }
+        finally {
+            return sampleInput;
+        }
+    }
+
+    private static async getContractName() {
+        const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
+        const doc = await vscode.workspace.openTextDocument(cargoToml);
+        const cargo = toml.parse(doc.getText());
+        const contractName = cargo.package.name;
+        return contractName;
+    }
+}
+
+class Input {
+    id: string;
+    data: string;
+
+    constructor(id: string, data: string) {
+        this.id = id;
+        this.data = data;
     }
 }
