@@ -13,6 +13,9 @@ function main() {
   const queryButton = document.getElementById("queryBtn");
   queryButton.addEventListener("click", handleQueryClick);
 
+  const executeInputDropdown = document.getElementById("executeInputDrop");
+  executeInputDropdown.addEventListener("input", handleExecuteDropdownClick);
+
   document.getElementById('vm-responses-grid').rowsData = [];
   document.getElementById('vm-responses-grid').columnDefinitions = [
     { title: '#', columnDataKey: 'Header1' },
@@ -63,6 +66,13 @@ function loadDefaultInputs() {
       document.getElementById("instantiateInput").value = data.instantiate;
     }
     if(data.execute && data.execute.length > 0) {
+      let executeInputDrop = document.getElementById("executeInputDrop");
+      for (const opt of data.execute) {
+        const option = document.createElement("vscode-option");
+        option.value = opt.id;
+        option.textContent = opt.id;
+        executeInputDrop.appendChild(option);
+      }
       document.getElementById("executeInput").value = data.execute[0].data;
     }
     if(data.query && data.query.length > 0) {
@@ -135,6 +145,13 @@ function handleQueryClick() {
       ContractAddr: queryContractAddr,
       input: queryInput
     },
+  });
+}
+
+function handleExecuteDropdownClick() {
+  const selectedDrop = document.getElementById("executeInputDrop").value; 
+  data.execute.filter( p => p.id == selectedDrop).forEach( p => {
+    document.getElementById("executeInput").value = p.data;
   });
 }
 

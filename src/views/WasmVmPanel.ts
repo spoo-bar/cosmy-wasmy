@@ -70,16 +70,27 @@ export class WasmVmPanel {
             <br />
             <vscode-divider></vscode-divider>
             <br />
-            <vscode-panels activeid="tab-3" aria-label="Default">
+            <vscode-panels activeid="tab-1" aria-label="Default">
                 <vscode-panel-tab id="tab-1">${vscode.l10n.t("EXECUTE")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("QUERY")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-3">${vscode.l10n.t("INSTANTIATE")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                    <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
-                    <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
-                    <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
-                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
-                    <vscode-button id="executeBtn" style="margin:1.5rem;">${vscode.l10n.t("Execute")}</vscode-button>
+                    <div>
+                        <div>
+                            <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                            <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                            <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
+                        </div>
+                        <div>
+                            <label for="executeInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
+                            <vscode-dropdown id="executeInputDrop">
+                            </vscode-dropdown>
+                            <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                        </div>
+                        <div>
+                            <vscode-button id="executeBtn">${vscode.l10n.t("Execute")}</vscode-button>
+                        </div>
+                    </div>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                     <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
@@ -94,6 +105,7 @@ export class WasmVmPanel {
                     <vscode-button id="instantiateBtn" style="margin:1.5rem;">${vscode.l10n.t("Instantiate")}</vscode-button>
             </vscode-panel-view>
             </vscode-panels>
+            <br />
             <vscode-text-area id="response" style="width: 90%" disabled>${vscode.l10n.t("Response")}</vscode-text-area>
             <br />
                 <vscode-divider></vscode-divider>
