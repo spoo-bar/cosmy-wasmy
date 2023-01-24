@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { CWSimulateApp } from '@terran-one/cw-simulate';
 import { parseCoins } from "@cosmjs/launchpad";
+import { JSONSchemaFaker } from "json-schema-faker";
+var toml = require('toml');
 
 
 export class WasmVmPanel {
@@ -26,15 +28,17 @@ export class WasmVmPanel {
     }
 
     public async getWebviewContent(extensionUri: vscode.Uri) {
+        const contractName = await this.getContractName();
+        const schemaFile = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
+        const defaltData = await SampleInput.Load(schemaFile);
         const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
             "webview-ui-toolkit",
             "dist",
-            "toolkit.min.js", // A toolkit.min.js file is also available
+            "toolkit.min.js",
         ]);
         const mainUri = this.getUri(this._panel.webview, extensionUri, ["media", "wasm-vm.js"]);
-        const contractName = this._panel.title;
 
         this._panel.webview.html = /*html*/ `
         <!DOCTYPE html>
@@ -43,6 +47,9 @@ export class WasmVmPanel {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <script type="module" src="${toolkitUri}"></script>
+            <script>
+                var data = ${JSON.stringify(defaltData)};
+            </script>
             <script type="module" src="${mainUri}"></script>
             <title>${contractName}</title>
           </head>
@@ -55,7 +62,8 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${schemaFile.path}" size="50">${vscode.l10n.t("Schema File")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
@@ -69,25 +77,56 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("QUERY")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-3">${vscode.l10n.t("INSTANTIATE")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                    <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
-                    <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
-                    <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
-                    <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
-                    <vscode-button id="executeBtn" style="margin:1.5rem;">${vscode.l10n.t("Execute")}</vscode-button>
+                    <div>
+                        <div>
+                            <vscode-text-field id="executeContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                            <vscode-text-field id="executeSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42" style="margin-left:20px;">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                            <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
+                        </div>
+                        <div>
+                            <label for="executeInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
+                            <vscode-dropdown id="executeInputDrop">
+                            </vscode-dropdown>
+                            <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                        </div>
+                        <div>
+                            <vscode-button id="executeBtn">${vscode.l10n.t("Execute")}</vscode-button>
+                        </div>
+                    </div>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
-                    <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
-                    <vscode-button id="queryBtn" style="margin:1.5rem;">${vscode.l10n.t("Query")}</vscode-button>
-                    </vscode-panel-view>
+                    <div>
+                        <div>
+                            <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                            </div>
+                        <div>
+                        <label for="queryInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
+                            <vscode-dropdown id="queryInputDrop">
+                            </vscode-dropdown>
+                            <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                        </div>
+                        <div>
+                            <vscode-button id="queryBtn">${vscode.l10n.t("Query")}</vscode-button>
+                        </div>
+                    </div>
+                </vscode-panel-view>
                 <vscode-panel-view id="view-3">
-                    <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
-                    <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">${vscode.l10n.t("Contract Label")}</vscode-text-field> 
-                    <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
-                    <vscode-text-area id="instantiateInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
-                    <vscode-button id="instantiateBtn" style="margin:1.5rem;">${vscode.l10n.t("Instantiate")}</vscode-button>
+                    <div>
+                        <div>
+                            <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                            <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">${vscode.l10n.t("Contract Label")}</vscode-text-field> 
+                            <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
+                        </div>
+                        <div>
+                            <vscode-text-area id="instantiateInput" style="margin-top:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
+                        </div>
+                        <div>                        
+                            <vscode-button id="instantiateBtn" style="margin-top:10px;">${vscode.l10n.t("Instantiate")}</vscode-button>
+                        </div>
+                    </div>
             </vscode-panel-view>
             </vscode-panels>
+            <br />
             <vscode-text-area id="response" style="width: 90%" disabled>${vscode.l10n.t("Response")}</vscode-text-area>
             <br />
                 <vscode-divider></vscode-divider>
@@ -127,6 +166,7 @@ export class WasmVmPanel {
         );
     }
 
+
     private async initializeContract(value: any) {
         let funds = parseCoins(value.funds);
         let input = JSON.parse(value.input);
@@ -160,6 +200,14 @@ export class WasmVmPanel {
         return webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, ...pathList));
     }
 
+    private async getContractName() {
+        const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
+        const doc = await vscode.workspace.openTextDocument(cargoToml);
+        const cargo = toml.parse(doc.getText());
+        const contractName = cargo.package.name;
+        return contractName;
+    }
+
     public dispose() {
         WasmVmPanel.currentPanel = undefined;
 
@@ -171,5 +219,60 @@ export class WasmVmPanel {
                 disposable.dispose();
             }
         }
+    }
+
+}
+
+class SampleInput {
+    instantiate: string;
+    query: Input[];
+    execute: Input[];
+
+    static async Load(schemaFile: vscode.Uri): Promise<SampleInput> {
+        let sampleInput = new SampleInput();
+        try {
+            const doc = await vscode.workspace.openTextDocument(schemaFile);
+            const schema = JSON.parse(doc.getText());
+            loadInstantiate();
+            loadExecute();
+            loadQuery();
+
+            function loadQuery() {
+                sampleInput.query = [];
+                for (const query of schema.query.oneOf) {
+                    const endpointName = query.required[0];
+                    const val = JSON.stringify(JSONSchemaFaker.generate(query, {}));
+                    const defaultVal = new Input(endpointName, val);
+                    sampleInput.query.push(defaultVal);
+                }
+            }
+
+            function loadExecute() {
+                sampleInput.execute = [];
+                for (const exec of schema.execute.oneOf) {
+                    const endpointName = exec.required[0];
+                    const val = JSON.stringify(JSONSchemaFaker.generate(exec, {}));
+                    const defaultVal = new Input(endpointName, val);
+                    sampleInput.execute.push(defaultVal);
+                }
+            }
+
+            function loadInstantiate() {
+                sampleInput.instantiate = JSON.stringify(JSONSchemaFaker.generate(schema.instantiate, {}));
+            }
+        }
+        finally {
+            return sampleInput;
+        }
+    }
+}
+
+class Input {
+    id: string;
+    data: string;
+
+    constructor(id: string, data: string) {
+        this.id = id;
+        this.data = data;
     }
 }

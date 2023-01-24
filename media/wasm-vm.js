@@ -13,6 +13,12 @@ function main() {
   const queryButton = document.getElementById("queryBtn");
   queryButton.addEventListener("click", handleQueryClick);
 
+  const executeInputDropdown = document.getElementById("executeInputDrop");
+  executeInputDropdown.addEventListener("input", handleExecuteDropdownClick);
+
+  const queryInputDropdown = document.getElementById("queryInputDrop");
+  queryInputDropdown.addEventListener("input", handleQueryDropdownClick);
+
   document.getElementById('vm-responses-grid').rowsData = [];
   document.getElementById('vm-responses-grid').columnDefinitions = [
     { title: '#', columnDataKey: 'Header1' },
@@ -53,6 +59,36 @@ function main() {
     }
   });
 
+  loadDefaultInputs();
+
+}
+
+function loadDefaultInputs() {
+  if(data) {
+    if(data.instantiate) {
+      document.getElementById("instantiateInput").value = data.instantiate;
+    }
+    if(data.execute && data.execute.length > 0) {
+      let executeInputDrop = document.getElementById("executeInputDrop");
+      for (const opt of data.execute) {
+        const option = document.createElement("vscode-option");
+        option.value = opt.id;
+        option.textContent = opt.id;
+        executeInputDrop.appendChild(option);
+      }
+      document.getElementById("executeInput").value = data.execute[0].data;
+    }
+    if(data.query && data.query.length > 0) {
+      let queryInputDrop = document.getElementById("queryInputDrop");
+      for (const opt of data.query) {
+        const option = document.createElement("vscode-option");
+        option.value = opt.id;
+        option.textContent = opt.id;
+        queryInputDrop.appendChild(option);
+      }
+      document.getElementById("queryInput").value = data.query[0].data;
+    }
+  }
 }
 
 function displayResponseDataGrid() {
@@ -119,6 +155,20 @@ function handleQueryClick() {
       ContractAddr: queryContractAddr,
       input: queryInput
     },
+  });
+}
+
+function handleExecuteDropdownClick() {
+  const selectedDrop = document.getElementById("executeInputDrop").value; 
+  data.execute.filter( p => p.id == selectedDrop).forEach( p => {
+    document.getElementById("executeInput").value = p.data;
+  });
+}
+
+function handleQueryDropdownClick() {
+  const selectedDrop = document.getElementById("queryInputDrop").value; 
+  data.query.filter( p => p.id == selectedDrop).forEach( p => {
+    document.getElementById("queryInput").value = p.data;
   });
 }
 
