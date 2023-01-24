@@ -70,7 +70,7 @@ export class WasmVmPanel {
             <br />
             <vscode-divider></vscode-divider>
             <br />
-            <vscode-panels activeid="tab-1" aria-label="Default">
+            <vscode-panels activeid="tab-3" aria-label="Default">
                 <vscode-panel-tab id="tab-1">${vscode.l10n.t("EXECUTE")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("QUERY")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-3">${vscode.l10n.t("INSTANTIATE")}</vscode-panel-tab>
@@ -93,10 +93,21 @@ export class WasmVmPanel {
                     </div>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
-                    <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}">${vscode.l10n.t("Input")}</vscode-text-area>
-                    <vscode-button id="queryBtn" style="margin:1.5rem;">${vscode.l10n.t("Query")}</vscode-button>
-                    </vscode-panel-view>
+                    <div>
+                        <div>
+                            <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                            </div>
+                        <div>
+                        <label for="queryInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
+                            <vscode-dropdown id="queryInputDrop">
+                            </vscode-dropdown>
+                            <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                        </div>
+                        <div>
+                            <vscode-button id="queryBtn">${vscode.l10n.t("Query")}</vscode-button>
+                        </div>
+                    </div>
+                </vscode-panel-view>
                 <vscode-panel-view id="view-3">
                     <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
                     <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">${vscode.l10n.t("Contract Label")}</vscode-text-field> 
