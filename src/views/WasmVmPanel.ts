@@ -28,16 +28,17 @@ export class WasmVmPanel {
     }
 
     public async getWebviewContent(extensionUri: vscode.Uri) {
-        const defaltData = await SampleInput.Load();
+        const contractName = await this.getContractName();
+        const schemaFile = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
+        const defaltData = await SampleInput.Load(schemaFile);
         const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
             "webview-ui-toolkit",
             "dist",
-            "toolkit.min.js", // A toolkit.min.js file is also available
+            "toolkit.min.js",
         ]);
         const mainUri = this.getUri(this._panel.webview, extensionUri, ["media", "wasm-vm.js"]);
-        const contractName = this._panel.title;
 
         this._panel.webview.html = /*html*/ `
         <!DOCTYPE html>
@@ -61,7 +62,8 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${schemaFile.path}" size="50">${vscode.l10n.t("Schema File")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
@@ -198,6 +200,14 @@ export class WasmVmPanel {
         return webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, ...pathList));
     }
 
+    private async getContractName() {
+        const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
+        const doc = await vscode.workspace.openTextDocument(cargoToml);
+        const cargo = toml.parse(doc.getText());
+        const contractName = cargo.package.name;
+        return contractName;
+    }
+
     public dispose() {
         WasmVmPanel.currentPanel = undefined;
 
@@ -218,11 +228,9 @@ class SampleInput {
     query: Input[];
     execute: Input[];
 
-    static async Load(): Promise<SampleInput> {
+    static async Load(schemaFile: vscode.Uri): Promise<SampleInput> {
         let sampleInput = new SampleInput();
         try {
-            const contractName = await SampleInput.getContractName();
-            const schemaFile = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
             const doc = await vscode.workspace.openTextDocument(schemaFile);
             const schema = JSON.parse(doc.getText());
             loadInstantiate();
@@ -256,14 +264,6 @@ class SampleInput {
         finally {
             return sampleInput;
         }
-    }
-
-    private static async getContractName() {
-        const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
-        const doc = await vscode.workspace.openTextDocument(cargoToml);
-        const cargo = toml.parse(doc.getText());
-        const contractName = cargo.package.name;
-        return contractName;
     }
 }
 
