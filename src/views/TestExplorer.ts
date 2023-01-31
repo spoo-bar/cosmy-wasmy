@@ -24,6 +24,13 @@ export class TestExplorer {
         );
         // maybe someday, come back to this and instead of string parse, do via cargo 
         this.testController.resolveHandler = async test => {
+            // const workingDir = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
+            // let res = cp.spawnSync("cargo", ["test", "--", "--list", "--format=terse"], {
+            //     cwd: workingDir
+            // });
+            // const decoder = new TextDecoder()
+            // let testsText = decoder.decode(res.stdout)
+
             const wf = vscode.workspace.workspaceFolders;
             if (wf) {
                 if (test && test.uri) {
@@ -103,32 +110,6 @@ export class TestExplorer {
                 test.busy = true;
 
                 const workingDir = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
-
-                // var child = spawn("cargo", ["test", test.label], {
-                // 	cwd: workingDir
-                // });
-
-                // child.stdout.setEncoding('utf8');
-                // child.stdout.on('data', function (data) {
-                // 	run.appendOutput(data);
-                // });
-
-                // child.stderr.setEncoding('utf8');
-                // child.stderr.on('error', function (error) {
-                // 	run.appendOutput(error.message);
-                // });
-
-                // child.on('close', function (code) {
-                // 	test.busy = false;
-                // 	if (code == 0) {
-                // 		run.passed(test, Date.now() - start);
-                //         vscode.window.showInformationMessage("pass")
-                // 	}
-                // 	else {
-                // 		run.failed(test, new vscode.TestMessage("Test failed with code : " + code), Date.now() - start);
-                //         vscode.window.showErrorMessage("fail")
-                // 	}
-                // });
 
                 let res = cp.spawnSync("cargo", ["test", test.label], {
                     cwd: workingDir
