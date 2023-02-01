@@ -51,10 +51,10 @@ export class WasmVmPanel {
                 var data = ${JSON.stringify(defaltData)};
             </script>
             <script type="module" src="${mainUri}"></script>
-            <title>${contractName}</title>
+            <title>${this._panel.title}</title>
           </head>
           <body>
-            <h1>${contractName}</h1>
+            <h1>${this._panel.title}</h1>
             <h3>${vscode.l10n.t("Simulating in CosmWasm VM")}</h3>
             <vscode-divider></vscode-divider>
             <vscode-panels id="meta-panel" aria-label="Default">
