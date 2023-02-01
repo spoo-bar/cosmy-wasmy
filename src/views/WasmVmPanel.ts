@@ -51,13 +51,13 @@ export class WasmVmPanel {
                 var data = ${JSON.stringify(defaltData)};
             </script>
             <script type="module" src="${mainUri}"></script>
-            <title>${contractName}</title>
+            <title>${this._panel.title}</title>
           </head>
           <body>
-            <h1>${contractName}</h1>
+            <h1>${this._panel.title}</h1>
             <h3>${vscode.l10n.t("Simulating in CosmWasm VM")}</h3>
             <vscode-divider></vscode-divider>
-            <vscode-panels aria-label="Default">
+            <vscode-panels id="meta-panel" aria-label="Default">
                 <vscode-panel-tab id="tab-1">${vscode.l10n.t("SETUP")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
@@ -132,9 +132,13 @@ export class WasmVmPanel {
                 <vscode-divider></vscode-divider>
             <br />
             <vscode-panels aria-label="Default">
-                <vscode-panel-tab id="tab-1">${vscode.l10n.t("LOG")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-1">${vscode.l10n.t("EVENTS")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-2">${vscode.l10n.t("HISTORY")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                <vscode-data-grid id="vm-responses-grid" aria-label="Default" grid-template-columns="5% 5% 20% 35% 35%"></vscode-data-grid>
+                    <vscode-data-grid id="vm-responses-grid" aria-label="Default" grid-template-columns="5% 5% 20% 35% 35%"></vscode-data-grid>
+                </vscode-panel-view>
+                <vscode-panel-view id="view-2">
+                    <vscode-data-grid id="vm-history-grid" aria-label="Default" grid-template-columns="5% 10% 25% 25% 10% 25%"></vscode-data-grid>
                 </vscode-panel-view>
             </vscode-panels>
           </body>
@@ -186,13 +190,13 @@ export class WasmVmPanel {
     private async executeContract(value: any) {
         let funds = parseCoins(value.funds);
         let input = JSON.parse(value.input);
-        let result = await this._app.wasm.executeContract(value.senderAddr, funds, value.ContractAddr, input);
+        let result = await this._app.wasm.executeContract(value.senderAddr, funds, value.contractAddr, input);
         this._panel.webview.postMessage({ command: 'execute-res', value: result });
     }
 
     private async queryContract(value: any) {
         let input = JSON.parse(value.input);
-        let result = await this._app.wasm.query(value.ContractAddr, input);
+        let result = await this._app.wasm.query(value.contractAddr, input);
         this._panel.webview.postMessage({ command: 'query-res', value: result });
     }
 
