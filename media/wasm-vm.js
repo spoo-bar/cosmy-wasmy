@@ -54,6 +54,7 @@ function main() {
         responses.push(message.value);
         displayResponseDataGrid();
         document.getElementById('response').value = JSON.stringify(message.value.val.data, undefined, 2);
+        document.getElementById('meta-panel').setAttribute("activeid","tab-2");
         break;
       case 'execute-res':
         responses.push(message.value);

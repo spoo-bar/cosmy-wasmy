@@ -57,7 +57,7 @@ export class WasmVmPanel {
             <h1>${contractName}</h1>
             <h3>${vscode.l10n.t("Simulating in CosmWasm VM")}</h3>
             <vscode-divider></vscode-divider>
-            <vscode-panels aria-label="Default">
+            <vscode-panels id="meta-panel" aria-label="Default">
                 <vscode-panel-tab id="tab-1">${vscode.l10n.t("SETUP")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
