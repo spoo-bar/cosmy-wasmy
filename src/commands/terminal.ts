@@ -50,6 +50,16 @@ export class TerminalCmds {
 					"*.json"
 				],
 				url: "/schema/query_msg.json"
+			}, {
+				fileMatch: [
+					"*.json"
+				],
+				url: "/schema/instantiate_msg.json"
+			}, {
+				fileMatch: [
+					"*.json"
+				],
+				url: "/schema/migrate_msg.json"
 			}];
 			Workspace.SetWorkspaceSchemaAutoComplete(schema);
 		});
