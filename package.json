@@ -669,6 +669,63 @@
         "view": "contract",
         "contents": "%cosmywasmy.viewsWelcome.contract.desc%"
       }
+    ],
+    "walkthroughs": [
+      {
+        "id": "cosmy-wasmy",
+        "title": "Get Started with Cosmy Wasmy",
+        "description": "Discover how to use Cosmy Wasmy and what all it offers",
+        "steps": [
+          {
+            "id": "openCWView",
+            "title": "Open Cosmy Wasmy",
+            "description": "Click on the Cosmy Wasmy logo in the Activity Bar/sidebar to open the extension",
+            "completionEvents": [
+              "onView:account"
+            ],
+            "media": {
+              "image": "media/icon.png",
+              "altText": "Cosmy Wasmy logo"
+            }
+          },
+          {
+            "id": "createKey",
+            "title": "Add Account",
+            "description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.addAccount"
+            ],
+            "media": {
+              "image": "images/account.gif",
+              "altText": "How to add a new account"
+            }
+          },
+          {
+            "id": "importContract",
+            "title": "Import Contract",
+            "description": "Import a contract which have already been deployed by their bech32 address. \n[Import Contract](command:cosmy-wasmy.addContract)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.addContract"
+            ],
+            "media": {
+              "image": "images/contract.gif",
+              "altText": "How to import a contract"
+            }
+          },
+          {
+            "id": "uploadContract",
+            "title": "Upload Contract",
+            "description": "Select an account from the Account view as your currently active wallet. Upload a contract wasm binary which has been optimized. \n[Upload Contract](command:cosmy-wasmy.upload)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.upload"
+            ],
+            "media": {
+              "image": "images/upload.gif",
+              "altText": "How to upload a contract"
+            }
+          }
+        ]
+      }
     ]
   },
   "scripts": {
