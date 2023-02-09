@@ -747,6 +747,18 @@
               "image": "images/query.gif",
               "altText": "How to query a contract"
             }
+          },
+          {
+            "id": "executeContract",
+            "title": "Execute Contract",
+            "description": "Select a contract from the Contract view and an account from the Account view as currently active contract and account and input your execute json and click on ``Execute`` button to execute the contract tx.\nYou can also pass in funds if your contract requires any.\nThe response from the contract is shown in the Output channel and you can see the txHash in the notification.",
+            "completionEvents": [
+              "onView:execute"
+            ],
+            "media": {
+              "image": "images/execute.gif",
+              "altText": "How to execute a contract"
+            }
           }
         ]
       }
