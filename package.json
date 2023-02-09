@@ -723,6 +723,18 @@
               "image": "images/upload.gif",
               "altText": "How to upload a contract"
             }
+          },
+          {
+            "id": "queryContract",
+            "title": "Query Contract",
+            "description": "Select a contract from the Contract view as currently active contract and input your query json and click on ``Query`` button to query the contract state",
+            "completionEvents": [
+              "onView:query"
+            ],
+            "media": {
+              "image": "images/query.gif",
+              "altText": "How to query a contract"
+            }
           }
         ]
       }
