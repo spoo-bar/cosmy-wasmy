@@ -725,18 +725,6 @@
             }
           },
           {
-            "id": "uploadContract",
-            "title": "Upload Contract",
-            "description": "Select an account from the Account view as your currently active wallet. Upload a contract wasm binary which has been optimized. \n[Upload Contract](command:cosmy-wasmy.upload)",
-            "completionEvents": [
-              "onCommand:cosmy-wasmy.upload"
-            ],
-            "media": {
-              "image": "images/upload.gif",
-              "altText": "How to upload a contract"
-            }
-          },
-          {
             "id": "queryContract",
             "title": "Query Contract",
             "description": "Select a contract from the Contract view as currently active contract and input your query json and click on ``Query`` button to query the contract state",
@@ -758,6 +746,18 @@
             "media": {
               "image": "images/execute.gif",
               "altText": "How to execute a contract"
+            }
+          },
+          {
+            "id": "simulateContract",
+            "title": "Simulate Contract",
+            "description": "Right click on a wasm binary to get the option to simulate the binary in the Cosmwasm VM within vscode",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "images/simulate.gif",
+              "altText": "How to simulate a contract in Cosmwasm virtual machine"
             }
           }
         ]
