@@ -701,6 +701,18 @@
             }
           },
           {
+            "id": "changeChain",
+            "title": "Change Active Chain",
+            "description": "Change the chain the current workspace is connected to. You can select the chain in the status bar below.\nThe chains are organized by localnet, testnet, mainnet and Beaker imported chain configs. \n[Change Chain Config](command:cosmy-wasmy.reloadConfig)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.reloadConfig"
+            ],
+            "media": {
+              "image": "images/status.png",
+              "altText": "How to add a new account"
+            }
+          },
+          {
             "id": "importContract",
             "title": "Import Contract",
             "description": "Import a contract which have already been deployed by their bech32 address. \n[Import Contract](command:cosmy-wasmy.addContract)",
