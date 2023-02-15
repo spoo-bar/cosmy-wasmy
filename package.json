@@ -754,7 +754,80 @@
         "id": "cosmy-wasmy.accounts",
         "title": "Cosmy Wasmy: Accounts",
         "description": "Discover how to use Accounts in Cosmy Wasmy and what all it offers",
-        "steps": []
+        "steps": [
+          {
+            "id": "cosmy-wasmy.accounts.addNew",
+            "title": "Add account",
+            "description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)\n❗Ensure you are not using your mainnet seed phrases. The seed phrase is stored in plain text by vscode",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.addAccount"
+            ],
+            "media": {
+              "image": "walkthrough/account/add.gif",
+              "altText": "How to add a new account"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.accounts.copyAddress",
+            "title": "Copy account address",
+            "description": "Right click on an account to get the option to copy the account address into your $(clippy) clipboard",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/account/copyAddr.gif",
+              "altText": "How to copy an account address"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.accounts.copyMnemonic",
+            "title": "Copy account nnemonic",
+            "description": "Right click on an account to get the option to copy the account seed phrase  into your $(clippy) clipboard",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/account/copySeed.gif",
+              "altText": "How to copy an account seed phrase"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.accounts.requestFunds",
+            "title": "Request funds from faucet",
+            "description": "If a faucet has been configured in the chain config, you will see the ``Request Funds`` icon next to the account. You can click on the button to request funds from the faucet",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/account/requestFunds.gif",
+              "altText": "How to request funds from faucet"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.accounts.deleteAccount",
+            "title": "Delete account",
+            "description": "Right click on an account to get the option to delete the account from the extension. \n❗Account is only removed from the Cosmy Wasmy vscode extension. The account and its state continues to persist on chain.",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/account/deleteAccount.gif",
+              "altText": "How to delete an account from the extension"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.accounts.refresh",
+            "title": "Refresh account view",
+            "description": "Click on the $(refresh) Refresh icon to refresh all the account balances. \n[Refresh Accounts](command:cosmy-wasmy.refreshAccount)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.refreshAccount"
+            ],
+            "media": {
+              "image": "walkthrough/account/refresh.gif",
+              "altText": "How to refresh account view"
+            }
+          }
+        ]
       },
       {
         "id": "cosmy-wasmy.contracts",
