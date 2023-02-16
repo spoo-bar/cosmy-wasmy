@@ -833,7 +833,104 @@
         "id": "cosmy-wasmy.contracts",
         "title": "Cosmy Wasmy: Contracts",
         "description": "Discover how to use Contracts in Cosmy Wasmy and what all it offers",
-        "steps": []
+        "steps": [
+          {
+            "id": "cosmy-wasmy.contracts.import",
+            "title": "Import Contract",
+            "description": "Import a contract which have already been deployed by its bech32 address. \n[Import Contract](command:cosmy-wasmy.addContract)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.addContract"
+            ],
+            "media": {
+              "image": "walkthrough/contract/import.gif",
+              "altText": "How to import a contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.notes",
+            "title": "Add notes",
+            "description": "You can add personal notes and comments $(comment) to contracts. This information is only stored by the extension and is not stored on chain",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/notes.gif",
+              "altText": "How to add notes to a contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.copyAddr",
+            "title": "Copy contract address",
+            "description": "Right click on a contract to get the option to copy the address into your $(clippy) clipboard",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/copyAddr.gif",
+              "altText": "How to copy a contract address"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.checksum",
+            "title": "Retreive checksum",
+            "description": "If you would like to verify the checksum of any contract, you can right click on the contract to get the option to Display Checksum",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/checksum.gif",
+              "altText": "How to display contract checksum"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.binary",
+            "title": "Download contract binary",
+            "description": "Right click on the contract in the Contract view to view the option to Download the contract binary. This will fetch the contract from the chain and store it locally at the root of your repository.",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/binary.gif",
+              "altText": "How to download contract binary"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.adminChange",
+            "title": "Update or clear admin",
+            "description": "Right click on the contract to get the option to update the current contract admin or clear the contarct admin. You can only do this with the current contract admin account",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/admin.gif",
+              "altText": "How to clear or change admin"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.deleteContract",
+            "title": "Delete contract",
+            "description": "Right click on an account to get the option to delete the contract from the extension. \n❗Contract is only removed from the Cosmy Wasmy vscode extension. The contract and its state continues to persist on chain.",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/contract/delete.gif",
+              "altText": "How to delete a contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.contracts.upload",
+            "title": "Upload a new contract code",
+            "description": "Select an account from the Account view to use to upload the contract. Click on the $(cloud-upload) upload contract icon or right click on a wasm binary file and click on ``Upload Contract`` menu item to upload the contract to the selected chain.",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.upload"
+            ],
+            "media": {
+              "image": "walkthrough/contract/upload.gif",
+              "altText": "How to upload a contract code"
+            }
+          }
+        ]
       },
       {
         "id": "cosmy-wasmy.notebooks",
