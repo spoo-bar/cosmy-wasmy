@@ -936,7 +936,46 @@
         "id": "cosmy-wasmy.notebooks",
         "title": "Cosmy Wasmy: CW Notebooks",
         "description": "Discover how to use CW Notebooks in Cosmy Wasmy",
-        "steps": []
+        "steps": [
+          {
+            "id": "cosmy-wasmy.notebook.new",
+            "title": "Create or open a CW Notebook",
+            "description": "Right click in the file explorer and create a new file with an ``.cwnotebook`` extension. Or, open the [Command Palette](command:workbench.action.showCommands) and run the command \n\n[Create New CW Notebook](command:cosmy-wasmy.createCwNotebook)",
+            "completionEvents": [
+              "onCommand:cosmy-wasmy.createCwNotebook",
+              "onCommand:workbench.action.files.openFolder",
+              "onCommand:workbench.action.files.openFileFolder"
+            ],
+            "media": {
+              "image": "walkthrough/notebooks/create.gif",
+              "altText": "How to create a new CW notebook"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.notebook.setup",
+            "title": "Setup your notebook",
+            "description": "You can setup which wasm binary and schema is used by the Cosmwasm VM in a TOML code block",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/notebooks/setup.gif",
+              "altText": "How to setup a new CW notebook"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.notebook.run",
+            "title": "Run your notebook",
+            "description": "You can run the json blocks in the CW Notebook to execute against a Cosmwasm VM. You can instantiate contracts and query and execute messages",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/notebooks/run.gif",
+              "altText": "How to run a new CW notebook"
+            }
+          }
+        ]
       },
       {
         "id": "cosmy-wasmy.cosmwasm",
