@@ -39,6 +39,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Enable Localization support. Makes it easier for new languages to be supported.
 - Enabled Test Explorer - The extension now finds the tests within the project and shows them in the Test Explorer as well as implements a Test Runner
 - Add json autocomplete for inputs for instantiate&migrate msgs
+- Walkthroughs which can be accessed by the command palette
 
 ### Changed
 
