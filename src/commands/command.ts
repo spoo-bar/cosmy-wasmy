@@ -69,7 +69,7 @@ export class Commands {
 					description: ""
 				}));
 				const currentlySelectedText = vscode.l10n.t("currently selected")
-				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description += " ( " + currentlySelectedText + ") ")
+				chainPicks.filter(c => c.label == global.workspaceChain.configName).forEach(c => c.description += " (" + currentlySelectedText + ") ")
 				vscode.window.showQuickPick(chainPicks, {
 					canPickMany: false,
 					title: vscode.l10n.t("Select a new chain config"),
