@@ -972,7 +972,7 @@
             ],
             "media": {
               "image": "walkthrough/notebooks/run.gif",
-              "altText": "How to run a new CW notebook"
+              "altText": "How to run a CW notebook"
             }
           }
         ]
@@ -981,14 +981,68 @@
         "id": "cosmy-wasmy.cosmwasm",
         "title": "Cosmy Wasmy: Cosmwasm Interactions",
         "description": "Discover how to interact with Cosmwasm Contracts in Cosmy Wasmy",
-        "steps": []
-      },
-      {
-        "id": "cosmy-wasmy.rust",
-        "title": "Cosmy Wasmy: Rust",
-        "description": "Discover Rust relatid features in Cosmy Wasmy",
-        "when": "",
-        "steps": []
+        "steps": [
+          {
+            "id": "cosmy-wasmy.cosmwasm.initialize",
+            "title": "Initialize a contract",
+            "description": "Once a contract has been uploaded you can initialize it using the sidebar. You need to select an account in the Account view which will be used to initialize the contract. You need to provide the Code Id and input message and optionally, any funds you might wanna send to the contract",
+            "completionEvents": [
+              "onView:intialize"
+            ],
+            "media": {
+              "image": "walkthrough/cosmwasm/intialize.gif",
+              "altText": "How to initialize a smart contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.cosmwasm.query",
+            "title": "Query a contract",
+            "description": "Click on any contract in the Contract view and pass in input json in the Query view to run the given query against the selected contract",
+            "completionEvents": [
+              "onView:query"
+            ],
+            "media": {
+              "image": "walkthrough/cosmwasm/query.gif",
+              "altText": "How to query a smart contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.cosmwasm.execute",
+            "title": "Execute a contract",
+            "description": "Select a contract from the Contract view and an account from the Account view as currently active contract and account and input your execute json and click on ``Execute`` button to execute the contract tx.\nYou can also pass in funds if your contract requires any.\nThe response from the contract is shown in the Output channel and you can see the txHash in the notification.",
+            "completionEvents": [
+              "onView:execute"
+            ],
+            "media": {
+              "image": "walkthrough/cosmwasm/execute.gif",
+              "altText": "How to execute a smart a contract"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.cosmwasm.autocomplete",
+            "title": "Get JSON input autocomplete",
+            "description": "Once your project has been loaded, run ``cargo schema`` to generate the json schema for the contract. Now open any new JSON file and you can get the json input auto complete for your contract. \nYou can click on the top right button on the JSON page to execute or query the smart contract right from the file",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/cosmwasm/autocomplete.gif",
+              "altText": "How to autocomplete JSON inputs"
+            }
+          },
+          {
+            "id": "cosmy-wasmy.cosmwasm.history",
+            "title": "Get your past contract interactions",
+            "description": "Based on the configured settings, you can choose to store your latest cosmwasm interactions like query and execute.\nClick in the $(history) on the ``Query`` or ``Execute`` view to load the history. The inputs of the interaction are stored and the historical interaction can be re-run from the History view",
+            "completionEvents": [
+              "onStepSelected"
+            ],
+            "media": {
+              "image": "walkthrough/cosmwasm/history.gif",
+              "altText": "How to view past Cosmwasm interactions"
+            }
+          }
+        ]
       }
     ]
   },
