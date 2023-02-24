@@ -202,6 +202,11 @@
         "command": "cosmy-wasmy.beakerTomlSync",
         "title": "%cosmy-wasmy.beakerTomlSync.title%",
         "category": "Cosmy Wasmy"
+      },
+      {
+        "command": "cosmy-wasmy.createCwNotebook",
+        "title": "%cosmy-wasmy.createCwNotebook.title%",
+        "category": "Cosmy Wasmy"
       }
     ],
     "configuration": [
