@@ -24,5 +24,9 @@ export class Constants {
 
     public static readonly STATUSBAR_ID_SELECTED_CONFIG = "selectedConfig";
     public static readonly STATUSBAR_ID_RECORD_STATUS = "recordStatus";
+
+    public static readonly LANGUAGE_MARKDOWN = "markdown";
+    public static readonly LANGUAGE_TOML = "toml";
+    public static readonly LANGUAGE_JSON = "json";
     
 }

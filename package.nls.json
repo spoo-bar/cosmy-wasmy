@@ -27,6 +27,7 @@
     "cosmy-wasmy.queryCosmwasm.title": "Run Query",
     "cosmy-wasmy.execCosmwasm.title": "Execute Tx",
     "cosmy-wasmy.beakerTomlSync.title": "Sync Beaker config",
+    "cosmy-wasmy.createCwNotebook.title": "Create a new CW Notebook",
 
     "cosmywasmy.chainConfigName.desc": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
     "cosmywasmy.chainConfigName.deprecationDesc": "This property is not used anymore in fetching the workspace chain config. Click on the Status bar item to select the chain config you require.",

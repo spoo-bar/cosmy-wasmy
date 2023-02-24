@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { Constants } from '../constants';
 import { Workspace } from '../helpers/workspace';
 import { Account } from '../models/account';
 import { Contract } from '../models/contract';
@@ -24,6 +25,7 @@ export class Commands {
 
 		this.registerReloadConfigCmd(context, accountViewProvider, contractViewProvider);
 		this.syncBeakerTomlCmd(context);
+		this.createNewCWNotebookCmd(context);
 		//this.registerRecordCWCmd(context);		
 	}
 
@@ -120,6 +122,30 @@ export class Commands {
 			if (item) {
 				await Utils.BeakerSync(item, context);
 				vscode.window.showInformationMessage(vscode.l10n.t("Finished syncing accounts and chains from Beaker.toml"))
+			}
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static createNewCWNotebookCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.createCwNotebook', async () => {
+			let cells: vscode.NotebookCellData[] = getNotebookText();
+			let data = new vscode.NotebookData(cells) 
+			let doc = await vscode.workspace.openNotebookDocument(Constants.VIEWS_NOTEBOOK, data);
+			await vscode.window.showNotebookDocument(doc)
+
+			function getNotebookText() {
+				let cells: vscode.NotebookCellData[] = [new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, "## CW Notebook (Sample)", Constants.LANGUAGE_MARKDOWN)];
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, 'You can create a CW notebook with config pointing to a wasm binary and the schema file and this allows anyone with the notebook to play with the contract locally in a virtual machine.', Constants.LANGUAGE_MARKDOWN));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, '[config]\r\ncontract-link = \"counter\" # the http link to the smart contract which is downloaded to be used in the vm\r\nschema-link = \"0.1.0\" # the http link to the json schema file for the contract e.g counter.json. Without this, the notebook kernel will not know how to process the input', Constants.LANGUAGE_TOML));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, 'You can add any *markdown* **formatted** text in the notebook. You can also add input `json` which is used to input to the smart contract.', Constants.LANGUAGE_MARKDOWN));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, '#### Step 1\r\nInitialize the contract. To be able to query/exec the contraact, it needs to first be initialized in the vm', Constants.LANGUAGE_MARKDOWN));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, '{\r\n    \"count\": 10 \r\n}', Constants.LANGUAGE_JSON));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, "#### Step 2 - Query", Constants.LANGUAGE_MARKDOWN));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, '{\r\n    \"get_count\": {}\r\n}', Constants.LANGUAGE_JSON));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Markup, "#### Step 3 - Play with the contract in the VM", Constants.LANGUAGE_MARKDOWN));
+				cells.push(new vscode.NotebookCellData(vscode.NotebookCellKind.Code, '{\r\n    \"increment\": {}\r\n}', Constants.LANGUAGE_JSON));
+				return cells;
 			}
 		});
 		context.subscriptions.push(disposable);
