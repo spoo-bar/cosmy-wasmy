@@ -43,9 +43,15 @@ export class CwSimulateKernel {
         let lang = cell.document.languageId;
         let input = cell.document.getText();
 
-        try {
-            if (lang == Constants.LANGUAGE_TOML) {
-                await this.parseToml(input);
+        if (lang == Constants.LANGUAGE_TOML) {
+            this.parseToml(input).catch(error => {
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.error(error)
+                    ])
+                ]);
+                execution.end(true, Date.now());
+            }).then((tt) => {
                 execution.replaceOutput([new vscode.NotebookCellOutput([
                     vscode.NotebookCellOutputItem.text("💾 Loaded the above contract and schema to notebook state")
                 ]), new vscode.NotebookCellOutput([
@@ -53,29 +59,22 @@ export class CwSimulateKernel {
                 ]), new vscode.NotebookCellOutput([
                     vscode.NotebookCellOutputItem.text("▶️ You can then run any query or tx with this contract")
                 ])]);
-            }
-            else if (lang == Constants.LANGUAGE_JSON) {
-                const json = JSON.parse(input);
-                let response = await this.simulate(json);
-                execution.replaceOutput([new vscode.NotebookCellOutput([response])]);
-            }
-            else {
-                execution.replaceOutput([
-                    new vscode.NotebookCellOutput([
-                        vscode.NotebookCellOutputItem.error(new Error("❌ Unknown code block! Expected json/toml blocks"))
-                    ])
-                ]);
-            }
+                execution.end(true, Date.now());
+            });
         }
-        catch (error) {
+        else if (lang == Constants.LANGUAGE_JSON) {
+            const json = JSON.parse(input);
+            let response = await this.simulate(json);
+            execution.replaceOutput([new vscode.NotebookCellOutput([response])]);
+        }
+        else {
             execution.replaceOutput([
                 new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.error(error)
+                    vscode.NotebookCellOutputItem.error(new Error("❌ Unknown code block! Expected json/toml blocks"))
                 ])
             ]);
         }
 
-        execution.end(true, Date.now());
     }
 
     private async simulate(input: any): Promise<vscode.NotebookCellOutputItem> {
@@ -122,12 +121,17 @@ export class CwSimulateKernel {
         const configParsed = toml.parse(cellInput);
         const contractUrl = configParsed.config["contract-url"];
         const contractResponse = await fetch(contractUrl);
+        if (!contractResponse.ok) {
+            throw new Error("Could not fetch from contract-url: " + contractResponse.statusText);
+        }
         const contractFile = await contractResponse.arrayBuffer();
         this.contractBinary = new Uint8Array(contractFile);
         this.instance.codeId = this.app.wasm.create('', this.contractBinary)
-
         const schemaUrl = configParsed.config["schema-url"];
         const schemaResponse = await fetch(schemaUrl);
+        if (!schemaResponse.ok) {
+            throw new Error("Could not fetch from schema-url: " + schemaResponse.statusText);
+        }
         this.contractSchema = await schemaResponse.text();
     }
 
