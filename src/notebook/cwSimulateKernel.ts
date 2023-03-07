@@ -63,9 +63,21 @@ export class CwSimulateKernel {
             });
         }
         else if (lang == Constants.LANGUAGE_JSON) {
-            const json = JSON.parse(input);
-            let response = await this.simulate(json);
-            execution.replaceOutput([new vscode.NotebookCellOutput([response])]);
+            try {
+                const json = JSON.parse(input);
+                let response = await this.simulate(json);
+                execution.replaceOutput([new vscode.NotebookCellOutput([response])]);
+            }
+            catch (err) {
+                execution.replaceOutput([
+                    new vscode.NotebookCellOutput([
+                        vscode.NotebookCellOutputItem.error(new Error("❌ " + err))
+                    ])
+                ]);
+            }
+            finally {
+                execution.end(true, Date.now());
+            }
         }
         else {
             execution.replaceOutput([
@@ -73,6 +85,7 @@ export class CwSimulateKernel {
                     vscode.NotebookCellOutputItem.error(new Error("❌ Unknown code block! Expected json/toml blocks"))
                 ])
             ]);
+            execution.end(true, Date.now());
         }
 
     }
@@ -84,16 +97,29 @@ export class CwSimulateKernel {
                 let response = await this.app.wasm.instantiateContract('', [], this.instance.codeId, input, 'cw-notebook');
                 if (response.ok && typeof response.val !== 'string') {
                     this.instance.contractAddress = response.val.events[0].attributes[0].value;
+                    return vscode.NotebookCellOutputItem.text("🎂 Successfully instantiated contract");
                 }
-                return vscode.NotebookCellOutputItem.text("🎂 successfully instantiated contract " + this.instance.contractAddress);
+                else {
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ Could not instantiate contract: " + response.val));
+                }
             };
             case Action.Query: {
                 let response = await this.app.wasm.query(this.instance.contractAddress, input);
-                return vscode.NotebookCellOutputItem.json(response.val);
+                if (response.ok) {
+                    return vscode.NotebookCellOutputItem.json(response.val);
+                }
+                else {
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ Query failed: " + response.val));
+                }
             };
             case Action.Execute: {
                 let response = await this.app.wasm.executeContract('', [], this.instance.contractAddress, input);
-                return vscode.NotebookCellOutputItem.json(response.val);
+                if (response.ok) {
+                    return vscode.NotebookCellOutputItem.json(response.val);
+                }
+                else {
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ Execute failed: " + response.val));
+                }
             };
             case Action.Invalid:
             default: vscode.NotebookCellOutputItem.error(new Error("❌ Invalid operation"));
