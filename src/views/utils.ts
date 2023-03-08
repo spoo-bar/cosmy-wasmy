@@ -11,6 +11,7 @@ import { NotebookCosmwasmController } from '../notebook/cosmwasmVmController';
 import { TextDecoder } from 'util';
 import { Account } from '../models/account';
 import { TestExplorer } from './TestExplorer';
+import { CwSimulateKernel } from '../notebook/cwSimulateKernel';
 var toml = require('toml');
 
 export class Utils {
@@ -171,7 +172,7 @@ export class Views {
         context.subscriptions.push(vscode.window.registerWebviewViewProvider(Constants.VIEWS_INITIALIZE, initializeViewProvider));
 
         context.subscriptions.push(vscode.workspace.registerNotebookSerializer(Constants.VIEWS_NOTEBOOK, new CWSerializer()));
-        context.subscriptions.push(new NotebookCosmwasmController());
+        context.subscriptions.push(new CwSimulateKernel());
 
         const testExplorer = new TestExplorer();
     }
