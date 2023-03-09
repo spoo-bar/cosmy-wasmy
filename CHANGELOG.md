@@ -51,6 +51,8 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 
 ### Removed
 
+- Rust snippets for code completion 
+
 ### Fixed
 
 - After Executor refactor, the tx link in the dialog after tx execution success was showing json obj instead of tx hash

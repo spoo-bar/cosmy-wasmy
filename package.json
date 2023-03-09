@@ -13,7 +13,6 @@
   },
   "categories": [
     "Testing",
-    "Snippets",
     "Other"
   ],
   "keywords": [
@@ -602,12 +601,6 @@
             "filenamePattern": "*.cwnotebook"
           }
         ]
-      }
-    ],
-    "snippets": [
-      {
-        "language": "rust",
-        "path": "./snippets.json"
       }
     ],
     "views": {
