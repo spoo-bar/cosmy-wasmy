@@ -7,7 +7,6 @@ import { MigrateViewProvider } from './migrateViewProvider';
 import { QueryProvider } from './queryProvider';
 import { SignProvider } from './signProvider';
 import { TxProvider } from './txProvider';
-import { NotebookCosmwasmController } from '../notebook/cosmwasmVmController';
 import { TextDecoder } from 'util';
 import { Account } from '../models/account';
 import { TestExplorer } from './TestExplorer';

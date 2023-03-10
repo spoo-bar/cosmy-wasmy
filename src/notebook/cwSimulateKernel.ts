@@ -53,11 +53,11 @@ export class CwSimulateKernel {
                 execution.end(true, Date.now());
             }).then((tt) => {
                 execution.replaceOutput([new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("💾 Loaded the above contract and schema to notebook state")
+                    vscode.NotebookCellOutputItem.text("💾 " + vscode.l10n.t("Loaded the above contract and schema to notebook state"))
                 ]), new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("❗ Remember to first instantiate your contract before executing any query/tx")
+                    vscode.NotebookCellOutputItem.text("❗ " + vscode.l10n.t("Remember to first instantiate your contract before executing any query/tx"))
                 ]), new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("▶️ You can then run any query or tx with this contract")
+                    vscode.NotebookCellOutputItem.text("▶️ " + vscode.l10n.t("You can then run any query or tx with this contract"))
                 ])]);
                 execution.end(true, Date.now());
             });
@@ -82,7 +82,7 @@ export class CwSimulateKernel {
         else {
             execution.replaceOutput([
                 new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.error(new Error("❌ Unknown code block! Expected json/toml blocks"))
+                    vscode.NotebookCellOutputItem.error(new Error("❌ " + vscode.l10n.t("Unknown code block! Expected json/toml blocks")))
                 ])
             ]);
             execution.end(true, Date.now());
@@ -97,10 +97,10 @@ export class CwSimulateKernel {
                 let response = await this.app.wasm.instantiateContract('', [], this.instance.codeId, input, 'cw-notebook');
                 if (response.ok && typeof response.val !== 'string') {
                     this.instance.contractAddress = response.val.events[0].attributes[0].value;
-                    return vscode.NotebookCellOutputItem.text("🎂 Successfully instantiated contract");
+                    return vscode.NotebookCellOutputItem.text("🎂 " + vscode.l10n.t("Successfully instantiated contract"));
                 }
                 else {
-                    return vscode.NotebookCellOutputItem.error(new Error("❌ Could not instantiate contract: " + response.val));
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ " + vscode.l10n.t("Could not instantiate contract: ") + response.val));
                 }
             };
             case Action.Query: {
@@ -109,7 +109,7 @@ export class CwSimulateKernel {
                     return vscode.NotebookCellOutputItem.json(response.val);
                 }
                 else {
-                    return vscode.NotebookCellOutputItem.error(new Error("❌ Query failed: " + response.val));
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ " + vscode.l10n.t("Query failed: ") + response.val));
                 }
             };
             case Action.Execute: {
@@ -118,11 +118,11 @@ export class CwSimulateKernel {
                     return vscode.NotebookCellOutputItem.json(response.val);
                 }
                 else {
-                    return vscode.NotebookCellOutputItem.error(new Error("❌ Execute failed: " + response.val));
+                    return vscode.NotebookCellOutputItem.error(new Error("❌ " + vscode.l10n.t("Execute failed: ") + response.val));
                 }
             };
             case Action.Invalid:
-            default: vscode.NotebookCellOutputItem.error(new Error("❌ Invalid operation"));
+            default: vscode.NotebookCellOutputItem.error(new Error("❌ " + vscode.l10n.t("Invalid operation")));
         }
     }
 
@@ -148,7 +148,7 @@ export class CwSimulateKernel {
         const contractUrl = configParsed.config["contract-url"];
         const contractResponse = await fetch(contractUrl);
         if (!contractResponse.ok) {
-            throw new Error("Could not fetch from contract-url: " + contractResponse.statusText);
+            throw new Error(vscode.l10n.t("Could not fetch from contract-url: ") + contractResponse.statusText);
         }
         const contractFile = await contractResponse.arrayBuffer();
         this.contractBinary = new Uint8Array(contractFile);
@@ -156,7 +156,7 @@ export class CwSimulateKernel {
         const schemaUrl = configParsed.config["schema-url"];
         const schemaResponse = await fetch(schemaUrl);
         if (!schemaResponse.ok) {
-            throw new Error("Could not fetch from schema-url: " + schemaResponse.statusText);
+            throw new Error(vscode.l10n.t("Could not fetch from schema-url: ") + schemaResponse.statusText);
         }
         this.contractSchema = await schemaResponse.text();
     }
