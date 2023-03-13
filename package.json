@@ -932,13 +932,13 @@
       },
       {
         "id": "cosmy-wasmy.notebooks",
-        "title": "Cosmy Wasmy: CW Notebooks",
-        "description": "Discover how to use CW Notebooks in Cosmy Wasmy",
+        "title": "%cosmywasmy.walkthroughs.notebooks.title%",
+        "description": "%cosmywasmy.walkthroughs.notebooks.description%",
         "steps": [
           {
             "id": "cosmy-wasmy.notebook.new",
-            "title": "Create or open a CW Notebook",
-            "description": "Right click in the file explorer and create a new file with an ``.cwnotebook`` extension. Or, open the [Command Palette](command:workbench.action.showCommands) and run the command \n\n[Create New CW Notebook](command:cosmy-wasmy.createCwNotebook)",
+            "title": "%cosmywasmy.walkthroughs.notebooks.new.title%",
+            "description": "%cosmywasmy.walkthroughs.notebooks.new.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.createCwNotebook",
               "onCommand:workbench.action.files.openFolder",
@@ -951,8 +951,8 @@
           },
           {
             "id": "cosmy-wasmy.notebook.setup",
-            "title": "Setup your notebook",
-            "description": "You can setup which wasm binary and schema is used by the Cosmwasm VM in a TOML code block",
+            "title": "%cosmywasmy.walkthroughs.notebooks.setup.title%",
+            "description": "%cosmywasmy.walkthroughs.notebooks.setup.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -963,8 +963,8 @@
           },
           {
             "id": "cosmy-wasmy.notebook.run",
-            "title": "Run your notebook",
-            "description": "You can run the json blocks in the CW Notebook to execute against a Cosmwasm VM. You can instantiate contracts and query and execute messages",
+            "title": "%cosmywasmy.walkthroughs.notebooks.run.title%",
+            "description": "%cosmywasmy.walkthroughs.notebooks.run.description%",
             "completionEvents": [
               "onStepSelected"
             ],

@@ -109,5 +109,14 @@
     "cosmywasmy.walkthroughs.contracts.deleteContract.title": "Delete contract",
     "cosmywasmy.walkthroughs.contracts.deleteContract.description": "Right click on an account to get the option to delete the contract from the extension. \n❗Contract is only removed from the Cosmy Wasmy vscode extension. The contract and its state continues to persist on chain.",
     "cosmywasmy.walkthroughs.contracts.upload.title": "Upload a new contract code",
-    "cosmywasmy.walkthroughs.contracts.upload.description": "Right click on a contract to get the option to copy the address into your $(clippy) clipboard",
+    "cosmywasmy.walkthroughs.contracts.upload.description": "Select an account from the Account view to use to upload the contract. Click on the $(cloud-upload) upload contract icon or right click on a wasm binary file and click on ``Upload Contract`` menu item to upload the contract to the selected chain.",
+
+    "cosmywasmy.walkthroughs.notebooks.title": "Cosmy Wasmy: CW Notebooks",
+    "cosmywasmy.walkthroughs.notebooks.description": "Discover how to use CW Notebooks in Cosmy Wasmy",
+    "cosmywasmy.walkthroughs.notebooks.new.title": "Create or open a CW Notebook",
+    "cosmywasmy.walkthroughs.notebooks.new.description": "Right click in the file explorer and create a new file with an ``.cwnotebook`` extension. Or, open the [Command Palette](command:workbench.action.showCommands) and run the command \n\n[Create New CW Notebook](command:cosmy-wasmy.createCwNotebook)",
+    "cosmywasmy.walkthroughs.notebooks.setup.title": "Setup your notebook",
+    "cosmywasmy.walkthroughs.notebooks.setup.description": "You can setup which wasm binary and schema is used by the Cosmwasm VM in a TOML code block",
+    "cosmywasmy.walkthroughs.notebooks.run.title": "Run your notebook",
+    "cosmywasmy.walkthroughs.notebooks.run.description": "You can run the json blocks in the CW Notebook to execute against a Cosmwasm VM. You can instantiate contracts and query and execute messages",
 }
