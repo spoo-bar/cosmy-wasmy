@@ -58,5 +58,35 @@
     "beaker.autosync.desc": "If this setting is set, any accounts configured in [Beaker.toml](https://github.com/osmosis-labs/beaker/blob/main/docs/config/README.md) will be automatically loaded into Cosmy Wasmy",
 
     "cosmywasmy.viewsWelcome.account.desc": "⚠️ Looks like there are no accounts set up. \n [Add an account](command:cosmy-wasmy.addAccount)",
-    "cosmywasmy.viewsWelcome.contract.desc": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)"
+    "cosmywasmy.viewsWelcome.contract.desc": "⚠️ Looks like there are no imported contracts. \n [Import a contract](command:cosmy-wasmy.addContract)",
+
+    "cosmywasmy.walkthroughs.title": "Getting Started with Cosmy Wasmy",
+    "cosmywasmy.walkthroughs.description": "Discover how to use Cosmy Wasmy and what all it offers",
+    
+    "cosmywasmy.walkthroughs.primary.openCWView.title": "Open Cosmy Wasmy",
+    "cosmywasmy.walkthroughs.primary.openCWView.description": "Click on the Cosmy Wasmy logo in the Activity Bar/sidebar to open the extension",
+    "cosmywasmy.walkthroughs.primary.createKey.title": "Add Account",
+    "cosmywasmy.walkthroughs.primary.createKey.description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)",
+    "cosmywasmy.walkthroughs.primary.changeChain.title": "Change Active Chain",
+    "cosmywasmy.walkthroughs.primary.changeChain.description": "Change the chain the current workspace is connected to. You can select the chain in the status bar below.\nThe chains are organized by localnet, testnet, mainnet and Beaker imported chain configs. \n[Change Chain Config](command:cosmy-wasmy.reloadConfig)",
+    "cosmywasmy.walkthroughs.primary.importContract.title": "Import Contract",
+    "cosmywasmy.walkthroughs.primary.importContract.description": "Import a contract which have already been deployed by their bech32 address. \n[Import Contract](command:cosmy-wasmy.addContract)",
+    "cosmywasmy.walkthroughs.primary.executeContract.title": "Execute Contract",
+    "cosmywasmy.walkthroughs.primary.executeContract.description": "Select a contract from the Contract view and an account from the Account view as currently active contract and account and input your execute json and click on ``Execute`` button to execute the contract tx.\nYou can also pass in funds if your contract requires any.\nThe response from the contract is shown in the Output channel and you can see the txHash in the notification.",
+    "cosmywasmy.walkthroughs.primary.simulateContract.title": "Simulate Contract",
+    "cosmywasmy.walkthroughs.primary.simulateContract.description": "Right click on a wasm binary to get the option to simulate the binary in the Cosmwasm VM within vscode",
+
+    
+    "cosmywasmy.walkthroughs.accounts.title": "Cosmy Wasmy: Accounts",
+    "cosmywasmy.walkthroughs.accounts.description": "Discover how to use Accounts in Cosmy Wasmy and what all it offers",
+    "cosmywasmy.walkthroughs.accounts.addNew.title": "Add account",
+    "cosmywasmy.walkthroughs.accounts.addNew.description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)\n❗Ensure you are not using your mainnet seed phrases. The seed phrase is stored in plain text by vscode",
+    "cosmywasmy.walkthroughs.accounts.copyAddress.title": "Copy account address",
+    "cosmywasmy.walkthroughs.accounts.copyAddress.description": "Right click on an account to get the option to copy the account address into your $(clippy) clipboard",
+    "cosmywasmy.walkthroughs.accounts.copyMnemonic.title": "Copy account nnemonic",
+    "cosmywasmy.walkthroughs.accounts.copyMnemonic.description": "Right click on an account to get the option to copy the account seed phrase into your $(clippy) clipboard",    
+    "cosmywasmy.walkthroughs.accounts.requestFunds.title": "Request funds from faucet",
+    "cosmywasmy.walkthroughs.accounts.requestFunds.description": "If a faucet has been configured in the chain config, you will see the ``Request Funds`` icon next to the account. You can click on the button to request funds from the faucet",    
+    "cosmywasmy.walkthroughs.accounts.deleteAccount.title": "Copy account nnemonic",
+    "cosmywasmy.walkthroughs.accounts.deleteAccount.description": "Right click on an account to get the option to copy the account seed phrase into your $(clippy) clipboard",    
 }

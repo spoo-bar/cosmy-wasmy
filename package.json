@@ -671,13 +671,13 @@
     "walkthroughs": [
       {
         "id": "cosmy-wasmy",
-        "title": "Getting Started with Cosmy Wasmy",
-        "description": "Discover how to use Cosmy Wasmy and what all it offers",
+        "title": "%cosmywasmy.walkthroughs.title%",
+        "description": "%cosmywasmy.walkthroughs.description%",
         "steps": [
           {
             "id": "openCWView",
-            "title": "Open Cosmy Wasmy",
-            "description": "Click on the Cosmy Wasmy logo in the Activity Bar/sidebar to open the extension",
+            "title": "%cosmywasmy.walkthroughs.primary.openCWView.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.openCWView.description%",
             "completionEvents": [
               "onView:account"
             ],
@@ -688,8 +688,8 @@
           },
           {
             "id": "createKey",
-            "title": "Add Account",
-            "description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)",
+            "title": "%cosmywasmy.walkthroughs.primary.createKey.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.createKey.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.addAccount"
             ],
@@ -700,8 +700,8 @@
           },
           {
             "id": "changeChain",
-            "title": "Change Active Chain",
-            "description": "Change the chain the current workspace is connected to. You can select the chain in the status bar below.\nThe chains are organized by localnet, testnet, mainnet and Beaker imported chain configs. \n[Change Chain Config](command:cosmy-wasmy.reloadConfig)",
+            "title": "%cosmywasmy.walkthroughs.primary.changeChain.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.changeChain.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.reloadConfig"
             ],
@@ -712,8 +712,8 @@
           },
           {
             "id": "importContract",
-            "title": "Import Contract",
-            "description": "Import a contract which have already been deployed by their bech32 address. \n[Import Contract](command:cosmy-wasmy.addContract)",
+            "title": "%cosmywasmy.walkthroughs.primary.importContract.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.importContract.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.addContract"
             ],
@@ -724,8 +724,8 @@
           },
           {
             "id": "executeContract",
-            "title": "Execute Contract",
-            "description": "Select a contract from the Contract view and an account from the Account view as currently active contract and account and input your execute json and click on ``Execute`` button to execute the contract tx.\nYou can also pass in funds if your contract requires any.\nThe response from the contract is shown in the Output channel and you can see the txHash in the notification.",
+            "title": "%cosmywasmy.walkthroughs.primary.executeContract.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.executeContract.description%",
             "completionEvents": [
               "onView:execute"
             ],
@@ -736,8 +736,8 @@
           },
           {
             "id": "simulateContract",
-            "title": "Simulate Contract",
-            "description": "Right click on a wasm binary to get the option to simulate the binary in the Cosmwasm VM within vscode",
+            "title": "%cosmywasmy.walkthroughs.primary.simulateContract.title%",
+            "description": "%cosmywasmy.walkthroughs.primary.simulateContract.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -750,13 +750,13 @@
       },
       {
         "id": "cosmy-wasmy.accounts",
-        "title": "Cosmy Wasmy: Accounts",
-        "description": "Discover how to use Accounts in Cosmy Wasmy and what all it offers",
+        "title": "%cosmywasmy.walkthroughs.accounts.title%",
+        "description": "%cosmywasmy.walkthroughs.accounts.description%",
         "steps": [
           {
             "id": "cosmy-wasmy.accounts.addNew",
-            "title": "Add account",
-            "description": "Create a new key. You can import an existing seed phrase or generate a new one. \n[Add Account](command:cosmy-wasmy.addAccount)\n❗Ensure you are not using your mainnet seed phrases. The seed phrase is stored in plain text by vscode",
+            "title": "%cosmywasmy.walkthroughs.accounts.addNew.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.addNew.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.addAccount"
             ],
@@ -767,8 +767,8 @@
           },
           {
             "id": "cosmy-wasmy.accounts.copyAddress",
-            "title": "Copy account address",
-            "description": "Right click on an account to get the option to copy the account address into your $(clippy) clipboard",
+            "title": "%cosmywasmy.walkthroughs.accounts.copyAddress.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.copyAddress.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -779,8 +779,8 @@
           },
           {
             "id": "cosmy-wasmy.accounts.copyMnemonic",
-            "title": "Copy account nnemonic",
-            "description": "Right click on an account to get the option to copy the account seed phrase  into your $(clippy) clipboard",
+            "title": "%cosmywasmy.walkthroughs.accounts.copyMnemonic.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.copyMnemonic.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -791,8 +791,8 @@
           },
           {
             "id": "cosmy-wasmy.accounts.requestFunds",
-            "title": "Request funds from faucet",
-            "description": "If a faucet has been configured in the chain config, you will see the ``Request Funds`` icon next to the account. You can click on the button to request funds from the faucet",
+            "title": "%cosmywasmy.walkthroughs.accounts.requestFunds.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.requestFunds.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -803,8 +803,8 @@
           },
           {
             "id": "cosmy-wasmy.accounts.deleteAccount",
-            "title": "Delete account",
-            "description": "Right click on an account to get the option to delete the account from the extension. \n❗Account is only removed from the Cosmy Wasmy vscode extension. The account and its state continues to persist on chain.",
+            "title": "%cosmywasmy.walkthroughs.accounts.deleteAccount.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.deleteAccount.description%",
             "completionEvents": [
               "onStepSelected"
             ],
@@ -815,8 +815,8 @@
           },
           {
             "id": "cosmy-wasmy.accounts.refresh",
-            "title": "Refresh account view",
-            "description": "Click on the $(refresh) Refresh icon to refresh all the account balances. \n[Refresh Accounts](command:cosmy-wasmy.refreshAccount)",
+            "title": "%cosmywasmy.walkthroughs.accounts.refresh.title%",
+            "description": "%cosmywasmy.walkthroughs.accounts.refresh.description%",
             "completionEvents": [
               "onCommand:cosmy-wasmy.refreshAccount"
             ],
