@@ -119,4 +119,17 @@
     "cosmywasmy.walkthroughs.notebooks.setup.description": "You can setup which wasm binary and schema is used by the Cosmwasm VM in a TOML code block",
     "cosmywasmy.walkthroughs.notebooks.run.title": "Run your notebook",
     "cosmywasmy.walkthroughs.notebooks.run.description": "You can run the json blocks in the CW Notebook to execute against a Cosmwasm VM. You can instantiate contracts and query and execute messages",
+
+    "cosmywasmy.walkthroughs.cosmwasm.title": "Cosmy Wasmy: Cosmwasm Interactions",
+    "cosmywasmy.walkthroughs.cosmwasm.description": "Discover how to interact with Cosmwasm Contracts in Cosmy Wasmy",
+    "cosmywasmy.walkthroughs.cosmwasm.initialize.title": "Initialize a contract",
+    "cosmywasmy.walkthroughs.cosmwasm.initialize.description": "Once a contract has been uploaded you can initialize it using the sidebar. You need to select an account in the Account view which will be used to initialize the contract. You need to provide the Code Id and input message and optionally, any funds you might wanna send to the contract",
+    "cosmywasmy.walkthroughs.cosmwasm.query.title": "Query a contract",
+    "cosmywasmy.walkthroughs.cosmwasm.query.description": "Click on any contract in the Contract view and pass in input json in the Query view to run the given query against the selected contract",
+    "cosmywasmy.walkthroughs.cosmwasm.execute.title": "Execute a contract",
+    "cosmywasmy.walkthroughs.cosmwasm.execute.description": "Select a contract from the Contract view and an account from the Account view as currently active contract and account and input your execute json and click on ``Execute`` button to execute the contract tx.\nYou can also pass in funds if your contract requires any.\nThe response from the contract is shown in the Output channel and you can see the txHash in the notification.",
+    "cosmywasmy.walkthroughs.cosmwasm.autocomplete.title": "Get JSON input autocomplete",
+    "cosmywasmy.walkthroughs.cosmwasm.autocomplete.description": "Once your project has been loaded, run ``cargo schema`` to generate the json schema for the contract. Now open any new JSON file and you can get the json input auto complete for your contract. \nYou can click on the top right button on the JSON page to execute or query the smart contract right from the file",
+    "cosmywasmy.walkthroughs.cosmwasm.history.title": "Get your past contract interactions",
+    "cosmywasmy.walkthroughs.cosmwasm.history.description": "Based on the configured settings, you can choose to store your latest cosmwasm interactions like query and execute.\nClick in the $(history) on the ``Query`` or ``Execute`` view to load the history. The inputs of the interaction are stored and the historical interaction can be re-run from the History view"
 }
