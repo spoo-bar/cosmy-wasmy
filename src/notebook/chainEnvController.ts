@@ -81,11 +81,11 @@ export class NotebookChainController {
                 await this.executor.SetupClient(this._clientConfig.rpcEndpoint, this._clientConfig.gasPrice);
 
                 execution.replaceOutput([new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("💾 Loaded the above data to notebook state")
+                    vscode.NotebookCellOutputItem.text("💾 " + vscode.l10n.t("Loaded the above data to notebook state"))
                 ]), new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("🔑 Your account address is " + this.executor.GetAccountAddress() + ".")
+                    vscode.NotebookCellOutputItem.text("🔑 " + vscode.l10n.t("Your account address is ") + this.executor.GetAccountAddress() + ".")
                 ]), new vscode.NotebookCellOutput([
-                    vscode.NotebookCellOutputItem.text("▶️ You can now run any query or tx with this account and contract at the given endpoint.")
+                    vscode.NotebookCellOutputItem.text("▶️ " + vscode.l10n.t("You can now run any query or tx with this account and contract at the given endpoint."))
                 ])]);
             }
 

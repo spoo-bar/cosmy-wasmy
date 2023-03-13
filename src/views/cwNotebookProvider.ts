@@ -30,7 +30,7 @@ export class CWSerializer implements vscode.NotebookSerializer {
             this.validateNotebook(notebook);
         }
         catch (err) {
-            vscode.window.showErrorMessage("Error validating the notebook: " + err.message);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error validating the notebook: ") + err.message);
         }
         return notebook;
     }
@@ -54,16 +54,16 @@ export class CWSerializer implements vscode.NotebookSerializer {
     private validateNotebook(data: vscode.NotebookData) {
         const tomlCells = data.cells.filter(c => c.languageId == Constants.LANGUAGE_TOML);
         if (tomlCells.length !== 1) {
-            throw new Error("The notebook needs to have one TOML config. For more details, look at documentation");
+            throw new Error(vscode.l10n.t("The notebook needs to have one TOML config. For more details, look at documentation"));
         }
         const configParsed = toml.parse(tomlCells[0].value);
         const contractUrl: string = configParsed.config["contract-url"];
         if (!contractUrl || contractUrl.trim().length == 0) {
-            throw new Error("config.contract-url is not provided in TOML config");
+            throw new Error("config.contract-url " + vscode.l10n.t("is not provided in TOML config"));
         }
         const schemaUrl: string = configParsed.config["schema-url"];
         if (!schemaUrl || schemaUrl.trim().length == 0) {
-            throw new Error("config.schema-url is not provided in TOML config");
+            throw new Error("config.schema-url " + vscode.l10n.t("is not provided in TOML config"));
         }
     }
 }
