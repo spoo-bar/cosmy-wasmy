@@ -34,6 +34,12 @@
   ],
   "main": "./dist/extension.js",
   "l10n": "./l10n",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "%cosmy-wasmy.capabilities.trustedWorkspace.description%"
+    }
+  },
   "contributes": {
     "commands": [
       {
