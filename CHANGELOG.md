@@ -41,6 +41,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 - Add json autocomplete for inputs for instantiate&migrate msgs
 - Walkthroughs which can be accessed by the command palette
 - Some extension features are now supported in untrusted workspace - limited support 
+- Added Stargaze Elgafar testnet to preset chain config 
 
 ### Changed
 

@@ -357,6 +357,17 @@
                 "chainDenom": "const",
                 "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}",
                 "txExplorerLink": "https://explorer.constantine-1.archway.tech/transactions/${txHash}"
+              },
+              {
+                "configName": "Stargaze - elgafar-1",
+                "chainId": "elgafar-1",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "stars",
+                "rpcEndpoint": "https://rpc.elgafar-1.stargaze-apis.com/",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "ustars",
+                "accountExplorerLink": "https://testnet-explorer.publicawesome.dev/stargaze/account/${accountAddress}",
+                "txExplorerLink": "https://testnet-explorer.publicawesome.dev/stargaze/tx/${txHash}"
               }
             ]
           },
