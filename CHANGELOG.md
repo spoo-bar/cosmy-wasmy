@@ -45,6 +45,7 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 ### Changed
 
 - Upgraded @cosmjs libraries to `0.29.5`.
+- Changed Juno testnet config to uni-6
 
 ### Deprecated
 

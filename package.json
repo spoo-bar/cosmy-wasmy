@@ -307,8 +307,8 @@
             },
             "default": [
               {
-                "configName": "Juno uni-5",
-                "chainId": "uni-5",
+                "configName": "Juno uni-6",
+                "chainId": "uni-6",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "juno",
                 "rpcEndpoint": "https://rpc.uni.junonetwork.io/",
