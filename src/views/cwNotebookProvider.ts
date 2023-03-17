@@ -52,6 +52,7 @@ export class CWSerializer implements vscode.NotebookSerializer {
     }
 
     private validateNotebook(data: vscode.NotebookData) {
+        if (data.cells.length == 0) return
         const tomlCells = data.cells.filter(c => c.languageId == Constants.LANGUAGE_TOML);
         if (tomlCells.length !== 1) {
             throw new Error(vscode.l10n.t("The notebook needs to have one TOML config. For more details, look at documentation"));
