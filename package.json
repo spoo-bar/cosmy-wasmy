@@ -723,8 +723,8 @@
               "onCommand:cosmy-wasmy.reloadConfig"
             ],
             "media": {
-              "image": "images/status.png",
-              "altText": "How to add a new account"
+              "image": "images/changeActiveChain.gif",
+              "altText": "How to change selected chain"
             }
           },
           {
@@ -747,7 +747,7 @@
               "onView:execute"
             ],
             "media": {
-              "image": "images/execute.gif",
+              "image": "walkthrough/cosmwasm/execute.gif",
               "altText": "How to execute a contract"
             }
           },
@@ -778,7 +778,7 @@
               "onCommand:cosmy-wasmy.addAccount"
             ],
             "media": {
-              "image": "walkthrough/account/add.gif",
+              "image": "images/account.gif",
               "altText": "How to add a new account"
             }
           },
@@ -814,7 +814,7 @@
               "onStepSelected"
             ],
             "media": {
-              "image": "walkthrough/account/requestFunds.gif",
+              "image": "walkthrough/account/requestFunds.png",
               "altText": "How to request funds from faucet"
             }
           },
@@ -974,8 +974,7 @@
               "onStepSelected"
             ],
             "media": {
-              "image": "walkthrough/notebooks/setup.gif",
-              "altText": "How to setup a new CW notebook"
+              "markdown": "walkthrough/notebooks/setup.md"
             }
           },
           {
