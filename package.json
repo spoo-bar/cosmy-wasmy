@@ -747,7 +747,7 @@
               "onView:execute"
             ],
             "media": {
-              "image": "images/execute.gif",
+              "image": "walkthrough/cosmwasm/execute.gif",
               "altText": "How to execute a contract"
             }
           },
