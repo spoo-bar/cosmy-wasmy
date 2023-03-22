@@ -974,8 +974,7 @@
               "onStepSelected"
             ],
             "media": {
-              "image": "walkthrough/notebooks/setup.gif",
-              "altText": "How to setup a new CW notebook"
+              "markdown": "walkthrough/notebooks/setup.md"
             }
           },
           {
