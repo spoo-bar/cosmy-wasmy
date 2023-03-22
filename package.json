@@ -348,7 +348,7 @@
                 "chainDenom": "uosmo"
               },
               {
-                "configName": "Archway - Constantine-1",
+                "configName": "Archway constantine-1",
                 "chainId": "constantine-1",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "archway",
@@ -359,7 +359,7 @@
                 "txExplorerLink": "https://explorer.constantine-1.archway.tech/transactions/${txHash}"
               },
               {
-                "configName": "Stargaze - elgafar-1",
+                "configName": "Stargaze elgafar-1",
                 "chainId": "elgafar-1",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "stars",
@@ -368,6 +368,17 @@
                 "chainDenom": "ustars",
                 "accountExplorerLink": "https://testnet-explorer.publicawesome.dev/stargaze/account/${accountAddress}",
                 "txExplorerLink": "https://testnet-explorer.publicawesome.dev/stargaze/tx/${txHash}"
+              },
+              {
+                "configName": "Neutron baryon-1",
+                "chainId": "baryon-1",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "neutron",
+                "rpcEndpoint": "https://rpc.baryon.ntrn.info",
+                "defaultGasPrice": "0.025",
+                "chainDenom": "untrn",
+                "accountExplorerLink": "https://testnet.mintscan.io/neutron-testnet/account/${accountAddress}",
+                "txExplorerLink": "https://testnet.mintscan.io/neutron-testnet/txs/${txHash}"
               }
             ]
           },
