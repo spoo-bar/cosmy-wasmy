@@ -1,4 +1,4 @@
-# cosmy-wasmy 
+# Cosmy Wasmy
 
 ![feature Cosmy Wasmy Logo](media/icon-small.png)
 
@@ -12,40 +12,58 @@
 Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://github.com/CosmWasm/cosmwasm) smart contract. With the most popular Cosmwasm chains testnet pre-configured, it makes chain interactions during testing super simple. You can perform all Cosmwasm interactions without touching the CLI.
 
 
-This extension allows you to interact with Cosmwasm contracts on local, testnet or mainnet chains
+---
+
+## Getting Started
+
+This section is intended to give you an introduction to using Cosmy Wasmy.
+
+### Prerequisites
+
+* [Rust](https://www.rust-lang.org/tools/install) for building cosmwasm contract
+    * [Rustup](https://rustup.rs/) for dealing with wasm target
+* [Docker](https://docs.docker.com/get-docker/) for running wasm rust-optimizer 
+* [VSCode](https://code.visualstudio.com/) to install the extension in
+
+#### Optional
+* [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension for vscode to provide syntax highlighting and othre language server features
+
+---
+## Installation
+
+You can install Cosmy Wasmy from the [visual stucio marketplace](https://marketplace.visualstudio.com/items?itemName=spoorthi.cosmy-wasmy) 
+
+Or, you can search for `Cosmy Wasmy` in vscode Extensions sidebar. 
+
+> **Note**
+> The extension provides Walkthroughs for the major features. You can access the walkthroughs by going to Command Palette (Windows: `Ctrl+Shft+P`, MacOS: `Cmd+Shft+P`, Linux: `Ctrl+Shft+P`) and selecting **"Welcome: Open Walkthrough"**.
+
+Its recommended post installation to configure the extension for your use case. Here are the first few things you might wanna do.
+
+1. Select your target chain
+    The extension is preconfigured with some of the most popular CW-enabled chains. You can find more details in the [Configuration](#configuration) section.
+
+    ![Change Chain Configuration](./images/changeActiveChain.gif)
 
 
-![feature Show Cosmwasn History](walkthrough/cosmwasm/history.gif)
+2. Import accounts
+    If you have any prior test accounts, you can import them by going to the Cosmy Wasmy sidebar and adding a new account in the Account view. Or you can choose to create a new account as well. 
 
-Remix IDE is an online development environment for creating smart contracts and decentralized applications (dApps) on the Ethereum blockchain. It provides developers with a comprehensive set of tools and features to write, test, and deploy Solidity smart contracts. Some of the key features of Remix IDE include:
+    ![Add account](./images/account.gif)
 
-Code Editor: Remix IDE provides a code editor that supports syntax highlighting, code completion, and error highlighting to help developers write Solidity code.
+    > **Warning**
+    > Do NOT use your mainnet account here. The mnemonic is stored in plain text within vscode
 
-Compiler: Remix IDE includes a compiler that can be used to compile Solidity code into bytecode, which can be executed on the Ethereum Virtual Machine (EVM).
+3. Import contracts
+    Any contracts deployed on your target chain can be imported here with its address
 
-Debugger: Developers can use Remix IDE's debugger to step through their Solidity code and identify any bugs or errors.
+    ![Add contract](./images/contract.gif)
 
-Testing Framework: Remix IDE provides a testing framework that allows developers to write automated tests for their smart contracts.
+4. Explore the settings
+    Explore all the configurations available in the extension by going to `File > Preferences > Settings > Extensions > Cosmy wasmy`. The detailed documentation of the configurations is available [here](./docs/configuration.md)
 
-Deployment: Once a smart contract is written and tested, Remix IDE can be used to deploy it to the Ethereum network.
+---
 
-Overall, Remix IDE is a powerful tool that simplifies the process of developing smart contracts and dApps on Ethereum.
-
-
-## Get Started
-
-To get started with Cosmwasm Smart Contract development in vscode,
-
-1. Install Rustup by following the instructions [here](https://rustup.rs/)
-2. Install vscode from [here](https://code.visualstudio.com/Download)
-3. Install Cosmy Wasmy from [here](https://marketplace.visualstudio.com/items?itemName=spoorthi.cosmy-wasmy) or search for `Cosmy Wasmy` in vscode Extensions sidebar. 
-4. Run the `Setup Dev Environment` command by opening the Command Palette in vscode (Windows: Ctrl+Shft+P, MacOS: Cmd+Shft+P, Linux: Ctrl+Shft+P) .
-
-All the required components will now be installed for you to start your smart contract development.
-
-To access all the Cosmwasm related features, click on the Cosmy Wasmy icon on the sidebar.
-
-The extension by default connects to the Juno `uni-5` testnet. You can go to the [settings](/docs/configuration.md) and customize this to target your local instance or any other testnet.
 
 ## Warnings
 
