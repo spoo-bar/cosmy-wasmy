@@ -52,6 +52,7 @@ Its recommended post installation to configure the extension for your use case. 
     ![Add account](./images/account.gif)
 
     > **Warning**
+    >
     > Do NOT use your mainnet account here. The mnemonic is stored in plain text within vscode
 
 3. Import contracts
@@ -64,10 +65,52 @@ Its recommended post installation to configure the extension for your use case. 
 
 ---
 
+## Configuration
 
-## Warnings
+The following chains are preconfigured by default. Any other chains can be manually added i nthe settings.
 
-*  The seedphrases are stored in plaintext within vscode. `DO NOT USE YOUR ACTUAL WALLET SEED PHRASE WITH THIS EXTENSION`
+|    | Project | Environment | ChainID       |
+| -- | ------- | ----------- | ------------- |
+| 1 | Osmosis  | testnet     | osmo-test-4   |
+| 2 | Juno     | testnet     | uni-6         |
+| 3 | Archway  | testnet     | constantine-1 |
+| 4 | Stargaze | testnet     | elgafar-1     |
+| 5 | Neutron  | testnet     | baryon-1      |
+| 6 | Juno     | localnet    | testing       |
+| 7 | Osmosis  | localnet    | localosmosis  |
+
+You can set up the extension settings at
+> File > Preferences > Settings > Extensions> Cosmy Wasmy
+
+| Setting | Type | Default  | Scope | Details |
+| --------|------|----------|-------|---------|
+| [Deprecated] ~~`cosmywasmy.chainConfigName`~~ | ~~string~~ | ~~Juno UNI-5~~ | ~~Workspace~~ | ~~This setting is used to select which of the given Chain configs is to be used in this workspace~~ |
+| `cosmywasmy.chains`  | json   | *Refer above* | Application | Stores an array of JSON objects which contains the chain config details. <br />  The structure of the expected setting is elaborated below this table  |
+| `cosmywasmy.contractSortOrder` | enum   | None | Workspace | Controls the sorting order of the Smart Contracts in the Contract view <br /> * Alphabetical - Sort by the label<br /> * CodeId - Sort by the Code ID<br /> * None - No explicit sorting - Maintains the order the contracts were imported in |
+| `cosmywasmy.cosmwasmResponseView` | enum   | Terminal | Workspace | Controls where the smart contract responses should be displayed <br /> * NewFile - Open a new dummy doc with response <br /> * Terminal -  A seperate output channel by Cosmy Wasmy in the Output view |
+| `cosmywasmy.maxHistoryStored` | number | 20 | Workspace | Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored |
+| `cosmywasmy.openTxExplorerInVscode` | bool | false | Workspace | Controls if tx should be opened in block explorer within vscode |
+| `beaker.autosync` | bool | true | Machine | Controls if any accounts configured in Beaker.toml are autonaticcaly loaded into the extension |
+
+The structure of the expected setting for `cosmywasamy.chains`:
+```json
+[
+    {
+        "configName": "Osmosis test-4", // A unique human fiendly name for the chain
+        "chainId": "osmo-test-4", // The localnet/testnet Chain ID
+        "chainEnvironment": "testnet", // Is the chain localnet, testnet or (god forbid 😨) mainnet
+        "addressPrefix": "osmo", // Used to derive account address
+        "rpcEndpoint": "https://rpc-test.osmosis.zone", // Used for query and tx exec of smart contracts
+        "defaultGasPrice": "0.025", // Gas price set for the smart contract tx execution
+        "chainDenom": "uosmo", // the micro denom used to pay for gas and to track account balance
+        "faucetEndpoint": "http://localhost:8000", //Faucet address and port to request funds
+        "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}", //Block explorer url which includes '${accountAddress}' text to generate account url
+        "txExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/txs/${txHash}" // Block explorer url which includes '${txHash}' text to generate tx url
+    }
+]
+```
+
+
 
 ## Docs
 
