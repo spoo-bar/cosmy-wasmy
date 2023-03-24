@@ -48,12 +48,12 @@ This section is intended to give you an introduction to using Cosmy Wasmy.
 * [VSCode](https://code.visualstudio.com/) to install the extension in
 
 #### Optional
-* [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension for vscode to provide syntax highlighting and othre language server features
+* [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension for vscode to provide syntax highlighting and other language server features
 
 ---
 ## Installation
 
-You can install Cosmy Wasmy from the [visual stucio marketplace](https://marketplace.visualstudio.com/items?itemName=spoorthi.cosmy-wasmy) 
+You can install Cosmy Wasmy from the [visual studio marketplace](https://marketplace.visualstudio.com/items?itemName=spoorthi.cosmy-wasmy) 
 
 Or, you can search for `Cosmy Wasmy` in vscode Extensions sidebar. 
 
@@ -64,7 +64,7 @@ Or, you can search for `Cosmy Wasmy` in vscode Extensions sidebar.
 Its recommended post installation to configure the extension for your use case. Here are the first few things you might wanna do.
 
 1. Select your target chain
-    The extension is preconfigured with some of the most popular CW-enabled chains. You can find more details in the [Configuration](#configuration) section.
+    The extension is pre-configured with some of the most popular CW-enabled chains. You can find more details in the [Configuration](#configuration) section.
 
     ![Change Chain Configuration](./images/changeActiveChain.gif)
 
@@ -84,42 +84,42 @@ Its recommended post installation to configure the extension for your use case. 
     ![Add contract](./images/contract.gif)
 
 4. Explore the settings
-    Explore all the configurations available in the extension by going to `File > Preferences > Settings > Extensions > Cosmy wasmy`. The detailed documentation of the configurations is available [here](./docs/configuration.md)
+    Explore all the configurations available in the extension by going to `File > Preferences > Settings > Extensions > Cosmy Wasmy`. 
 
 ---
 
 ## Configuration
 
-The following chains are preconfigured by default. Any other chains can be manually added i nthe settings.
+The following chains are pre-configured by default. Any other chains can be manually added in the settings.
 
-|    | Project | Environment | ChainID       |
-| -- | ------- | ----------- | ------------- |
-| 1 | [Osmosis](https://osmosis.zone/)  | testnet     | osmo-test-4   |
-| 2 | [Juno](https://www.junonetwork.io/)     | testnet     | uni-6         |
-| 3 | [Archway](https://archway.io/)  | testnet     | constantine-1 |
+|    | Project                               | Environment | ChainID       |
+| -- | ------------------------------------- | ----------- | ------------- |
+| 1 | [Osmosis](https://osmosis.zone/)       | testnet     | osmo-test-4   |
+| 2 | [Juno](https://www.junonetwork.io/)    | testnet     | uni-6         |
+| 3 | [Archway](https://archway.io/)         | testnet     | constantine-1 |
 | 4 | [Stargaze](https://www.stargaze.zone/) | testnet     | elgafar-1     |
-| 5 | [Neutron](https://neutron.org/)  | testnet     | baryon-1      |
-| 6 | [Juno](https://www.junonetwork.io/)      | localnet    | testing       |
-| 7 | [Osmosis](https://osmosis.zone/)  | localnet    | localosmosis  |
+| 5 | [Neutron](https://neutron.org/)        | testnet     | baryon-1      |
+| 6 | [Juno](https://www.junonetwork.io/)    | localnet    | testing       |
+| 7 | [Osmosis](https://osmosis.zone/)       | localnet    | localosmosis  |
 
 You can set up the extension settings at
-> File > Preferences > Settings > Extensions> Cosmy Wasmy
+> File > Preferences > Settings > Extensions > Cosmy Wasmy
 
 | Setting | Type | Default  | Scope | Details |
 | --------|------|----------|-------|---------|
 | [Deprecated] ~~`cosmywasmy.chainConfigName`~~ | ~~string~~ | ~~Juno UNI-5~~ | ~~Workspace~~ | ~~This setting is used to select which of the given Chain configs is to be used in this workspace~~ |
 | `cosmywasmy.chains`  | json   | *Refer above* | Application | Stores an array of JSON objects which contains the chain config details. <br />  The structure of the expected setting is elaborated below this table  |
 | `cosmywasmy.contractSortOrder` | enum   | None | Workspace | Controls the sorting order of the Smart Contracts in the Contract view <br /> * Alphabetical - Sort by the label<br /> * CodeId - Sort by the Code ID<br /> * None - No explicit sorting - Maintains the order the contracts were imported in |
-| `cosmywasmy.cosmwasmResponseView` | enum   | Terminal | Workspace | Controls where the smart contract responses should be displayed <br /> * NewFile - Open a new dummy doc with response <br /> * Terminal -  A seperate output channel by Cosmy Wasmy in the Output view |
+| `cosmywasmy.cosmwasmResponseView` | enum   | Terminal | Workspace | Controls where the smart contract responses should be displayed <br /> * NewFile - Open a new dummy doc with response <br /> * Terminal -  A separate output channel by Cosmy Wasmy in the Output view |
 | `cosmywasmy.maxHistoryStored` | number | 20 | Workspace | Controls the latest number of queries and txs kept in history for easy re-execution. If set to `0` the feature is disabled and nothing is stored |
 | `cosmywasmy.openTxExplorerInVscode` | bool | false | Workspace | Controls if tx should be opened in block explorer within vscode |
-| `beaker.autosync` | bool | true | Machine | Controls if any accounts configured in Beaker.toml are autonaticcaly loaded into the extension |
+| `beaker.autosync` | bool | true | Machine | Controls if any accounts configured in Beaker.toml are automatically loaded into the extension |
 
 The structure of the expected setting for `cosmywasamy.chains`:
 ```json
 [
     {
-        "configName": "Osmosis test-4", // A unique human fiendly name for the chain
+        "configName": "Osmosis test-4", // A unique human friendly name for the chain
         "chainId": "osmo-test-4", // The localnet/testnet Chain ID
         "chainEnvironment": "testnet", // Is the chain localnet, testnet or (god forbid 😨) mainnet
         "addressPrefix": "osmo", // Used to derive account address
@@ -182,9 +182,9 @@ Once an account has been created, you can do the following actions
 
 If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
 
-#### Beaker Intergration
+#### Beaker Integration
 
-If your settigns have been configured such that `beaker.autosync` is enabled, all the accounts and chain configurations from the `Beaker.toml` will be imported into the extension. 
+If your settings have been configured such that `beaker.autosync` is enabled, all the accounts and chain configurations from the `Beaker.toml` will be imported into the extension. 
 
 Alternatively, you can also right-click on a `Beaker.toml` file to manually sync the accounts and chain configs.
 
@@ -266,11 +266,11 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
     Right clicking on a wasm file shows you the command to Load the contract in Virtual Machine. Click on this and you will get access to a Contract simulate view. You can instantiate the contract multiple times. Run queries against the contract as well as execute messages. You can view the event history of the VM as well.
 
-    The inputs for the contract might be prepopulated based on the schema found in the repository. But thats just a suggestion. You can input arbitrary json into the simulations.
+    The inputs for the contract might be pre-populated based on the schema found in the repository. But thats just a suggestion. You can input arbitrary json into the simulations.
 
 ### Notebooks
 
-Th eextension now supports CosmWasm Notebooks. Any file stored with the file extension  `*.cwnotebook` is treated as a CW Notebook. CW Notebooks are similar to Jupyter notebooks where you can store in snippets of code in the middle of notebook documentation. 
+Th extension now supports CosmWasm Notebooks. Any file stored with the file extension  `*.cwnotebook` is treated as a CW Notebook. CW Notebooks are similar to Jupyter notebooks where you can store in snippets of code in the middle of notebook documentation. 
 
 In the notebook you can configure a contract binary and its schema in TOML block as given below
 ```toml
@@ -295,7 +295,7 @@ The extension has localization support enabled. However, it is currently only av
 
 #### Test Explorer
 
-The extension does not implement any Rust language features as it is recommended to use the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension. However, the `rust-analyzer` extension does not provide Test Explorer fuaters yet. This has been implemented such that native vscode Test Explorer will identify any Cosmwasm tests in your code and you can run your tests from there.
+The extension does not implement any Rust language features as it is recommended to use the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension. However, the `rust-analyzer` extension does not provide Test Explorer features yet. This has been implemented such that native vscode Test Explorer will identify any Cosmwasm tests in your code and you can run your tests from there.
 
 #### Walkthroughs
 
