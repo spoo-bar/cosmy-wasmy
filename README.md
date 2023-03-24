@@ -21,7 +21,8 @@ Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://gith
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Commands](#commands)
-* [Features]
+* [Features](#features)
+    * [Account](#account)
 * [Thanks]
 
 ---
@@ -48,6 +49,7 @@ You can install Cosmy Wasmy from the [visual stucio marketplace](https://marketp
 Or, you can search for `Cosmy Wasmy` in vscode Extensions sidebar. 
 
 > **Note**
+>
 > The extension provides Walkthroughs for the major features. You can access the walkthroughs by going to Command Palette (Windows: `Ctrl+Shft+P`, MacOS: `Cmd+Shft+P`, Linux: `Ctrl+Shft+P`) and selecting **"Welcome: Open Walkthrough"**.
 
 Its recommended post installation to configure the extension for your use case. Here are the first few things you might wanna do.
@@ -83,13 +85,13 @@ The following chains are preconfigured by default. Any other chains can be manua
 
 |    | Project | Environment | ChainID       |
 | -- | ------- | ----------- | ------------- |
-| 1 | Osmosis  | testnet     | osmo-test-4   |
-| 2 | Juno     | testnet     | uni-6         |
-| 3 | Archway  | testnet     | constantine-1 |
-| 4 | Stargaze | testnet     | elgafar-1     |
-| 5 | Neutron  | testnet     | baryon-1      |
-| 6 | Juno     | localnet    | testing       |
-| 7 | Osmosis  | localnet    | localosmosis  |
+| 1 | [Osmosis](https://osmosis.zone/)  | testnet     | osmo-test-4   |
+| 2 | [Juno](https://www.junonetwork.io/)     | testnet     | uni-6         |
+| 3 | [Archway](https://archway.io/)  | testnet     | constantine-1 |
+| 4 | [Stargaze](https://www.stargaze.zone/) | testnet     | elgafar-1     |
+| 5 | [Neutron](https://neutron.org/)  | testnet     | baryon-1      |
+| 6 | [Juno](https://www.junonetwork.io/)      | localnet    | testing       |
+| 7 | [Osmosis](https://osmosis.zone/)  | localnet    | localosmosis  |
 
 You can set up the extension settings at
 > File > Preferences > Settings > Extensions> Cosmy Wasmy
@@ -141,21 +143,30 @@ All the given keybindings can be customized
 | Reset Data            | cosmy-wasmy.resetData      | | Deletes all the extension stored data, like accounts and contracts. | 
 | Show Cosmwasm History | cosmy-wasmy.history | ctrl+shift+a | Shows latest queries and transactions and with saved inputs. Allows easy re-execution of same queries. The number of saved queries is configurable in the settings. | 
 | Export Cosmy Wasmy data | cosmy-wasmy.export |  | Export imported accounts, all imported contracts and history as a JSON file. Careful sharing this file with others as it will include your seed phrase | 
+| Create a new CW Notebook | cosmy-wasmy.createCwNotebook |   | Create a new CW Notebook with some sample content |
 
 ---
 
-## Docs
+## Features
 
-You can find detailed docs for each feature here:
+### Account
 
-### Contributions
+Create new wallets with user-given seed phrase or an auto-generated seed phrase. 
 
-* [Settings](/docs/configuration.md) - All the configuration exposed by the extension
-* [Commands](/docs/commands.md) - All the commands contributed by the extension
+> **Warning**
+>
+> Do NOT use your mainnet account here. The mnemonic is stored in plain text within vscode
 
-### Features
+Once an account has been created, you can do the following actions
 
-* [Account](/docs/account.md) - Generate, store and import keys
+* Request funds from faucet (if it has been set up)
+* Copy address (derived from prefix from the current active chain config)
+* Copy mnemonic or seed phrase
+* Delete the account from vscode (the address and funds on-chain still persists. You can always reimport it again)
+* Open in Block Explorer (if it has been set up)
+
+If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
+
 * [Contract](/docs/contract.md) - Import and upload smart contracts
 * [Cosmwasm Interaction](/docs/cosmwasm_interactions.md) - Query, Execute Msg, Migrate and instantiate smart contracts. 
 * [Snippets](/docs/snippets.md) - Shortcuts to generate fns to query, execute msg and to write tests
