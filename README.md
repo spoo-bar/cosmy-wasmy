@@ -26,6 +26,7 @@ Find release notes in [CHANGELOG](CHANGELOG.md)
     * [Account](#account)
     * [Contract](#contract) 
     * [Cosmwasm](#cosmwasm)
+    * [Notebooks](#notebooks)
 * [Thanks](#thanks)
 
 ---
@@ -240,6 +241,23 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
     Right clicking on a wasm file shows this command in the context menu or right clicking on the tab of the currently open wasm file shows this command in the context menu or command can be invoked using Command Palette/Key Binding and file dialog opens to select a wasm file.
 
+### Notebooks
+
+Th eextension now supports CosmWasm Notebooks. Any file stored with the file extension  `*.cwnotebook` is treated as a CW Notebook. CW Notebooks are similar to Jupyter notebooks where you can store in snippets of code in the middle of notebook documentation. 
+
+In the notebook you can configure a contract binary and its schema in TOML block as given below
+```toml
+[config]
+contract-url = "https://../contract.wasm"
+schema-url = "https://../contract.json"
+```
+Any contract interactions in the notebook will be run against this contract. The contract is loaded into a CW virtual machine. 
+
+To use the notebook, first execute the TOML block and then you can run the instantiate json and then the contract has been setup in the VM to be used for query and msg executions.
+
+![CW Notebook execution](./walkthrough/notebooks/run.gif)
+
+You can use as many markdown or JSON blocks in the notebook as needed. However, there should be only one TOML block with the contract configuration.
 
 
 ---
@@ -255,9 +273,13 @@ And the consistent support I have found in the Cosmos and Cosmwasm community whi
 If you would like to support this extension, you can:
 
 1. Create issues for any bugs you encounter [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=spoo-bar&labels=&template=bug_report.md&title=)
+
 2. Share what features you might be interested  [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=&labels=&template=feature_request.md&title=)
+
 3. [Contribute](./CONTRIBUTING.md) to the extension - PRs are always welcome
+
 4. Share the extension with other devs 💜
-5. If you would like to support me ([spoo-bar](https://www.spoorthi.dev)) directly, you can DM me compliments on Twitter. I thrive on validation from strangers on the internet.
+
+5. If you would like to support me ([spoo-bar](https://www.spoorthi.dev)) directly, you can DM me compliments on Twitter.
 
 
