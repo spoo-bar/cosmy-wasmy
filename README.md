@@ -327,7 +327,7 @@ Big shoutout to [aswever](https://github.com/aswever), early feature inspiration
 Another shoutout to [
 TERRAN.ONE](https://twitter.com/terran_one) team for building the [cw-simulate](https://github.com/Terran-One/cw-simulate) library. 
 
-Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the V2 release of the extension.
+Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the v2 release of the extension.
 
 And the consistent support I have found in the Cosmos and Cosmwasm community which motivates me to work on this extension 💜
 
