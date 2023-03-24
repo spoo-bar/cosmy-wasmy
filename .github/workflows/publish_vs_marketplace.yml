@@ -4,7 +4,7 @@ on:
       - "*"
   workflow_dispatch:
 
-name: Deploy Extension
+name: Deploy to Visual Studio Marketplace
 jobs:
   deploy:
     runs-on: ubuntu-latest

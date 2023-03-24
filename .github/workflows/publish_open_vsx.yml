@@ -4,7 +4,7 @@ on:
       - "*"
   workflow_dispatch:
 
-name: Deploy Extension
+name: Deploy to Open VSX Registry
 jobs:
   deploy:
     runs-on: ubuntu-latest
