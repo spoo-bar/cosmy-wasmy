@@ -23,7 +23,8 @@ Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://gith
 * [Commands](#commands)
 * [Features](#features)
     * [Account](#account)
-    * [Contract](#contract)
+    * [Contract](#contract) 
+    * [Cosmwasm](#cosmwasm)
 * [Thanks]
 
 ---
@@ -169,7 +170,7 @@ Once an account has been created, you can do the following actions
 * Delete the account from vscode 
 
     The address and funds persists on-chain. You can always reimport it again
-    
+
 * Open in Block Explorer (if it has been set up)
 
 If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
@@ -202,12 +203,46 @@ Once a contract has been imported, you can do the following from the context men
 >
 > If any imported contract has a disconnected plug icon next to it, it implies that the contract was imported before v1.0.0 of the extension came out and the extension does not have the relevant information as to which chain config it was imported with. You can delete the contract and reimport it to set it up right
 
+### Cosmwasm
 
----
+The following Cosmwasm related interactions are possible with the help of the extension
 
-* [Contract](/docs/contract.md) - Import and upload smart contracts
-* [Cosmwasm Interaction](/docs/cosmwasm_interactions.md) - Query, Execute Msg, Migrate and instantiate smart contracts. 
-* [Snippets](/docs/snippets.md) - Shortcuts to generate fns to query, execute msg and to write tests
+* Query
+
+    * Input the JSON request query data and select the smart contract from the above view to query and the response/err will be output. The historical queries are also stored and can be accessed by `Show Cosmwasm History` command for easy re-execution.
+
+    * OR, Open a JSON file, and click on the `Run Query` button.
+
+* Execute
+
+    * Input the JSON request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will be output The historical txs are also stored and can be accessed by Show Cosmwasm History command for easy re-execution.
+
+    * OR, Open a JSON file, and click on the `Execute Tx` button.
+
+* Sign
+
+    Input the text which needs to be signed and select the wallet account in the view above and the signature/err will be output
+
+* Migrate
+
+    Input the JSON request migrate data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will be output
+
+* Initialize
+
+    Specify the Code Id of the uploaded contract wasm and provide a label for the smart contract. Include any JSON initialization information needed and select the wallet account from the account view to sign and broadcast the transaction and the response/err will be output.
+
+    The selected account will be set as admin for the contract.
+
+* Upload
+
+    You can also upload a wasm file to selected chain with selected account.
+
+    Right clicking on a wasm file shows this command in the context menu or right clicking on the tab of the currently open wasm file shows this command in the context menu or command can be invoked using Command Palette/Key Binding and file dialog opens to select a wasm file.
+
+
+
+    ---
+
 
 Find release notes in [CHANGELOG](CHANGELOG.md)
 
