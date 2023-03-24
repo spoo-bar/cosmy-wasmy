@@ -1,5 +1,3 @@
-## Config 
-
 ```toml
 [config]
 contract-url = "https://../contract.wasm"

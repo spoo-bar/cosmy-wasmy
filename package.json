@@ -311,7 +311,7 @@
                 "chainId": "uni-6",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "juno",
-                "rpcEndpoint": "https://rpc.uni.junonetwork.io/",
+                "rpcEndpoint": "https://juno-testnet-rpc.polkachu.com",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "ujunox",
                 "accountExplorerLink": "https://testnet.mintscan.io/juno-testnet/account/${accountAddress}",

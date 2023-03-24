@@ -116,7 +116,7 @@ function displayResponseDataGrid() {
       }
     }
     else {
-      document.getElementById('vm-responses-grid').rowsData.push({ Header1: count, Header2: '❌', Header3: message.val, Header4: message._stack });
+      document.getElementById('vm-responses-grid').rowsData.push({ Header1: count, Header2: '❌', Header3: message.val });
     }
     count -= 1;
   }
