@@ -1,8 +1,8 @@
 {
   "name": "cosmy-wasmy",
-  "displayName": "cosmy wasmy",
+  "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -13,6 +13,7 @@
   },
   "categories": [
     "Testing",
+    "Notebooks",
     "Other"
   ],
   "keywords": [
@@ -21,7 +22,9 @@
     "Juno",
     "Smart Contract",
     "Archway",
-    "Chihuahua"
+    "Chihuahua",
+    "Stargaze",
+    "Neutron"
   ],
   "activationEvents": [
     "onView:account",

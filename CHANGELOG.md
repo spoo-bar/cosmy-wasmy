@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "cosmy-wasmy" extension will be documented in this file.
+All notable changes to the Cosmy Wasmy extension will be documented in this file.
 
 <!-- 
 ## [Unreleased]
@@ -19,7 +19,12 @@ All notable changes to the "cosmy-wasmy" extension will be documented in this fi
 -->
 
 
-## [Unreleased]
+## [v2.0.0] - 24 March 2023
+
+Wohoooo!! 🎉
+Its **v2.0.0**!!
+
+Thank you [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for this release.
 
 ### Added
 
