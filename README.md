@@ -24,9 +24,14 @@ Find release notes in [CHANGELOG](CHANGELOG.md)
 * [Commands](#commands)
 * [Features](#features)
     * [Account](#account)
+        * [Beaker Integration](#beaker-intergration)
     * [Contract](#contract) 
     * [Cosmwasm](#cosmwasm)
     * [Notebooks](#notebooks)
+    * [Misc](#misc)
+        * [Localization](#localization)
+        * [Test Explorer](#test-explorer)
+        * [Walkthroughs](#walkthroughs)
 * [Thanks](#thanks)
 
 ---
@@ -177,6 +182,15 @@ Once an account has been created, you can do the following actions
 
 If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
 
+#### Beaker Intergration
+
+If your settigns have been configured such that `beaker.autosync` is enabled, all the accounts and chain configurations from the `Beaker.toml` will be imported into the extension. 
+
+Alternatively, you can also right-click on a `Beaker.toml` file to manually sync the accounts and chain configs.
+
+> **Note**
+> Ensure the Beaker.toml is present in the root of your repository for auto-sync.
+
 
 ### Contract
 
@@ -185,6 +199,10 @@ Any contracts deployed on-chain, can be imported by their contract address so th
 Once a contract has been imported, you can do the following from the context menu
 
 * Copy contract address
+* View contract checksum from chain
+* Download contract binary from chain
+
+    The contract is saved in the root of your repository with name `{contractAddress}.wasm`
 * Delete the contract from vscode 
     
     The contract and its state persists on-chain. You can always reimport it again
@@ -200,6 +218,9 @@ Once a contract has been imported, you can do the following from the context men
 * Add notes and comments
 
      Developer can add some notes and comments about the smart contracts which will be saved locally in the extension. Its not connected to any on-chain or cosmwasm feature. It is just for a developer's self reference. This information is shown when the user hovers on the contract in the view. Markdown as well as [vscode codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) are supported in the comments.
+
+
+    
 
 > **Note**
 >
@@ -217,7 +238,7 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
 * Execute
 
-    * Input the JSON request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will be output The historical txs are also stored and can be accessed by Show Cosmwasm History command for easy re-execution.
+    * Input the JSON request tx data and select the smart contract as well as the wallet account from the above view to sign and broadcast the transaction and the response/err will be output. You can also send any funds from your wallet for the msg execution as well. The historical txs are also stored and can be accessed by `Show Cosmwasm History `command for easy re-execution.
 
     * OR, Open a JSON file, and click on the `Execute Tx` button.
 
@@ -231,7 +252,7 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
 * Initialize
 
-    Specify the Code Id of the uploaded contract wasm and provide a label for the smart contract. Include any JSON initialization information needed and select the wallet account from the account view to sign and broadcast the transaction and the response/err will be output.
+    Specify the Code Id of the uploaded contract wasm and provide a label for the smart contract. Include any JSON initialization information needed and select the wallet account from the account view to sign and broadcast the transaction and the response/err will be output. You also send any funds needed by the contract for the execution.
 
     The selected account will be set as admin for the contract.
 
@@ -240,6 +261,12 @@ The following Cosmwasm related interactions are possible with the help of the ex
     You can also upload a wasm file to selected chain with selected account.
 
     Right clicking on a wasm file shows this command in the context menu or right clicking on the tab of the currently open wasm file shows this command in the context menu or command can be invoked using Command Palette/Key Binding and file dialog opens to select a wasm file.
+
+* Simulate
+
+    Right clicking on a wasm file shows you the command to Load the contract in Virtual Machine. Click on this and you will get access to a Contract simulate view. You can instantiate the contract multiple times. Run queries against the contract as well as execute messages. You can view the event history of the VM as well.
+
+    The inputs for the contract might be prepopulated based on the schema found in the repository. But thats just a suggestion. You can input arbitrary json into the simulations.
 
 ### Notebooks
 
@@ -260,11 +287,37 @@ To use the notebook, first execute the TOML block and then you can run the insta
 You can use as many markdown or JSON blocks in the notebook as needed. However, there should be only one TOML block with the contract configuration.
 
 
+### Misc
+
+#### Localization
+
+The extension has localization support enabled. However, it is currently only available in English. You can choose to contribute other languages. You can find more details on how to do that in [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+#### Test Explorer
+
+The extension does not implement any Rust language features as it is recommended to use the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension. However, the `rust-analyzer` extension does not provide Test Explorer fuaters yet. This has been implemented such that native vscode Test Explorer will identify any Cosmwasm tests in your code and you can run your tests from there.
+
+#### Walkthroughs
+
+The extension provides Walkthroughs for the major features. You can access the walkthroughs by going to Command Palette (Windows: `Ctrl+Shft+P`, MacOS: `Cmd+Shft+P`, Linux: `Ctrl+Shft+P`) and selecting **"Welcome: Open Walkthrough"**
+
+There are five walkthroughs available:
+1. Getting Started with Cosmy Wasmy
+2. Cosmy Wasmy: Accounts
+3. Cosmy Wasmy: Contracts
+4. Cosmy Wasmy: CW Notebooks
+5. Cosmy Wasmy: Cosmwasm Interactions
+
+It is recommended to run through them as they provide detailed information on how to use the extension.
+
 ---
 
 ## Thanks 
 
-Big shoutout to [aswever](https://github.com/aswever), many feature inspirations came from [cosmwasm.tools](https://cosmwasm.tools/).
+Big shoutout to [aswever](https://github.com/aswever), early feature inspirations for the extension came from [cosmwasm.tools](https://cosmwasm.tools/).
+
+Another shoutout to [
+TERRAN.ONE](https://twitter.com/terran_one) team for building the [cw-simulate](https://github.com/Terran-One/cw-simulate) library. 
 
 Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the V2 release of the extension.
 
@@ -280,6 +333,6 @@ If you would like to support this extension, you can:
 
 4. Share the extension with other devs 💜
 
-5. If you would like to support me ([spoo-bar](https://www.spoorthi.dev)) directly, you can DM me compliments on Twitter.
+5. If you would like to support me ([spoo-bar](https://www.spoorthi.dev)) directly, you can DM me compliments on [Twitter](https://twitter.com/spoo_bar).
 
 
