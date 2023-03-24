@@ -23,6 +23,7 @@ Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://gith
 * [Commands](#commands)
 * [Features](#features)
     * [Account](#account)
+    * [Contract](#contract)
 * [Thanks]
 
 ---
@@ -160,12 +161,49 @@ Create new wallets with user-given seed phrase or an auto-generated seed phrase.
 Once an account has been created, you can do the following actions
 
 * Request funds from faucet (if it has been set up)
-* Copy address (derived from prefix from the current active chain config)
+* Copy address 
+
+    The address is derived from prefix from the current active chain config
+
 * Copy mnemonic or seed phrase
-* Delete the account from vscode (the address and funds on-chain still persists. You can always reimport it again)
+* Delete the account from vscode 
+
+    The address and funds persists on-chain. You can always reimport it again
+    
 * Open in Block Explorer (if it has been set up)
 
 If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
+
+
+### Contract
+
+Any contracts deployed on-chain, can be imported by their contract address so that they can be interacted with using the extension. Only contracts which were imported with the current active chain are displayed.
+
+Once a contract has been imported, you can do the following from the context menu
+
+* Copy contract address
+* Delete the contract from vscode 
+    
+    The contract and its state persists on-chain. You can always reimport it again
+
+* Change the contract admin 
+
+    Changes the cosmwasm admin, not any admin set up by the contract itself
+
+* Remove the contract admin 
+
+    Changes the cosmwasm admin, not any admin set up by the contract itself
+
+* Add notes and comments
+
+     Developer can add some notes and comments about the smart contracts which will be saved locally in the extension. Its not connected to any on-chain or cosmwasm feature. It is just for a developer's self reference. This information is shown when the user hovers on the contract in the view. Markdown as well as [vscode codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) are supported in the comments.
+
+> **Note**
+>
+> If any imported contract has a disconnected plug icon next to it, it implies that the contract was imported before v1.0.0 of the extension came out and the extension does not have the relevant information as to which chain config it was imported with. You can delete the contract and reimport it to set it up right
+
+
+---
 
 * [Contract](/docs/contract.md) - Import and upload smart contracts
 * [Cosmwasm Interaction](/docs/cosmwasm_interactions.md) - Query, Execute Msg, Migrate and instantiate smart contracts. 
