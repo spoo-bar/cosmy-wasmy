@@ -1,6 +1,10 @@
 # Cosmy Wasmy
 
-![feature Cosmy Wasmy Logo](media/icon-small.png)
+<p align="center">
+<a href="https://marketplace.visualstudio.com/items?itemName=spoorthi.cosmy-wasmy">
+    <img src="https://raw.githubusercontent.com/spoo-bar/cosmy-wasmy/0c072775ba3970e9b4c5cfbbf4825ecdbdb16868/media/icon-small.png" alt="Cosmy Wasmy logo" title="Cosmy Wasmy" align="center" />
+</a>
+</p>
 
 ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/spoorthi.cosmy-wasmy)
 ![Visual Studio Marketplace Release Date](https://img.shields.io/visual-studio-marketplace/release-date/spoorthi.cosmy-wasmy)
@@ -9,7 +13,7 @@
 [![Mirror to Gitopia](https://github.com/spoo-bar/cosmy-wasmy/actions/workflows/gitopia-mirror.yml/badge.svg)](https://github.com/spoo-bar/cosmy-wasmy/actions/workflows/gitopia-mirror.yml)
 ![GitHub](https://img.shields.io/github/license/spoo-bar/cosmy-wasmy)
 
-Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://github.com/CosmWasm/cosmwasm) smart contract. With the most popular Cosmwasm chains testnet pre-configured, it makes chain interactions during testing super simple. You can perform all Cosmwasm interactions without touching the CLI.
+Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://github.com/CosmWasm/cosmwasm) smart contracts. With the most popular Cosmwasm chains testnets pre-configured, it makes chain interactions during testing super simple. You can perform all Cosmwasm interactions without touching the CLI.
 
 Find release notes in [CHANGELOG](CHANGELOG.md)
 
@@ -64,12 +68,14 @@ Or, you can search for `Cosmy Wasmy` in vscode Extensions sidebar.
 Its recommended post installation to configure the extension for your use case. Here are the first few things you might wanna do.
 
 1. Select your target chain
+
     The extension is pre-configured with some of the most popular CW-enabled chains. You can find more details in the [Configuration](#configuration) section.
 
     ![Change Chain Configuration](./images/changeActiveChain.gif)
 
 
 2. Import accounts
+
     If you have any prior test accounts, you can import them by going to the Cosmy Wasmy sidebar and adding a new account in the Account view. Or you can choose to create a new account as well. 
 
     ![Add account](./images/account.gif)
@@ -79,11 +85,13 @@ Its recommended post installation to configure the extension for your use case. 
     > Do NOT use your mainnet account here. The mnemonic is stored in plain text within vscode
 
 3. Import contracts
+
     Any contracts deployed on your target chain can be imported here with its address
 
     ![Add contract](./images/contract.gif)
 
 4. Explore the settings
+
     Explore all the configurations available in the extension by going to `File > Preferences > Settings > Extensions > Cosmy Wasmy`. 
 
 ---
@@ -168,17 +176,17 @@ Create new wallets with user-given seed phrase or an auto-generated seed phrase.
 
 Once an account has been created, you can do the following actions
 
-* Request funds from faucet (if it has been set up)
-* Copy address 
+* Request funds from faucet (if [@cosmjs/faucet](https://www.npmjs.com/package/@cosmjs/faucet) compatible faucet has been set up)
+* Copy address to clipboard
 
     The address is derived from prefix from the current active chain config
 
-* Copy mnemonic or seed phrase
+* Copy mnemonic or seed phrase to clipboard
 * Delete the account from vscode 
 
-    The address and funds persists on-chain. You can always reimport it again
+    The address and funds persists on-chain.
 
-* Open in Block Explorer (if it has been set up)
+* Open in Block Explorer (if `accountExplorerLink` has been set up for currently active chain)
 
 If you see an account balance as `NaN`, it probably means your RPC endpoint is not reachable. Ensure the endpoint is reachable and run `cosmy-wasmy.refreshAccount` to fetch the account balances.
 
@@ -186,7 +194,7 @@ If you see an account balance as `NaN`, it probably means your RPC endpoint is n
 
 If your settings have been configured such that `beaker.autosync` is enabled, all the accounts and chain configurations from the `Beaker.toml` will be imported into the extension. 
 
-Alternatively, you can also right-click on a `Beaker.toml` file to manually sync the accounts and chain configs.
+Alternatively, you can also right-click and on a `Beaker.toml` file and select "Sync Beaker Config" to manually sync the accounts and chain configs.
 
 > **Note**
 > Ensure the Beaker.toml is present in the root of your repository for auto-sync.
@@ -202,10 +210,10 @@ Once a contract has been imported, you can do the following from the context men
 * View contract checksum from chain
 * Download contract binary from chain
 
-    The contract is saved in the root of your repository with name `{contractAddress}.wasm`
+    The contract is saved in the root of the repository with name `{contractAddress}.wasm`
 * Delete the contract from vscode 
     
-    The contract and its state persists on-chain. You can always reimport it again
+    The contract and its state persists on-chain.
 
 * Change the contract admin 
 
@@ -217,7 +225,7 @@ Once a contract has been imported, you can do the following from the context men
 
 * Add notes and comments
 
-     Developer can add some notes and comments about the smart contracts which will be saved locally in the extension. Its not connected to any on-chain or cosmwasm feature. It is just for a developer's self reference. This information is shown when the user hovers on the contract in the view. Markdown as well as [vscode codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) are supported in the comments.
+     Developer can add some notes and comments about the smart contracts which will be saved locally in the extension. Its not connected to any on-chain or cosmwasm feature. It is just for a developer's self reference. This information is shown when the user hovers on the contract in the view. Markdown as well as [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) are supported in the comments.
 
 
     
@@ -252,7 +260,7 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
 * Initialize
 
-    Specify the Code Id of the uploaded contract wasm and provide a label for the smart contract. Include any JSON initialization information needed and select the wallet account from the account view to sign and broadcast the transaction and the response/err will be output. You also send any funds needed by the contract for the execution.
+    Specify the Code Id of the uploaded contract wasm and provide a label for the smart contract. Include any JSON initialization information needed and select the wallet account from the account view to sign and broadcast the transaction and the response/err will be output. You can also send any funds needed by the contract for the initialization.
 
     The selected account will be set as admin for the contract.
 
@@ -264,7 +272,7 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
 * Simulate
 
-    Right clicking on a wasm file shows you the command to Load the contract in Virtual Machine. Click on this and you will get access to a Contract simulate view. You can instantiate the contract multiple times. Run queries against the contract as well as execute messages. You can view the event history of the VM as well.
+    Right clicking on a wasm file shows you the command to Load the contract in Virtual Machine. Click on this and you will get access to the contract simulation view. You can instantiate the contract multiple times. Run queries against the contract as well as execute messages. You can view the event history of the VM as well.
 
     The inputs for the contract might be pre-populated based on the schema found in the repository. But thats just a suggestion. You can input arbitrary json into the simulations.
 
