@@ -11,6 +11,7 @@
 
 Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://github.com/CosmWasm/cosmwasm) smart contract. With the most popular Cosmwasm chains testnet pre-configured, it makes chain interactions during testing super simple. You can perform all Cosmwasm interactions without touching the CLI.
 
+Find release notes in [CHANGELOG](CHANGELOG.md)
 
 ---
 
@@ -25,7 +26,7 @@ Cosmy Wasmy makes it easy to develop and interact with a [CosmWasm](https://gith
     * [Account](#account)
     * [Contract](#contract) 
     * [Cosmwasm](#cosmwasm)
-* [Thanks]
+* [Thanks](#thanks)
 
 ---
 
@@ -241,35 +242,22 @@ The following Cosmwasm related interactions are possible with the help of the ex
 
 
 
-    ---
+---
 
+## Thanks 
 
-Find release notes in [CHANGELOG](CHANGELOG.md)
+Big shoutout to [aswever](https://github.com/aswever), many feature inspirations came from [cosmwasm.tools](https://cosmwasm.tools/).
 
-## Known Issues
+Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the V2 release of the extension.
 
-*  The extension has only been tested in Windows environment. However, there is no reason it shouldn't work in native Linux or Mac. Please create an issue if the extension doesn't behave the way expected
+And the consistent support I have found in the Cosmos and Cosmwasm community which motivates me to work on this extension 💜
 
-
-## Thanks
-
-Big shoutout to [aswever](https://github.com/aswever), lots of the feature inspirations came from [cosmwasm.tools](https://cosmwasm.tools/).
-
-
-## Support 
-
-You can support this extension in the following ways:
+If you would like to support this extension, you can:
 
 1. Create issues for any bugs you encounter [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=spoo-bar&labels=&template=bug_report.md&title=)
 2. Share what features you might be interested  [here](https://github.com/spoo-bar/cosmy-wasmy/issues/new?assignees=&labels=&template=feature_request.md&title=)
-3. Contribute code to the extension - PRs are always welcome
+3. [Contribute](./CONTRIBUTING.md) to the extension - PRs are always welcome
 4. Share the extension with other devs 💜
-5. If you would like to support me([spoo-bar](https://www.spoorthi.dev)) directly, you can donate to this address 
+5. If you would like to support me ([spoo-bar](https://www.spoorthi.dev)) directly, you can DM me compliments on Twitter. I thrive on validation from strangers on the internet.
 
-    Juno - `juno1lg8ukq2ehc9k0wgjfk0afm7uea8750yp9gtfct`
 
-    Osmosis - `osmo1lg8ukq2ehc9k0wgjfk0afm7uea8750ypmpmzf9`
-
-    Cosmos Hub - `cosmos1lg8ukq2ehc9k0wgjfk0afm7uea8750ypn6gjlh`
-
-    This extension will never be paywalled. #DevsSupportingDevsByDevving
