@@ -7,6 +7,10 @@ import { Contract } from '../../models/contract';
 import { Workspace } from "../workspace";
 import { ResponseHandler } from "../responseHandler";
 import { Account } from "../../models/account";
+import { util } from "protobufjs";
+import { utils } from "elliptic";
+import { Utils } from "../../views/utils";
+import { stringToPath } from "@cosmjs/crypto";
 
 
 export class CosmwasmAPI {
@@ -21,7 +25,9 @@ export class CosmwasmAPI {
         let client = await Cosmwasm.GetQueryClient();
         let denom = global.workspaceChain.chainDenom;
         let balance = await client.getBalance(address, denom);
-        return balance.amount;
+
+        return Utils.TransDecimals(balance.amount, global.workspaceChain.chainDenomDecimals);
+        //return balance.amount;
     }
 
     public static async RequestFunds(address: string) {
@@ -44,11 +50,19 @@ export class Cosmwasm {
         const rpcEndpoint = global.workspaceChain.rpcEndpoint;
         return await CosmWasmClient.connect(rpcEndpoint);
     }
+    
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
+
+        // m/44'/118'/0'/0/0
+		// m/44'/60'/0'/0/0
+
+        const path = stringToPath("m/44'/118'/0'/0/0");
+        var pathArray = [path];
         let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
+            hdPaths: pathArray,
         });
         let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainGasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(

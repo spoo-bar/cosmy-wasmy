@@ -63,9 +63,9 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
 
                 let codeId = Number(data.value.codeid);
                 let label = data.value.label;
-                let funds = parseCoins(data.value.funds);
 
                 try {
+                    let funds = parseCoins(data.value.funds);
                     let res = await this.instantiateContract(account, codeId, req, label, funds);
                     ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
                     if (data.value.import) {

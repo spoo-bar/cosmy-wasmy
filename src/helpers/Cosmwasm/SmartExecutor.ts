@@ -3,6 +3,7 @@ import { GasPrice } from '@cosmjs/stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
+import { stringToPath } from "@cosmjs/crypto";
 
 export class SmartExecutor {
 
@@ -11,8 +12,14 @@ export class SmartExecutor {
     private client: SigningCosmWasmClient;
 
     public async SetupAccount(mnemonic: string, addressPrefix: string) {
+
+        // m/44'/118'/0'/0/0
+		// m/44'/60'/0'/0/0
+        const path = stringToPath("m/44'/118'/0'/0/0");
+        var pathArray = [path];
         this.wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
             prefix: addressPrefix,
+            hdPaths: pathArray,
         });
         const accounts = await this.wallet.getAccounts();
         this.address = accounts[0].address;

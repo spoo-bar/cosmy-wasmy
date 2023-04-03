@@ -3,6 +3,7 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { ExtData } from '../helpers/extensionData/extData';
 import { Workspace } from '../helpers/workspace';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
+import { stringToPath } from "@cosmjs/crypto";
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -24,8 +25,13 @@ export class Account extends vscode.TreeItem {
 	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
 		for (let account of accountData) {
+			// m/44'/118'/0'/0/0
+			// m/44'/60'/0'/0/0
+			const path = stringToPath("m/44'/118'/0'/0/0");
+        	var pathArray = [path];
 			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: global.workspaceChain.addressPrefix,
+				prefix: global.workspaceChain.addressPrefix, 
+				hdPaths: pathArray,
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;

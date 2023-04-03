@@ -131,6 +131,7 @@ export class ChainConfig {
     defaultGasPrice!: string;
     chainDenom!: string;
     chainGasDenom!: string;
+    chainDenomDecimals!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
@@ -162,6 +163,10 @@ export class ChainConfig {
         }
         if (!this.chainGasDenom || this.chainGasDenom === " ") {
             throw new Error(vscode.l10n.t("Chain gas denom is empty"));
+        }
+
+        if (!this.chainDenomDecimals || Number.isNaN(this.chainDenomDecimals)) {
+            throw new Error(vscode.l10n.t("Chain denom decimals is empty"));
         }
         return;
     }
