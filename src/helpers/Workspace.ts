@@ -130,6 +130,7 @@ export class ChainConfig {
     rpcEndpoint!: string;
     defaultGasPrice!: string;
     chainDenom!: string;
+    chainGasDenom!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
@@ -158,6 +159,9 @@ export class ChainConfig {
         }
         if (!this.chainDenom || this.chainDenom === " ") {
             throw new Error(vscode.l10n.t("Chain denom is empty"));
+        }
+        if (!this.chainGasDenom || this.chainGasDenom === " ") {
+            throw new Error(vscode.l10n.t("Chain gas denom is empty"));
         }
         return;
     }

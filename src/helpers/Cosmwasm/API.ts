@@ -50,7 +50,7 @@ export class Cosmwasm {
         let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         });
-        let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainDenom;
+        let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainGasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
             global.workspaceChain.rpcEndpoint,
             signer, {
