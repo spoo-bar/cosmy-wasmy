@@ -7,6 +7,7 @@ const crypto_1 = require("@cosmjs/crypto");
 const encoding_1 = require("@cosmjs/encoding");
 const utils_1 = require("@cosmjs/utils");
 const signing_1 = require("@cosmjs/proto-signing/build/signing");
+const signing_2 = require("@cosmjs/amino/build/signdoc");
 const wallet_1 = require("@cosmjs/proto-signing/build/wallet");
 const serializationTypeV1 = "directsecp256k1hdwallet-v1";
 const web3 = require('web3'); 
@@ -124,7 +125,7 @@ class EthSecp256k1HdWallet {
         throw new Error("Todo, deserializeTypeV1");
     }
     get mnemonic() {
-        throw new Error("Todo, mnemonic");
+        return this.secret;
     }
     async getAccounts() {
         const accountsWithPrivkeys = await this.getAccountsWithPrivkeys();
@@ -148,6 +149,22 @@ class EthSecp256k1HdWallet {
             signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
         }
     }
+
+    async signAmino(signerAddress, signDoc) {
+        const accounts = await this.getAccountsWithPrivkeys();
+        const account = accounts.find(({ address }) => address === signerAddress);
+        if (account === undefined) {
+            throw new Error(`Address ${signerAddress} not found in wallet`);
+        }
+        const { privkey, pubkey } = account;
+        const message = web3.utils.sha3(Buffer.from((0, signing_2.serializeSignDoc)(signDoc)));
+        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2),'hex')), privkey);
+        const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
+        return {
+            signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
+        }
+    }
+
     /**
      * Generates an encrypted serialization of this wallet.
      *

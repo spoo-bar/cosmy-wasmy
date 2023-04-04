@@ -2,6 +2,9 @@ import { EnglishMnemonic, HdPath } from "@cosmjs/crypto";
 import { SignDoc } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { AccountData, DirectSignResponse, OfflineDirectSigner } from "@cosmjs/proto-signing/build/signer";
 import { EncryptionConfiguration, KdfConfiguration } from "@cosmjs/proto-signing/build/wallet";
+import { StdSignDoc } from "@cosmjs/amino";
+import { AminoSignResponse } from "@cosmjs/amino/build/signer";
+
 /**
  * This interface describes a JSON object holding the encrypted wallet and the meta data.
  * All fields in here must be JSON types.
@@ -72,6 +75,8 @@ export declare class EthSecp256k1HdWallet implements OfflineDirectSigner {
     get mnemonic(): string;
     getAccounts(): Promise<readonly AccountData[]>;
     signDirect(signerAddress: string, signDoc: SignDoc): Promise<DirectSignResponse>;
+
+    signAmino(signerAddress: string, signDoc: StdSignDoc): Promise<AminoSignResponse>;
     /**
      * Generates an encrypted serialization of this wallet.
      *

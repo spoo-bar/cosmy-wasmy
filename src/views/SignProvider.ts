@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+// import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { EthSecp256k1HdWallet } from '../helpers/Sign/ethsecp256k1hdwallet';
 import { StdSignDoc } from "@cosmjs/amino";
 import { Workspace } from '../helpers/workspace';
 import { ResponseHandler } from '../helpers/responseHandler';
@@ -42,12 +43,12 @@ export class SignProvider implements vscode.WebviewViewProvider {
 
 			const path = stringToPath("m/44'/118'/0'/0/0");
         	var pathArray = [path];
-			let wallet = await Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
+			let wallet = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix,
 				// hdPaths: pathArray,
 			});
 			const signDoc = this.makeSignDoc(account.address, data.value);
-			let response = await wallet.signAmino(account.address, signDoc)
+			let response = await wallet.signAmino(account.address, signDoc);
 			ResponseHandler.OutputSuccess(data.value, JSON.stringify(response.signature, null, 4), "Signing")
 		}
 		catch (err: any) {
