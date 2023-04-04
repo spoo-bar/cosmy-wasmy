@@ -142,12 +142,47 @@ class EthSecp256k1HdWallet {
             throw new Error(`Address ${signerAddress} not found in wallet`);
         }
         const { privkey, pubkey } = account;
-        const message = web3.utils.sha3(Buffer.from((0, signing_1.makeSignBytes)(signDoc)));
-        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2),'hex')), privkey);
+        
+        // let sha3Msg = Buffer.from((0, signing_1.makeSignBytes)(signDoc));
+        // const hash = web3.utils.sha3(sha3Msg);
+        // console.log(sha3Msg.toString('hex'));
+        // console.log(hash.toString());
+        // console.log(this.buf2hex(pubkey.buffer));
+        // const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(hash.substring(2),'hex')), privkey);
+        // const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
+        // return {
+        //     signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
+        // };
+
+        // const signBytes = (0, signing_1.makeSignBytes)(signDoc);
+        // const hashedMessage = (0, crypto_1.sha256)(signBytes);
+        // const signature = await crypto_1.Secp256k1.createSignature(hashedMessage, privkey);
+        // const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
+        // const stdSignature = (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes);
+        // return {
+        //     signed: signDoc,
+        //     signature: stdSignature,
+        // };
+
+        // const accounts = await this.getAccountsWithPrivkeys();
+        // const account = accounts.find(({ address }) => address === signerAddress);
+        // if (account === undefined) {
+        //     throw new Error(`Address ${signerAddress} not found in wallet`);
+        // }
+        // const { privkey, pubkey } = account;
+        const signBytes = (0, signing_1.makeSignBytes)(signDoc);
+        const hashedMessage = (0, crypto_1.sha256)(signBytes);
+        const signature = await crypto_1.Secp256k1.createSignature(hashedMessage, privkey);
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
+        const stdSignature = (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes);
         return {
-            signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
-        }
+            signed: signDoc,
+            signature: stdSignature,
+        };
+    }
+
+    async buf2hex(buffer) {
+        return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
     }
 
     async signAmino(signerAddress, signDoc) {
@@ -162,7 +197,7 @@ class EthSecp256k1HdWallet {
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
         return {
             signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
-        }
+        };
     }
 
     /**
@@ -199,7 +234,7 @@ class EthSecp256k1HdWallet {
             const { privkey, pubkey } = await this.getKeyPair(hdPath);
             const address = crypto_2.getAddressFromPrivateKey(privkey);;
             return {
-                algo: "ethsecp256k1",
+                algo: "secp256k1",
                 privkey: privkey,
                 pubkey: pubkey,
                 address: address,

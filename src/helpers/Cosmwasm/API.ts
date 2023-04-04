@@ -55,15 +55,8 @@ export class Cosmwasm {
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
-
-        // m/44'/118'/0'/0/0
-		// m/44'/60'/0'/0/0
-
-        const path = stringToPath("m/44'/118'/0'/0/0");
-        var pathArray = [path];
         let signer = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
-            hdPaths: pathArray,
         });
         let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainGasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
