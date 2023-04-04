@@ -104,7 +104,7 @@ The following chains are pre-configured by default. Any other chains can be manu
 | -- | ------------------------------------- | ----------- | ------------- |
 | 1 | [Osmosis](https://osmosis.zone/)       | testnet     | osmo-test-4   |
 | 2 | [Juno](https://www.junonetwork.io/)    | testnet     | uni-6         |
-| 3 | [Archway](https://archway.io/)         | testnet     | constantine-1 |
+| 3 | [Archway](https://archway.io/)         | testnet     | constantine-2 |
 | 4 | [Stargaze](https://www.stargaze.zone/) | testnet     | elgafar-1     |
 | 5 | [Neutron](https://neutron.org/)        | testnet     | baryon-1      |
 | 6 | [Juno](https://www.junonetwork.io/)    | localnet    | testing       |

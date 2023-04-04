@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -351,15 +351,15 @@
                 "chainDenom": "uosmo"
               },
               {
-                "configName": "Archway constantine-1",
-                "chainId": "constantine-1",
+                "configName": "Archway constantine-2",
+                "chainId": "constantine-2",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "archway",
-                "rpcEndpoint": "https://rpc.constantine-1.archway.tech/",
+                "rpcEndpoint": "https://rpc.constantine-2.archway.tech/",
                 "defaultGasPrice": "0.025",
                 "chainDenom": "const",
-                "accountExplorerLink": "https://explorer.constantine-1.archway.tech/account/${accountAddress}",
-                "txExplorerLink": "https://explorer.constantine-1.archway.tech/transactions/${txHash}"
+                "accountExplorerLink": "https://testnet.mintscan.io/archway-testnet/account/${accountAddress}",
+                "txExplorerLink": "https://testnet.mintscan.io/archway-testnet/txs/${txHash}"
               },
               {
                 "configName": "Stargaze elgafar-1",
