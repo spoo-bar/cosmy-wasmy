@@ -1,4 +1,5 @@
 "use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EthSecp256k1HdWallet = exports.extractKdfConfiguration = void 0;
 const amino_1 = require("@cosmjs/amino");
@@ -8,6 +9,12 @@ const utils_1 = require("@cosmjs/utils");
 const signing_1 = require("@cosmjs/proto-signing/build/signing");
 const wallet_1 = require("@cosmjs/proto-signing/build/wallet");
 const serializationTypeV1 = "directsecp256k1hdwallet-v1";
+const web3 = require('web3'); 
+const buffer = require('buffer'); 
+const ethers = require('ethers');
+const crypto_2 = require("./crypto/index");
+
+
 /**
  * A KDF configuration that is not very strong but can be used on the main thread.
  * It takes about 1 second in Node.js 16.0.0 and should have similar runtimes in other modern Wasm hosts.
@@ -64,7 +71,6 @@ class EthSecp256k1HdWallet {
         const prefix = (_a = options.prefix) !== null && _a !== void 0 ? _a : defaultOptions.prefix;
         const hdPaths = (_b = options.hdPaths) !== null && _b !== void 0 ? _b : defaultOptions.hdPaths;
         this.secret = mnemonic;
-        this.seed = options.seed;
         this.accounts = hdPaths.map((hdPath) => ({
             hdPath: hdPath,
             prefix: prefix,
@@ -77,11 +83,8 @@ class EthSecp256k1HdWallet {
      * @param options An optional `EthSecp256k1HdWalletOptions` object optionally containing a bip39Password, hdPaths, and prefix.
      */
     static async fromMnemonic(mnemonic, options = {}) {
-        const mnemonicChecked = new crypto_1.EnglishMnemonic(mnemonic);
-        const seed = await crypto_1.Bip39.mnemonicToSeed(mnemonicChecked, options.bip39Password);
-        return new EthSecp256k1HdWallet(mnemonicChecked, {
+        return new EthSecp256k1HdWallet(mnemonic, {
             ...options,
-            seed: seed,
         });
     }
     /**
@@ -103,15 +106,7 @@ class EthSecp256k1HdWallet {
      *                 This is not normalized internally (see "Unicode normalization" to learn more).
      */
     static async deserialize(serialization, password) {
-        const root = JSON.parse(serialization);
-        if (!(0, utils_1.isNonNullObject)(root))
-            throw new Error("Root document is not an object.");
-        switch (root.type) {
-            case serializationTypeV1:
-                return EthSecp256k1HdWallet.deserializeTypeV1(serialization, password);
-            default:
-                throw new Error("Unsupported serialization type");
-        }
+        throw new Error("Todo, deserialize");
     }
     /**
      * Restores a wallet from an encrypted serialization.
@@ -123,44 +118,13 @@ class EthSecp256k1HdWallet {
      * done using `extractKdfConfiguration(serialization)` and `executeKdf(password, kdfConfiguration)` from this package.
      */
     static async deserializeWithEncryptionKey(serialization, encryptionKey) {
-        const root = JSON.parse(serialization);
-        if (!(0, utils_1.isNonNullObject)(root))
-            throw new Error("Root document is not an object.");
-        const untypedRoot = root;
-        switch (untypedRoot.type) {
-            case serializationTypeV1: {
-                const decryptedBytes = await (0, wallet_1.decrypt)((0, encoding_1.fromBase64)(untypedRoot.data), encryptionKey, untypedRoot.encryption);
-                const decryptedDocument = JSON.parse((0, encoding_1.fromUtf8)(decryptedBytes));
-                const { mnemonic, accounts } = decryptedDocument;
-                (0, utils_1.assert)(typeof mnemonic === "string");
-                if (!Array.isArray(accounts))
-                    throw new Error("Property 'accounts' is not an array");
-                if (!accounts.every((account) => isDerivationJson(account))) {
-                    throw new Error("Account is not in the correct format.");
-                }
-                const firstPrefix = accounts[0].prefix;
-                if (!accounts.every(({ prefix }) => prefix === firstPrefix)) {
-                    throw new Error("Accounts do not all have the same prefix");
-                }
-                const hdPaths = accounts.map(({ hdPath }) => (0, crypto_1.stringToPath)(hdPath));
-                return EthSecp256k1HdWallet.fromMnemonic(mnemonic, {
-                    hdPaths: hdPaths,
-                    prefix: firstPrefix,
-                });
-            }
-            default:
-                throw new Error("Unsupported serialization type");
-        }
+        throw new Error("Todo, deserializeWithEncryptionKey");
     }
     static async deserializeTypeV1(serialization, password) {
-        const root = JSON.parse(serialization);
-        if (!(0, utils_1.isNonNullObject)(root))
-            throw new Error("Root document is not an object.");
-        const encryptionKey = await (0, wallet_1.executeKdf)(password, root.kdf);
-        return EthSecp256k1HdWallet.deserializeWithEncryptionKey(serialization, encryptionKey);
+        throw new Error("Todo, deserializeTypeV1");
     }
     get mnemonic() {
-        return this.secret.toString();
+        throw new Error("Todo, mnemonic");
     }
     async getAccounts() {
         const accountsWithPrivkeys = await this.getAccountsWithPrivkeys();
@@ -194,9 +158,7 @@ class EthSecp256k1HdWallet {
      *                 This is not normalized internally (see "Unicode normalization" to learn more).
      */
     async serialize(password) {
-        const kdfConfiguration = basicPasswordHashingOptions;
-        const encryptionKey = await (0, wallet_1.executeKdf)(password, kdfConfiguration);
-        return this.serializeWithEncryptionKey(encryptionKey, kdfConfiguration);
+        throw new Error("Todo, serialize");
     }
     /**
      * Generates an encrypted serialization of this wallet.
@@ -208,40 +170,22 @@ class EthSecp256k1HdWallet {
      * is not the case, the wallet cannot be restored with the original password.
      */
     async serializeWithEncryptionKey(encryptionKey, kdfConfiguration) {
-        const dataToEncrypt = {
-            mnemonic: this.mnemonic,
-            accounts: this.accounts.map(({ hdPath, prefix }) => ({
-                hdPath: (0, crypto_1.pathToString)(hdPath),
-                prefix: prefix,
-            })),
-        };
-        const dataToEncryptRaw = (0, encoding_1.toUtf8)(JSON.stringify(dataToEncrypt));
-        const encryptionConfiguration = {
-            algorithm: wallet_1.supportedAlgorithms.xchacha20poly1305Ietf,
-        };
-        const encryptedData = await (0, wallet_1.encrypt)(dataToEncryptRaw, encryptionKey, encryptionConfiguration);
-        const out = {
-            type: serializationTypeV1,
-            kdf: kdfConfiguration,
-            encryption: encryptionConfiguration,
-            data: (0, encoding_1.toBase64)(encryptedData),
-        };
-        return JSON.stringify(out);
+        throw new Error("Todo, serializeWithEncryptionKey");
     }
     async getKeyPair(hdPath) {
-        const { privkey } = crypto_1.Slip10.derivePath(crypto_1.Slip10Curve.Secp256k1, this.seed, hdPath);
-        const { pubkey } = await crypto_1.Secp256k1.makeKeypair(privkey);
+        let privateK = crypto_2.getPrivateKeyFromMnemonic(this.secret, '60');
+        let pubK = crypto_2.encodePubKeyToCompressedBuffer(crypto_2.getPubKeyFromPrivateKey(privateK));
         return {
-            privkey: privkey,
-            pubkey: crypto_1.Secp256k1.compressPubkey(pubkey),
+            privkey: privateK,
+            pubkey: Uint8Array.from(pubK),
         };
     }
     async getAccountsWithPrivkeys() {
         return Promise.all(this.accounts.map(async ({ hdPath, prefix }) => {
             const { privkey, pubkey } = await this.getKeyPair(hdPath);
-            const address = (0, encoding_1.toBech32)(prefix, (0, amino_1.rawSecp256k1PubkeyToRawAddress)(pubkey));
+            const address = crypto_2.getAddressFromPrivateKey(privkey);;
             return {
-                algo: "secp256k1",
+                algo: "ethsecp256k1",
                 privkey: privkey,
                 pubkey: pubkey,
                 address: address,

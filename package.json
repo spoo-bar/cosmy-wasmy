@@ -1138,6 +1138,22 @@
     "cross-fetch": "^3.1.5",
     "json-schema-faker": "^0.5.0-rcv.46",
     "node-fetch": "^3.3.0",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "web3": "^1.8.1",
+    "ethers": "^5.6.0",
+    "secure-random": "^1.1.2",
+    "bech32": "^1.1.4",
+    "crypto-browserify": "^3.12.0",
+    "uuid": "^3.4.0",
+    "lodash": "^4.17.21",
+    "bip39": "^2.5.0",
+    "bn.js": "^4.12.0",
+    "tiny-secp256k1": "^1.1.6",
+    "crypto-js": "^3.3.0",
+    "buffer": "^5.7.1",
+    "secp256k1": "^4.0.3",
+    "keccak": "^3.0.2",
+    "eth-lib": "^0.1.29",
+    "bip32": "^1.0.2"
   }
 }

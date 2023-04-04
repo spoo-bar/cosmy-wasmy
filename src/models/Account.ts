@@ -26,13 +26,8 @@ export class Account extends vscode.TreeItem {
 	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
 		for (let account of accountData) {
-			// m/44'/118'/0'/0/0
-			// m/44'/60'/0'/0/0
-			// const path = stringToPath("m/44'/118'/0'/0/0");
-        	// var pathArray = [path];
 			const wallet = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix
-				// hdPaths: pathArray,
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;
