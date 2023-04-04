@@ -141,15 +141,12 @@ class EthSecp256k1HdWallet {
             throw new Error(`Address ${signerAddress} not found in wallet`);
         }
         const { privkey, pubkey } = account;
-        const signBytes = (0, signing_1.makeSignBytes)(signDoc);
-        const hashedMessage = (0, crypto_1.sha256)(signBytes);
-        const signature = await crypto_1.Secp256k1.createSignature(hashedMessage, privkey);
+        const message = web3.utils.sha3(Buffer.from((0, signing_1.makeSignBytes)(signDoc)));
+        const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(message.substring(2),'hex')), privkey);
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
-        const stdSignature = (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes);
         return {
-            signed: signDoc,
-            signature: stdSignature,
-        };
+            signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
+        }
     }
     /**
      * Generates an encrypted serialization of this wallet.
