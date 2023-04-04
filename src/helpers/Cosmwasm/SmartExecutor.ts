@@ -1,13 +1,14 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { GasPrice } from '@cosmjs/stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+// import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { EthSecp256k1HdWallet } from '../Sign/ethsecp256k1hdwallet';
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 import { stringToPath } from "@cosmjs/crypto";
 
 export class SmartExecutor {
 
-    private wallet: DirectSecp256k1HdWallet;
+    private wallet: EthSecp256k1HdWallet;
     private address: string;
     private client: SigningCosmWasmClient;
 
@@ -17,7 +18,7 @@ export class SmartExecutor {
 		// m/44'/60'/0'/0/0
         const path = stringToPath("m/44'/118'/0'/0/0");
         var pathArray = [path];
-        this.wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+        this.wallet = await EthSecp256k1HdWallet.fromMnemonic(mnemonic, {
             prefix: addressPrefix,
             hdPaths: pathArray,
         });

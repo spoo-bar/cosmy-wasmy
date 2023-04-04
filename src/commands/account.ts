@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+// import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { EthSecp256k1HdWallet } from '../helpers/Sign/ethsecp256k1hdwallet';
 import { Constants } from '../constants';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
@@ -32,7 +33,7 @@ export class AccountCmds {
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
 								if (rr == vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									DirectSecp256k1HdWallet.generate(24).then(wallet => {
+									EthSecp256k1HdWallet.generate(24).then(wallet => {
 										const account = new Account(accountLabel, wallet.mnemonic)
 										saveNewAccount(account);
 									});

@@ -1,6 +1,7 @@
 import { CodeDetails, CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Coin, DirectSecp256k1HdWallet, parseCoins } from "@cosmjs/proto-signing";
+import { Coin, parseCoins } from "@cosmjs/proto-signing";
+import { EthSecp256k1HdWallet } from '../Sign/ethsecp256k1hdwallet';
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
@@ -60,7 +61,7 @@ export class Cosmwasm {
 
         const path = stringToPath("m/44'/118'/0'/0/0");
         var pathArray = [path];
-        let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        let signer = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
             hdPaths: pathArray,
         });
