@@ -24,6 +24,10 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 - Updated Archway constantine-1 to constantine-2 configuration in present chain config
 
+### Fixed
+
+- Fixed missing webpack export of `bufferutil` and `utf-8-validate`
+
 ## [v2.0.0] - 24 March 2023
 
 Wohoooo!! 🎉
