@@ -3,8 +3,6 @@ import { EthSecp256k1HdWallet } from './ethsecp256k1hdwallet';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import { HdPath } from "@cosmjs/crypto";
-const amino_1 = require("@cosmjs/amino");
-
 
 export interface WrapSecp256k1HdWalletOptions {
     /** The password to use when deriving a BIP39 seed from a mnemonic. */
@@ -14,7 +12,6 @@ export interface WrapSecp256k1HdWalletOptions {
     /** The bech32 address prefix (human readable part). Defaults to "cosmos". */
     readonly prefix: string;
 }
-
 
 export const SIGN_TYPE = {
     ethsecp256: 'ethsecp256',
@@ -44,10 +41,10 @@ export class WrapWallet {
     }
 
     static isEthSecp256(type){
-        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
-            return false;
+        if (typeof type !== "undefined" && type !== null && type !== "" && type === SIGN_TYPE.ethsecp256){
+            return true;
         }
-        return true;
+        return false;
     }
 
     async signDirect(signerAddress, signDoc) {
@@ -56,24 +53,17 @@ export class WrapWallet {
     }
 
     async signAmino(signerAddress, signDoc) {
-        let wallet;
-        if (this.signType !== SIGN_TYPE.ethsecp256){
-            let wallet = await Secp256k1HdWallet.fromMnemonic(this.mnemonic, {
-                prefix: global.workspaceChain.addressPrefix,
-            });
-        }
-        else {
-            wallet = await EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
-                prefix: global.workspaceChain.addressPrefix,
-            },);
-        }
+        let wallet = (this.signType === SIGN_TYPE.ethsecp256) ? (await EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+            prefix: global.workspaceChain.addressPrefix,
+        },)) : (await Secp256k1HdWallet.fromMnemonic(this.mnemonic, {
+            prefix: global.workspaceChain.addressPrefix,
+        }));
 
         return wallet.signAmino(signerAddress, signDoc);
     }
 
     public async getAccounts() {
-        let wallet = await this.getWallet();
-        return wallet.getAccounts();
+        return (await this.getWallet()).getAccounts();
     }
 
     async getWallet(){

@@ -4,39 +4,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EthSecp256k1HdWallet = exports.extractKdfConfiguration = void 0;
 const amino_1 = require("@cosmjs/amino");
 const crypto_1 = require("@cosmjs/crypto");
-const encoding_1 = require("@cosmjs/encoding");
 const utils_1 = require("@cosmjs/utils");
 const signing_1 = require("@cosmjs/proto-signing/build/signing");
 const signing_2 = require("@cosmjs/amino/build/signdoc");
-const wallet_1 = require("@cosmjs/proto-signing/build/wallet");
 const serializationTypeV1 = "directsecp256k1hdwallet-v1";
 const web3 = require('web3'); 
-const buffer = require('buffer'); 
-const ethers = require('ethers');
 const crypto_2 = require("./crypto/index");
 
-
-/**
- * A KDF configuration that is not very strong but can be used on the main thread.
- * It takes about 1 second in Node.js 16.0.0 and should have similar runtimes in other modern Wasm hosts.
- */
-const basicPasswordHashingOptions = {
-    algorithm: "argon2id",
-    params: {
-        outputLength: 32,
-        opsLimit: 24,
-        memLimitKib: 12 * 1024,
-    },
-};
-function isDerivationJson(thing) {
-    if (!(0, utils_1.isNonNullObject)(thing))
-        return false;
-    if (typeof thing.hdPath !== "string")
-        return false;
-    if (typeof thing.prefix !== "string")
-        return false;
-    return true;
-}
 function extractKdfConfigurationV1(doc) {
     return doc.kdf;
 }
@@ -52,13 +26,6 @@ function extractKdfConfiguration(serialization) {
     }
 }
 exports.extractKdfConfiguration = extractKdfConfiguration;
-
-// m/44'/118'/0'/0/0
-// m/44'/60'/0'/0/0
-// const path = stringToPath("m/44'/118'/0'/0/0");
-// var pathArray = [path];
-
-// hdPaths: pathArray,
 
 const defaultOptions = {
     bip39Password: "",
@@ -107,7 +74,7 @@ class EthSecp256k1HdWallet {
      *                 This is not normalized internally (see "Unicode normalization" to learn more).
      */
     static async deserialize(serialization, password) {
-        throw new Error("Todo, deserialize");
+        throw new Error("Error, no deserialize");
     }
     /**
      * Restores a wallet from an encrypted serialization.
@@ -119,10 +86,10 @@ class EthSecp256k1HdWallet {
      * done using `extractKdfConfiguration(serialization)` and `executeKdf(password, kdfConfiguration)` from this package.
      */
     static async deserializeWithEncryptionKey(serialization, encryptionKey) {
-        throw new Error("Todo, deserializeWithEncryptionKey");
+        throw new Error("Error, no deserializeWithEncryptionKey");
     }
     static async deserializeTypeV1(serialization, password) {
-        throw new Error("Todo, deserializeTypeV1");
+        throw new Error("Error, no deserializeTypeV1");
     }
     get mnemonic() {
         return this.secret;
@@ -142,33 +109,13 @@ class EthSecp256k1HdWallet {
             throw new Error(`Address ${signerAddress} not found in wallet`);
         }
         const { privkey, pubkey } = account;
-        
         let sha3Msg = Buffer.from((0, signing_1.makeSignBytes)(signDoc));
         const hash = web3.utils.sha3(sha3Msg);
-        console.log(sha3Msg.toString('hex'));
-        console.log(hash.toString());
-        console.log(this.buf2hex(pubkey.buffer));
         const signature = await crypto_1.Secp256k1.createSignature(Uint8Array.from(Buffer.from(hash.substring(2),'hex')), privkey);
         const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
         return {
             signed: signDoc, signature: (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes),
         };
-
-        // const signBytes = (0, signing_1.makeSignBytes)(signDoc);
-        // const hashedMessage = (0, crypto_1.sha256)(signBytes);
-        // const signature = await crypto_1.Secp256k1.createSignature(hashedMessage, privkey);
-        // const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
-        // const stdSignature = (0, amino_1.encodeSecp256k1Signature)(pubkey, signatureBytes);
-
-        // console.log(this.buf2hex(pubkey.buffer));
-        return {
-            signed: signDoc,
-            signature: stdSignature,
-        };
-    }
-
-    async buf2hex(buffer) {
-        return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
     }
 
     async signAmino(signerAddress, signDoc) {
@@ -193,7 +140,7 @@ class EthSecp256k1HdWallet {
      *                 This is not normalized internally (see "Unicode normalization" to learn more).
      */
     async serialize(password) {
-        throw new Error("Todo, serialize");
+        throw new Error("Error, no serialize");
     }
     /**
      * Generates an encrypted serialization of this wallet.
@@ -205,7 +152,7 @@ class EthSecp256k1HdWallet {
      * is not the case, the wallet cannot be restored with the original password.
      */
     async serializeWithEncryptionKey(encryptionKey, kdfConfiguration) {
-        throw new Error("Todo, serializeWithEncryptionKey");
+        throw new Error("Error, no serializeWithEncryptionKey");
     }
     async getKeyPair(hdPath) {
         let privateK = crypto_2.getPrivateKeyFromMnemonic(this.secret, '60');
@@ -229,4 +176,3 @@ class EthSecp256k1HdWallet {
     }
 }
 exports.EthSecp256k1HdWallet = EthSecp256k1HdWallet;
-//# sourceMappingURL=directsecp256k1hdwallet.js.map
