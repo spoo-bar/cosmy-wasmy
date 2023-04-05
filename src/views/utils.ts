@@ -73,7 +73,7 @@ export class Utils {
             }
             balance = zeroStr + balance;
         }
-        return balance.slice(0, balance.length - 18) + "." + balance.slice(balance.length - 18)
+        return balance.slice(0, balance.length - decimals) + "." + balance.slice(balance.length - decimals)
     }
 
     public static async BeakerAutoSync(context: vscode.ExtensionContext) {

@@ -32,13 +32,22 @@ export class AccountCmds {
 						const options = [vscode.l10n.t("Generate seed phrase for me (Recommended)"), vscode.l10n.t("I have a seed phrase")];
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
-								if (rr == vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									EthSecp256k1HdWallet.generate(12).then(wallet => {
-										const account = new Account(accountLabel, wallet.mnemonic)
-										saveNewAccount(account);
-									});
+								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
+									let mnemonicLen = global.workspaceChain.mnemonicLen;
+									if(typeof mnemonicLen === "undefined" || mnemonicLen === null || mnemonicLen === "" || mnemonicLen !== "12"){
+										EthSecp256k1HdWallet.generate(24).then(wallet => {
+											const account = new Account(accountLabel, wallet.mnemonic);
+											saveNewAccount(account);
+										});
+									}
+									else if(mnemonicLen === "12"){
+										EthSecp256k1HdWallet.generate(12).then(wallet => {
+											const account = new Account(accountLabel, wallet.mnemonic);
+											saveNewAccount(account);
+										});
+									}
 								}
-								if (rr == vscode.l10n.t("I have a seed phrase")) {
+								if (rr === vscode.l10n.t("I have a seed phrase")) {
 									vscode.window.showInputBox({
 										title: vscode.l10n.t("Account Mnemonic"),
 										placeHolder: vscode.l10n.t("Ensure this is not your main account seed phrase. This info is stored in plain text in vscode.")

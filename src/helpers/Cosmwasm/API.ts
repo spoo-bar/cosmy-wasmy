@@ -8,10 +8,7 @@ import { Contract } from '../../models/contract';
 import { Workspace } from "../workspace";
 import { ResponseHandler } from "../responseHandler";
 import { Account } from "../../models/account";
-import { util } from "protobufjs";
-import { utils } from "elliptic";
 import { Utils } from "../../views/utils";
-import { stringToPath } from "@cosmjs/crypto";
 
 
 export class CosmwasmAPI {
@@ -27,8 +24,11 @@ export class CosmwasmAPI {
         let denom = global.workspaceChain.chainDenom;
         let balance = await client.getBalance(address, denom);
 
-        return Utils.TransDecimals(balance.amount, global.workspaceChain.chainDenomDecimals);
-        //return balance.amount;
+        if (!Number.isNaN(global.workspaceChain.chainDenomDecimals)) {
+            return Utils.TransDecimals(balance.amount, global.workspaceChain.chainDenomDecimals);
+        }
+        
+        return balance.amount;
     }
 
     public static async RequestFunds(address: string) {
@@ -51,14 +51,18 @@ export class Cosmwasm {
         const rpcEndpoint = global.workspaceChain.rpcEndpoint;
         return await CosmWasmClient.connect(rpcEndpoint);
     }
-    
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
         let signer = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         });
-        let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainGasDenom;
+        let gasDenom = global.workspaceChain.chainGasDenom;
+        if(typeof gasDenom === "undefined" || gasDenom === null || gasDenom === ""){
+            gasDenom = global.workspaceChain.chainDenom;
+        }
+        
+        let gasPrice = global.workspaceChain.defaultGasPrice + gasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
             global.workspaceChain.rpcEndpoint,
             signer, {

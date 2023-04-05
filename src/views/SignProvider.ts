@@ -38,14 +38,8 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			return;
 		}
 		try {
-			// m/44'/118'/0'/0/0
-			// m/44'/60'/0'/0/0
-
-			const path = stringToPath("m/44'/118'/0'/0/0");
-        	var pathArray = [path];
 			let wallet = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix,
-				// hdPaths: pathArray,
 			});
 			const signDoc = this.makeSignDoc(account.address, data.value);
 			let response = await wallet.signAmino(account.address, signDoc);

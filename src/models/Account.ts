@@ -4,7 +4,6 @@ import { EthSecp256k1HdWallet } from '../helpers/Sign/ethsecp256k1hdwallet';
 import { ExtData } from '../helpers/extensionData/extData';
 import { Workspace } from '../helpers/workspace';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
-import { stringToPath } from "@cosmjs/crypto";
 
 export class Account extends vscode.TreeItem {
 	label: string;
@@ -47,10 +46,10 @@ export class Account extends vscode.TreeItem {
 
 	public static async AddAccount(context: vscode.Memento, account: Account) {
 		try{
-			const wallet = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+			//fix import error mnemonic,  failed to load account when restart vscode
+			await (await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix
-			}); 
-			const temp = await wallet.getAccounts();
+			})).getAccounts();
 	
 			const accounts = this.GetAccountsBasic(context);
 			accounts.push(account);

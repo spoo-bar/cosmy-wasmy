@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "2.0.2",
+  "version": "2.2.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -392,7 +392,8 @@
                 "defaultGasPrice": "100000000",
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
-                "chainDenomDecimals": "18"
+                "chainDenomDecimals": "18",
+                "mnemonicLen": "12"
               },
               {
                 "configName": "OKTC testnet",
@@ -404,6 +405,7 @@
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
+                "mnemonicLen": "12",
                 "accountExplorerLink": "https://www.oklink.com/cn/oktc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/cn/oktc-test/tx/${txHash}"
              }

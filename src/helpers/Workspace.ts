@@ -132,6 +132,7 @@ export class ChainConfig {
     chainDenom!: string;
     chainGasDenom!: string;
     chainDenomDecimals!: string;
+    mnemonicLen!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
@@ -168,6 +169,11 @@ export class ChainConfig {
         if (!this.chainDenomDecimals || Number.isNaN(this.chainDenomDecimals)) {
             throw new Error(vscode.l10n.t("Chain denom decimals is empty"));
         }
+
+        if (!this.mnemonicLen || Number.isNaN(this.mnemonicLen)) {
+            throw new Error(vscode.l10n.t("Mnemonic length must be 12 or 24, default 24"));
+        }
+
         return;
     }
 }
