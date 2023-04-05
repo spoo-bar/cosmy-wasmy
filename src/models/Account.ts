@@ -45,10 +45,21 @@ export class Account extends vscode.TreeItem {
 		return ExtData.GetExtensionData(context).accounts;
 	}
 
-	public static AddAccount(context: vscode.Memento, account: Account) {
-		const accounts = this.GetAccountsBasic(context);
-		accounts.push(account);
-		ExtData.SaveAccounts(context, accounts);
+	public static async AddAccount(context: vscode.Memento, account: Account) {
+		try{
+			const wallet = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+				prefix: global.workspaceChain.addressPrefix
+			}); 
+			const temp = await wallet.getAccounts();
+	
+			const accounts = this.GetAccountsBasic(context);
+			accounts.push(account);
+			ExtData.SaveAccounts(context, accounts);
+			return true;
+		}
+		catch{
+			return false;
+		}
 	}
 
 	public static DeleteAccount(context: vscode.Memento, account: Account) {
