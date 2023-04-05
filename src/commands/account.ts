@@ -32,19 +32,11 @@ export class AccountCmds {
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
 								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									let signType = global.workspaceChain.signType;
-									if(typeof signType === "undefined" || signType === null || signType === "" || signType !== SIGN_TYPE.ethsecp256){
-										WrapWallet.generate(signType, 24).then(wallet => {
-											const account = new Account(accountLabel, wallet.mnemonic);
-											saveNewAccount(account);
-										});
-									}
-									else{
-										WrapWallet.generate(signType, 12).then(wallet => {
-											const account = new Account(accountLabel, wallet.mnemonic);
-											saveNewAccount(account);
-										});
-									}
+									let defaultLen = WrapWallet.isEthSecp256(global.workspaceChain.signType)? 12 : 24;
+									WrapWallet.generate(global.workspaceChain.signType, defaultLen).then(wallet => {
+										const account = new Account(accountLabel, wallet.mnemonic);
+										saveNewAccount(account);
+									});
 								}
 								if (rr === vscode.l10n.t("I have a seed phrase")) {
 									vscode.window.showInputBox({

@@ -27,12 +27,7 @@ export class WrapWallet {
 
     constructor(type, mnemonic, options) {
         this.mnemonic = mnemonic;
-        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
-            this.signType = SIGN_TYPE.tmsecp256;
-        }
-        else{
-            this.signType = SIGN_TYPE.ethsecp256;
-        }
+        this.signType = WrapWallet.isEthSecp256(type) ? SIGN_TYPE.ethsecp256 : SIGN_TYPE.tmsecp256;;
     }
 
     static async fromMnemonic(type: string, mnemonic: string, options?: Partial<WrapSecp256k1HdWalletOptions>): Promise<WrapWallet>{
@@ -42,10 +37,17 @@ export class WrapWallet {
     }
 
     static async generate(type, length, options = {}) {
-        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
-           return DirectSecp256k1HdWallet.generate(length, options);
+        if (WrapWallet.isEthSecp256(type)){
+            return EthSecp256k1HdWallet.generate(length, options);
         }
-        return EthSecp256k1HdWallet.generate(length, options);
+        return DirectSecp256k1HdWallet.generate(length, options);
+    }
+
+    static isEthSecp256(type){
+        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
+            return false;
+        }
+        return true;
     }
 
     async signDirect(signerAddress, signDoc) {
