@@ -24,8 +24,9 @@ export class CosmwasmAPI {
         let denom = global.workspaceChain.chainDenom;
         let balance = await client.getBalance(address, denom);
 
-        if (!Number.isNaN(global.workspaceChain.chainDenomDecimals)) {
-            return Utils.TransDecimals(balance.amount, global.workspaceChain.chainDenomDecimals);
+        let decimals = global.workspaceChain.chainDenomDecimals;
+        if (!isNaN(parseFloat(decimals))) {
+            return Utils.TransDecimals(balance.amount, decimals);
         }
         
         return balance.amount;
