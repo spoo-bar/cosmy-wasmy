@@ -130,12 +130,12 @@ export class ChainConfig {
     rpcEndpoint!: string;
     defaultGasPrice!: string;
     chainDenom!: string;
-    chainGasDenom!: string;
-    chainDenomDecimals!: string;
-    signType!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
+    chainGasDenom!: string;
+    chainDenomDecimals!: string;
+    signType!: string;
 
     public Validate() {
         if (!this) {
@@ -161,17 +161,6 @@ export class ChainConfig {
         }
         if (!this.chainDenom || this.chainDenom === " ") {
             throw new Error(vscode.l10n.t("Chain denom is empty"));
-        }
-        if (!this.chainGasDenom || this.chainGasDenom === " ") {
-            throw new Error(vscode.l10n.t("Chain gas denom is empty"));
-        }
-
-        if (!this.chainDenomDecimals || Number.isNaN(this.chainDenomDecimals)) {
-            throw new Error(vscode.l10n.t("Chain denom decimals is empty"));
-        }
-
-        if (!this.signType || this.signType === " ") {
-            throw new Error(vscode.l10n.t("SignType type must ethsecp256 or tmsecp256, defualt tmsecp256"));
         }
 
         return;
