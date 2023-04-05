@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-// import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { EthSecp256k1HdWallet } from '../helpers/Sign/ethsecp256k1hdwallet';
+import { WrapWallet, SIGN_TYPE } from '../helpers/Sign/wrapwallet';
 import { Constants } from '../constants';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
@@ -33,15 +32,15 @@ export class AccountCmds {
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
 								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									let mnemonicLen = global.workspaceChain.mnemonicLen;
-									if(typeof mnemonicLen === "undefined" || mnemonicLen === null || mnemonicLen === "" || mnemonicLen !== "12"){
-										EthSecp256k1HdWallet.generate(24).then(wallet => {
+									let signType = global.workspaceChain.signType;
+									if(typeof signType === "undefined" || signType === null || signType === "" || signType !== SIGN_TYPE.ethsecp256){
+										WrapWallet.generate(signType, 24).then(wallet => {
 											const account = new Account(accountLabel, wallet.mnemonic);
 											saveNewAccount(account);
 										});
 									}
-									else if(mnemonicLen === "12"){
-										EthSecp256k1HdWallet.generate(12).then(wallet => {
+									else{
+										WrapWallet.generate(signType, 12).then(wallet => {
 											const account = new Account(accountLabel, wallet.mnemonic);
 											saveNewAccount(account);
 										});

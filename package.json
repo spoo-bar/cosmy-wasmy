@@ -393,7 +393,7 @@
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
-                "mnemonicLen": "12"
+                "signType": "ethsecp256"
               },
               {
                 "configName": "OKTC testnet",
@@ -405,7 +405,7 @@
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
-                "mnemonicLen": "12",
+                "signType": "ethsecp256",
                 "accountExplorerLink": "https://www.oklink.com/cn/oktc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/cn/oktc-test/tx/${txHash}"
              }

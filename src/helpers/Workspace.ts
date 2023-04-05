@@ -132,7 +132,7 @@ export class ChainConfig {
     chainDenom!: string;
     chainGasDenom!: string;
     chainDenomDecimals!: string;
-    mnemonicLen!: string;
+    signType!: string;
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
@@ -170,8 +170,8 @@ export class ChainConfig {
             throw new Error(vscode.l10n.t("Chain denom decimals is empty"));
         }
 
-        if (!this.mnemonicLen || Number.isNaN(this.mnemonicLen)) {
-            throw new Error(vscode.l10n.t("Mnemonic length must be 12 or 24, default 24"));
+        if (!this.signType || this.signType === " ") {
+            throw new Error(vscode.l10n.t("SignType type must ethsecp256 or tmsecp256, defualt tmsecp256"));
         }
 
         return;

@@ -1,12 +1,12 @@
 import { CodeDetails, CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Coin, parseCoins } from "@cosmjs/proto-signing";
-import { EthSecp256k1HdWallet } from '../Sign/ethsecp256k1hdwallet';
+import { parseCoins } from "@cosmjs/proto-signing";
+import { WrapWallet } from '../Sign/wrapwallet';
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
 import { Workspace } from "../workspace";
-import { ResponseHandler } from "../responseHandler";
+import { ResponseHandler } from "../ResponseHandler";
 import { Account } from "../../models/account";
 import { Utils } from "../../views/utils";
 
@@ -54,7 +54,7 @@ export class Cosmwasm {
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
-        let signer = await EthSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        let signer = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         });
         let gasDenom = global.workspaceChain.chainGasDenom;
