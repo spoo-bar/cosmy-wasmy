@@ -275,6 +275,18 @@
                   "type": "string",
                   "description": "%cosmywasmy.chains.items.defaultGasPrice.desc%"
                 },
+                "chainGasDenom": {
+                  "type": "string",
+                  "description": "%cosmywasmy.chains.items.chainGasDenom.desc%"
+                },
+                "chainDenomDecimals": {
+                  "type": "string",
+                  "description": "%cosmywasmy.chains.items.chainDenomDecimals.desc%"
+                },
+                "signType": {
+                  "type": "string",
+                  "description": "%cosmywasmy.chains.items.signType.desc%"
+                },
                 "chainDenom": {
                   "type": "string",
                   "description": "%cosmywasmy.chains.items.chainDenom.desc%"
