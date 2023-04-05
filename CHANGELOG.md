@@ -18,6 +18,21 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [v2.2.0] - 05 April 2023
+
+### Added
+
+- Support [OKTChain](https://www.okx.com/oktc) - OKTC is a L1 blockchain network built on Cosmos that aims for optimal interoperability and performance.
+- Support `ethsecp256`signature algorithm - Can sign compatibly with ethermint.
+- Added `chainDenomDecimals` config - Can display the decimals of account balance.
+- Added `chainGasDenom` config - Can use it when submit tx, default use `chainDenom`.
+
+### Fixed
+
+- Fixed failed to load accounts when import wrong mnemonics.
+
+
+
 ## [v2.1.0] - 04 April 2023
 
 ### Changed
