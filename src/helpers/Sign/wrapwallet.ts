@@ -1,5 +1,7 @@
 
 import { EthSecp256k1HdWallet } from './ethsecp256k1hdwallet';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import { HdPath } from "@cosmjs/crypto";
 const amino_1 = require("@cosmjs/amino");
 
@@ -13,11 +15,6 @@ export interface WrapSecp256k1HdWalletOptions {
     readonly prefix: string;
 }
 
-const defaultOptions = {
-    bip39Password: "",
-    hdPaths: [(0, amino_1.makeCosmoshubPath)(0)],
-    prefix: "cosmos",
-};
 
 export const SIGN_TYPE = {
     ethsecp256: 'ethsecp256',
@@ -30,7 +27,7 @@ export class WrapWallet {
 
     constructor(type, mnemonic, options) {
         this.mnemonic = mnemonic;
-        if (typeof type === "undefined" || type === null || type === "" || type === SIGN_TYPE.tmsecp256){
+        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
             this.signType = SIGN_TYPE.tmsecp256;
         }
         else{
@@ -45,50 +42,46 @@ export class WrapWallet {
     }
 
     static async generate(type, length, options = {}) {
-        if (typeof type === "undefined" || type === null || type === "" || type === SIGN_TYPE.tmsecp256){
-           
+        if (typeof type === "undefined" || type === null || type === "" || type !== SIGN_TYPE.ethsecp256){
+           return DirectSecp256k1HdWallet.generate(length, options);
         }
-        else{
-            return EthSecp256k1HdWallet.generate(length, options);
-        }
+        return EthSecp256k1HdWallet.generate(length, options);
     }
 
     async signDirect(signerAddress, signDoc) {
-        if (this.signType === SIGN_TYPE.ethsecp256){
-            let wallet = await this.getWallet();
-            return wallet.signDirect(signerAddress, signDoc);
-        }
-        else{
-            let wallet = await this.getWallet();
-            return wallet.signDirect(signerAddress, signDoc);
-        }
+        let wallet = await this.getWallet();
+        return wallet.signDirect(signerAddress, signDoc);
     }
 
     async signAmino(signerAddress, signDoc) {
-        if (this.signType === SIGN_TYPE.ethsecp256){
-            let wallet = await this.getWallet();
-            return wallet.signAmino(signerAddress, signDoc);
+        let wallet;
+        if (this.signType !== SIGN_TYPE.ethsecp256){
+            let wallet = await Secp256k1HdWallet.fromMnemonic(this.mnemonic, {
+                prefix: global.workspaceChain.addressPrefix,
+            });
         }
-        else{
-            let wallet = await this.getWallet();
-            return wallet.signAmino(signerAddress, signDoc);
+        else {
+            wallet = await EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+                prefix: global.workspaceChain.addressPrefix,
+            },);
         }
+
+        return wallet.signAmino(signerAddress, signDoc);
     }
 
     public async getAccounts() {
-        if (this.signType === SIGN_TYPE.ethsecp256){
-            let wallet = await this.getWallet();
-            return wallet.getAccounts();
-        }
-        else{
-            let wallet = await this.getWallet();
-            return wallet.getAccounts();
-        }
+        let wallet = await this.getWallet();
+        return wallet.getAccounts();
     }
 
     async getWallet(){
-        return EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+        if (this.signType !== SIGN_TYPE.ethsecp256){
+            return DirectSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
                 prefix: global.workspaceChain.addressPrefix,
+            },);
+        }
+        return EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+            prefix: global.workspaceChain.addressPrefix,
         },);
     }
 
