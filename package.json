@@ -24,7 +24,8 @@
     "Archway",
     "Chihuahua",
     "Stargaze",
-    "Neutron"
+    "Neutron",
+    "OKTC"
   ],
   "activationEvents": [
     "onView:account",
