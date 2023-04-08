@@ -33,6 +33,11 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                             vscode.window.showErrorMessage(vscode.l10n.t("CodeId is not specified"));
                             return;
                         }
+                        let admin = data.value.admin;
+                        if (admin && admin.indexOf("0x") !== 0 && admin.indexOf(global.workspaceChain.addressPrefix) !== 0) {
+                            vscode.window.showErrorMessage(vscode.l10n.t("Admin is not a valid address"));
+                            return;
+                        }
                         if (!data.value.label) {
                             vscode.window.showErrorMessage(vscode.l10n.t("No label provided for the contract"));
                             return;
@@ -62,11 +67,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
             return new Promise(async (resolve, reject) => {
 
                 let codeId = Number(data.value.codeid);
+                let admin = data.value.admin;
                 let label = data.value.label;
 
                 try {
                     let funds = parseCoins(data.value.funds);
-                    let res = await this.instantiateContract(account, codeId, req, label, funds);
+                    let res = await this.instantiateContract(account, codeId, req, label, funds, admin);
                     ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
                     if (data.value.import) {
                         await vscode.commands.executeCommand('cosmy-wasmy.addContract', res.contractAddress);
@@ -82,10 +88,10 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
         });
     }
 
-    private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any, funds: Coin[]) {
+    private async instantiateContract(account: Account, codeId: number, req: Record<string, unknown>, label: any, funds: Coin[],  admin: any) {
         let client = await Cosmwasm.GetSigningClient();
         let res = await client.instantiate(account.address, codeId, req, label, "auto", {
-            admin: account.address,
+            admin: admin,
             funds: funds,
             memo: "Initialized from cosmy-wasmy"
         });
@@ -119,6 +125,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
 			<body>
                 <input type="number" id="codeid-text" placeholder="CodeId"></input>
                 <input type="text" id="label-text" placeholder="Contract Label"></input>
+                <input type="text" id="admin-text" placeholder="Admin"></input>
                 <input id="funds-text" placeholder="10${denom}"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
 				<button id="exec-button">${vscode.l10n.t("Initialize")}</button>
@@ -131,10 +138,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                         const inputText = document.getElementById('input-text').value;
                         const codeId = document.getElementById('codeid-text').value;
                         const labelText = document.getElementById('label-text').value;
+                        const adminText = document.getElementById('admin-text').value;
                         const funds = document.getElementById('funds-text').value;
                         vscode.postMessage({ type: 'exec-text', value: {
                             codeid: codeId,
                             label: labelText,
+                            admin: adminText,
                             input: inputText,
                             funds: funds
                         }});
@@ -144,10 +153,12 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                         const inputText = document.getElementById('input-text').value;
                         const codeId = document.getElementById('codeid-text').value;
                         const labelText = document.getElementById('label-text').value;
+                        const adminText = document.getElementById('admin-text').value;
                         const funds = document.getElementById('funds-text').value;
                         vscode.postMessage({ type: 'exec-text', value: {
                             codeid: codeId,
                             label: labelText,
+                            admin: adminText,
                             input: inputText,
                             funds: funds,
                             import: true
