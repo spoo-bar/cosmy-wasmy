@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { WrapWallet } from '../helpers/Sign/wrapwallet';
-import { ExtData } from '../helpers/ExtensionData/ExtData';
+import { ExtData } from '../helpers/extensionData/extData';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 
 export class Account extends vscode.TreeItem {
