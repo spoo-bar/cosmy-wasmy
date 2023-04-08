@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { WrapWallet, SIGN_TYPE } from '../helpers/Sign/wrapwallet';
+import { WrapWallet} from '../helpers/Sign/wrapwallet';
 import { Constants } from '../constants';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';

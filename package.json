@@ -286,7 +286,10 @@
                 },
                 "signType": {
                   "type": "string",
-                  "enum": ["ethsecp256", "tmsecp256"],
+                  "enum": [
+                    "ethsecp256", 
+                    "tmsecp256"
+                  ],
                   "default": "tmsecp256",
                   "description": "%cosmywasmy.chains.items.signType.desc%"
                 },
