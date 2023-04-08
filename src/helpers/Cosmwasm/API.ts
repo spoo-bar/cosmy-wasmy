@@ -59,7 +59,7 @@ export class Cosmwasm {
             prefix: global.workspaceChain.addressPrefix,
         });
         let gasDenom = global.workspaceChain.chainGasDenom;
-        if(typeof gasDenom === "undefined" || gasDenom === null || gasDenom === ""){
+        if (!gasDenom) {
             gasDenom = global.workspaceChain.chainDenom;
         }
         
