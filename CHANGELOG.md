@@ -26,6 +26,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 - Support `signType`signature algorithm - Can sign compatibly with ethermint, `ethsecp256` or `tmsecp256`, default `tmsecp256`.
 - Added `chainDenomDecimals` config - Can display the decimals of account balance.
 - Added `chainGasDenom` config - Can use it when submit tx, default use `chainDenom`.
+- Add `Admin` input - Can set admin in instantiateContract view, default use "".
 
 ### Fixed
 
