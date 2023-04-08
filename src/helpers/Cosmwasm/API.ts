@@ -6,7 +6,7 @@ import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
 import { Workspace } from "../workspace";
-import { ResponseHandler } from "../ResponseHandler";
+import { ResponseHandler } from "../responseHandler";
 import { Account } from "../../models/account";
 import { Utils } from "../../views/utils";
 
