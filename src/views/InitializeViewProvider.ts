@@ -125,7 +125,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
 			<body>
                 <input type="number" id="codeid-text" placeholder="CodeId"></input>
                 <input type="text" id="label-text" placeholder="Contract Label"></input>
-                <input type="text" id="admin-text" placeholder="Admin"></input>
+                <input type="text" id="admin-text" placeholder="Contract Admin Address"></input>
                 <input id="funds-text" placeholder="10${denom}"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
 				<button id="exec-button">${vscode.l10n.t("Initialize")}</button>

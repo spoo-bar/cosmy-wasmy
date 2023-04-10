@@ -287,7 +287,7 @@
                 "signType": {
                   "type": "string",
                   "enum": [
-                    "ethsecp256", 
+                    "ethsecp256",
                     "tmsecp256"
                   ],
                   "default": "tmsecp256",
@@ -426,7 +426,7 @@
                 "signType": "ethsecp256",
                 "accountExplorerLink": "https://www.oklink.com/cn/oktc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/cn/oktc-test/tx/${txHash}"
-             }
+              }
             ]
           },
           "cosmywasmy.contractSortOrder": {
@@ -1150,16 +1150,17 @@
     "@cosmjs/cosmwasm-stargate": "^0.28.4",
     "@cosmjs/faucet-client": "^0.28.4",
     "@cosmjs/launchpad": "^0.27.1",
+    "@cosmjs/math": "^0.30.1",
     "@cosmjs/proto-signing": "^0.28.4",
     "@terran-one/cw-simulate": "^2.8.0",
     "@vscode/l10n": "^0.0.10",
     "@vscode/l10n-dev": "^0.0.22",
     "@vscode/webview-ui-toolkit": "^1.2.0",
     "cross-fetch": "^3.1.5",
+    "ethers": "^5.6.0",
     "json-schema-faker": "^0.5.0-rcv.46",
     "node-fetch": "^3.3.0",
     "toml": "^3.0.0",
-    "web3": "^1.8.1",
-    "ethers": "^5.6.0"
+    "web3": "^1.8.1"
   }
 }
