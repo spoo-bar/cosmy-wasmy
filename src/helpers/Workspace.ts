@@ -133,6 +133,9 @@ export class ChainConfig {
     faucetEndpoint!: string;
     accountExplorerLink!: string;
     txExplorerLink!: string;
+    chainGasDenom!: string;
+    chainDenomDecimals!: string;
+    signType!: string;
 
     public Validate() {
         if (!this) {
@@ -159,6 +162,7 @@ export class ChainConfig {
         if (!this.chainDenom || this.chainDenom === " ") {
             throw new Error(vscode.l10n.t("Chain denom is empty"));
         }
+
         return;
     }
 }

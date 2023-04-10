@@ -1,17 +1,17 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { GasPrice } from '@cosmjs/stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { WrapWallet } from '../Sign/wrapwallet';
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 
 export class SmartExecutor {
 
-    private wallet: DirectSecp256k1HdWallet;
+    private wallet: WrapWallet;
     private address: string;
     private client: SigningCosmWasmClient;
 
     public async SetupAccount(mnemonic: string, addressPrefix: string) {
-        this.wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+        this.wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, mnemonic, {
             prefix: addressPrefix,
         });
         const accounts = await this.wallet.getAccounts();

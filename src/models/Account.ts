@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { WrapWallet } from '../helpers/Sign/wrapwallet';
 import { ExtData } from '../helpers/extensionData/extData';
-import { Workspace } from '../helpers/workspace';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 
 export class Account extends vscode.TreeItem {
@@ -24,8 +23,8 @@ export class Account extends vscode.TreeItem {
 	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
 		for (let account of accountData) {
-			const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
-				prefix: global.workspaceChain.addressPrefix,
+			const wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+				prefix: global.workspaceChain.addressPrefix
 			});
 			const accounts = await wallet.getAccounts();
 			account.address = accounts[0].address;
@@ -43,10 +42,21 @@ export class Account extends vscode.TreeItem {
 		return ExtData.GetExtensionData(context).accounts;
 	}
 
-	public static AddAccount(context: vscode.Memento, account: Account) {
-		const accounts = this.GetAccountsBasic(context);
-		accounts.push(account);
-		ExtData.SaveAccounts(context, accounts);
+	public static async AddAccount(context: vscode.Memento, account: Account) {
+		try{
+			//fix import error mnemonic,  failed to load account when restart vscode
+			await (await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+				prefix: global.workspaceChain.addressPrefix
+			})).getAccounts();
+	
+			const accounts = this.GetAccountsBasic(context);
+			accounts.push(account);
+			ExtData.SaveAccounts(context, accounts);
+			return true;
+		}
+		catch{
+			return false;
+		}
 	}
 
 	public static DeleteAccount(context: vscode.Memento, account: Account) {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { WrapWallet} from '../helpers/Sign/wrapwallet';
 import { Constants } from '../constants';
 import { CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
@@ -31,13 +31,14 @@ export class AccountCmds {
 						const options = [vscode.l10n.t("Generate seed phrase for me (Recommended)"), vscode.l10n.t("I have a seed phrase")];
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
-								if (rr == vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									DirectSecp256k1HdWallet.generate(24).then(wallet => {
-										const account = new Account(accountLabel, wallet.mnemonic)
+								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
+									let defaultLen = WrapWallet.isEthSecp256(global.workspaceChain.signType)? 12 : 24;
+									WrapWallet.generate(global.workspaceChain.signType, defaultLen).then(wallet => {
+										const account = new Account(accountLabel, wallet.mnemonic);
 										saveNewAccount(account);
 									});
 								}
-								if (rr == vscode.l10n.t("I have a seed phrase")) {
+								if (rr === vscode.l10n.t("I have a seed phrase")) {
 									vscode.window.showInputBox({
 										title: vscode.l10n.t("Account Mnemonic"),
 										placeHolder: vscode.l10n.t("Ensure this is not your main account seed phrase. This info is stored in plain text in vscode.")
@@ -62,7 +63,10 @@ export class AccountCmds {
 
 		async function saveNewAccount(account: Account) {
 			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
-				Account.AddAccount(context.globalState, account);
+				if (!await Account.AddAccount(context.globalState, account)){
+					vscode.window.showErrorMessage(vscode.l10n.t("{label} - Account with given seed phrase is error, please check it.", { label: account.label }));
+					return;
+				}
 				vscode.window.showInformationMessage(vscode.l10n.t("Added new account: {label}", { label: account.label }));
 				const accounts = await Account.GetAccounts(context.globalState);
 				accountViewProvider.refresh(accounts);

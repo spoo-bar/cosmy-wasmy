@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { WrapWallet } from '../helpers/Sign/wrapwallet';
 import { StdSignDoc } from "@cosmjs/amino";
 import { Workspace } from '../helpers/workspace';
 import { ResponseHandler } from '../helpers/responseHandler';
-
 
 export class SignProvider implements vscode.WebviewViewProvider {
 
@@ -37,11 +36,11 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			return;
 		}
 		try {
-			let wallet = await Secp256k1HdWallet.fromMnemonic(account.mnemonic, {
+			let wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix,
 			});
 			const signDoc = this.makeSignDoc(account.address, data.value);
-			let response = await wallet.signAmino(account.address, signDoc)
+			let response = await wallet.signAmino(account.address, signDoc);
 			ResponseHandler.OutputSuccess(data.value, JSON.stringify(response.signature, null, 4), "Signing")
 		}
 		catch (err: any) {

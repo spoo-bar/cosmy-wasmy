@@ -1,12 +1,14 @@
 import { CodeDetails, CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { Coin, DirectSecp256k1HdWallet, parseCoins } from "@cosmjs/proto-signing";
+import { parseCoins } from "@cosmjs/proto-signing";
+import { WrapWallet } from '../Sign/wrapwallet';
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
 import { Workspace } from "../workspace";
 import { ResponseHandler } from "../responseHandler";
 import { Account } from "../../models/account";
+import { Utils } from "../../views/utils";
 
 
 export class CosmwasmAPI {
@@ -21,6 +23,12 @@ export class CosmwasmAPI {
         let client = await Cosmwasm.GetQueryClient();
         let denom = global.workspaceChain.chainDenom;
         let balance = await client.getBalance(address, denom);
+
+        let decimals = global.workspaceChain.chainDenomDecimals;
+        if (!isNaN(parseFloat(decimals))) {
+            return Utils.TransDecimals(balance.amount, decimals);
+        }
+        
         return balance.amount;
     }
 
@@ -47,10 +55,15 @@ export class Cosmwasm {
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
-        let signer = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, {
+        let signer = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         });
-        let gasPrice = global.workspaceChain.defaultGasPrice + global.workspaceChain.chainDenom;
+        let gasDenom = global.workspaceChain.chainGasDenom;
+        if (!gasDenom) {
+            gasDenom = global.workspaceChain.chainDenom;
+        }
+        
+        let gasPrice = global.workspaceChain.defaultGasPrice + gasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
             global.workspaceChain.rpcEndpoint,
             signer, {

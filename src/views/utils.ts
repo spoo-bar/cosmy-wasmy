@@ -64,6 +64,18 @@ export class Utils {
         }
     }
 
+    public static TransDecimals(balance, decimals) : string{
+        if (balance.length <= decimals){
+            let zeroLen = decimals - balance.length + 1;
+            let zeroStr = "";
+            for (let i = 0; i < zeroLen; i++){
+                zeroStr =  zeroStr + "0";
+            }
+            balance = zeroStr + balance;
+        }
+        return balance.slice(0, balance.length - decimals) + "." + balance.slice(balance.length - decimals)
+    }
+
     public static async BeakerAutoSync(context: vscode.ExtensionContext) {
         if (Workspace.GetBeakerAutosync()) {
             const files = await vscode.workspace.fs.readDirectory(vscode.workspace.workspaceFolders[0].uri);
