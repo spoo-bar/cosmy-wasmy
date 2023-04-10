@@ -18,7 +18,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
-## [v2.2.0] - 05 April 2023
+## [Unreleased]
 
 ### Added
 

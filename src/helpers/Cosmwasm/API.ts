@@ -1,4 +1,4 @@
-import { CodeDetails, CosmWasmClient, ExecuteInstruction } from "@cosmjs/cosmwasm-stargate";
+import { CodeDetails, CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { parseCoins } from "@cosmjs/proto-signing";
 import { WrapWallet } from '../Sign/wrapwallet';
@@ -110,24 +110,24 @@ export class Cosmwasm {
         }
     }
 
-    public static async ExecuteMultiple(account: Account, txs: ExecuteInstruction[]) {
-        try {
-            let client = await Cosmwasm.GetSigningClient();
-            let response = await client.executeMultiple(account.address, txs, "auto");
-            ResponseHandler.OutputSuccess(JSON.stringify(txs, null, 4), JSON.stringify(response, null, 4), "Tx");
-            return {
-                isSuccess: true,
-                response: response
-            };
-        }
-        catch (err: any) {
-            ResponseHandler.OutputError(JSON.stringify(txs, null, 4), err, "Tx");
-            return {
-                isSuccess: false,
-                response: err
-            };
-        }
-    }
+    // public static async ExecuteMultiple(account: Account, txs: ExecuteInstruction[]) {
+    //     try {
+    //         let client = await Cosmwasm.GetSigningClient();
+    //         let response = await client.executeMultiple(account.address, txs, "auto");
+    //         ResponseHandler.OutputSuccess(JSON.stringify(txs, null, 4), JSON.stringify(response, null, 4), "Tx");
+    //         return {
+    //             isSuccess: true,
+    //             response: response
+    //         };
+    //     }
+    //     catch (err: any) {
+    //         ResponseHandler.OutputError(JSON.stringify(txs, null, 4), err, "Tx");
+    //         return {
+    //             isSuccess: false,
+    //             response: err
+    //         };
+    //     }
+    // }
 
     public static async UpdateAdmin(account: Account, contract: Contract, newAdmin: string, resolve: (value: unknown) => void, reject: (reason?: any) => void) {
         const input = {
