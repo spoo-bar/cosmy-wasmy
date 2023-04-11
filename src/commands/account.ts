@@ -64,7 +64,7 @@ export class AccountCmds {
 		async function saveNewAccount(account: Account) {
 			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
 				if (!await Account.AddAccount(context.globalState, account)){
-					vscode.window.showErrorMessage(vscode.l10n.t("{label} - Account with given seed phrase is error, please check it.", { label: account.label }));
+					vscode.window.showErrorMessage(vscode.l10n.t("Given seed phrase is invalid - '{mnemonic}'", { mnemonic: account.mnemonic }));
 					return;
 				}
 				vscode.window.showInformationMessage(vscode.l10n.t("Added new account: {label}", { label: account.label }));
