@@ -20,6 +20,10 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ## [v2.2.0] - 11 April 2023
 
+> **Note**
+>
+> Thanks to [Barry](https://github.com/zjg555543) from [OKX](https://github.com/okx) for all contributions to this release
+
 ### Added
 
 - Support [OKTChain](https://www.okx.com/oktc) - OKTC is a L1 blockchain network built on Cosmos that aims for optimal interoperability and performance. Added configurations for localnet as well as testnet chains
