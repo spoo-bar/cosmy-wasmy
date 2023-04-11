@@ -135,7 +135,10 @@ The structure of the expected setting for `cosmywasamy.chains`:
         "addressPrefix": "osmo", // Used to derive account address
         "rpcEndpoint": "https://rpc-test.osmosis.zone", // Used for query and tx exec of smart contracts
         "defaultGasPrice": "0.025", // Gas price set for the smart contract tx execution
-        "chainDenom": "uosmo", // the micro denom used to pay for gas and to track account balance
+        "chainGasDenom": "uosmo", // The micro denom used to pay for gas
+        "chainDenomDecimals": "6", // Default decimals to display account balance
+        "signType": "tmsecp256k1", // Which signing scheme to use? tmsecp256k1 or ethsecp256k1
+        "chainDenom": "uosmo", // the micro denom used to track account balance
         "faucetEndpoint": "http://localhost:8000", //Faucet address and port to request funds
         "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}", //Block explorer url which includes '${accountAddress}' text to generate account url
         "txExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/txs/${txHash}" // Block explorer url which includes '${txHash}' text to generate tx url
