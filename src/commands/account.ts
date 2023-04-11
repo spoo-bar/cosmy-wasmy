@@ -32,7 +32,7 @@ export class AccountCmds {
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
 								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									let defaultLen = WrapWallet.isEthSecp256(global.workspaceChain.signType)? 12 : 24;
+									let defaultLen = WrapWallet.isEthSecp256k1(global.workspaceChain.signType)? 12 : 24;
 									WrapWallet.generate(global.workspaceChain.signType, defaultLen).then(wallet => {
 										const account = new Account(accountLabel, wallet.mnemonic);
 										saveNewAccount(account);
@@ -64,7 +64,7 @@ export class AccountCmds {
 		async function saveNewAccount(account: Account) {
 			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
 				if (!await Account.AddAccount(context.globalState, account)){
-					vscode.window.showErrorMessage(vscode.l10n.t("{label} - Account with given seed phrase is error, please check it.", { label: account.label }));
+					vscode.window.showErrorMessage(vscode.l10n.t("Given seed phrase is invalid - '{mnemonic}'", { mnemonic: account.mnemonic }));
 					return;
 				}
 				vscode.window.showInformationMessage(vscode.l10n.t("Added new account: {label}", { label: account.label }));

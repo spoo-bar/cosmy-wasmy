@@ -287,11 +287,15 @@
                 "signType": {
                   "type": "string",
                   "enum": [
-                    "ethsecp256",
-                    "tmsecp256"
+                    "tmsecp256k1",
+                    "ethsecp256k1"
                   ],
-                  "default": "tmsecp256",
-                  "description": "%cosmywasmy.chains.items.signType.desc%"
+                  "default": "tmsecp256k1",
+                  "description": "%cosmywasmy.chains.items.signType.desc%",
+                  "enumDescriptions": [
+                    "%cosmywasmy.chains.items.signType.tmsecp256k1.desc%",
+                    "%cosmywasmy.chains.items.signType.ethsecp256k1.desc%"
+                  ]
                 },
                 "chainDenom": {
                   "type": "string",
@@ -411,7 +415,7 @@
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
-                "signType": "ethsecp256"
+                "signType": "ethsecp256k1"
               },
               {
                 "configName": "OKTC testnet",
@@ -423,7 +427,7 @@
                 "chainDenom": "okt",
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
-                "signType": "ethsecp256",
+                "signType": "ethsecp256k1",
                 "accountExplorerLink": "https://www.oklink.com/cn/oktc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/cn/oktc-test/tx/${txHash}"
               }

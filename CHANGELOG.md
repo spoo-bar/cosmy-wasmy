@@ -18,20 +18,23 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
-## [Unreleased]
+## [v2.2.0] - 11 April 2023
+
+> **Note**
+>
+> Thanks to [Barry](https://github.com/zjg555543) from [OKX](https://github.com/okx) for all contributions to this release
 
 ### Added
 
 - Support [OKTChain](https://www.okx.com/oktc) - OKTC is a L1 blockchain network built on Cosmos that aims for optimal interoperability and performance. Added configurations for localnet as well as testnet chains
-- Support `signType`signature algorithm - Can sign compatibly with ethermint, `ethsecp256` or `tmsecp256`, default `tmsecp256`.
+- Support `signType`signature algorithm - Can sign compatibly with ethermint, `ethsecp256k1` or `tmsecp256k1`, default `tmsecp256k1`.
 - Added `chainDenomDecimals` config - Can display the decimals of account balance.
 - Added `chainGasDenom` config - Can use it when submit tx, default use `chainDenom`.
-- Add `Admin` input - Can set admin in instantiateContract view, default use "".
+- Add `Admin` input - Can set admin in instantiateContract view, if not set, contract has no admin set.
 
 ### Fixed
 
 - Fixed failed to load accounts when import wrong mnemonics.
-
 
 
 ## [v2.1.0] - 04 April 2023

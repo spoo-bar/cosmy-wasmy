@@ -135,7 +135,10 @@ The structure of the expected setting for `cosmywasamy.chains`:
         "addressPrefix": "osmo", // Used to derive account address
         "rpcEndpoint": "https://rpc-test.osmosis.zone", // Used for query and tx exec of smart contracts
         "defaultGasPrice": "0.025", // Gas price set for the smart contract tx execution
-        "chainDenom": "uosmo", // the micro denom used to pay for gas and to track account balance
+        "chainGasDenom": "uosmo", // The micro denom used to pay for gas
+        "chainDenomDecimals": "6", // Default decimals to display account balance
+        "signType": "tmsecp256k1", // Which signing scheme to use? tmsecp256k1 or ethsecp256k1
+        "chainDenom": "uosmo", // the micro denom used to track account balance
         "faucetEndpoint": "http://localhost:8000", //Faucet address and port to request funds
         "accountExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/account/${accountAddress}", //Block explorer url which includes '${accountAddress}' text to generate account url
         "txExplorerLink": "https://testnet.mintscan.io/osmosis-testnet/txs/${txHash}" // Block explorer url which includes '${txHash}' text to generate tx url
@@ -329,7 +332,9 @@ Big shoutout to [aswever](https://github.com/aswever), early feature inspiration
 Another shoutout to [
 TERRAN.ONE](https://twitter.com/terran_one) team for building the [cw-simulate](https://github.com/Terran-One/cw-simulate) library. 
 
-Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the v2 release of the extension.
+Thanks to [Osmosis Grants](https://grants.osmosis.zone/) for funding the work for the [v2](https://github.com/spoo-bar/cosmy-wasmy/releases/tag/v2.0.0) release of the extension.
+
+Thanks to [Barry](https://github.com/zjg555543) from [OKX](https://github.com/okx) for all major contributions to [v2.2](https://github.com/spoo-bar/cosmy-wasmy/releases/tag/v2.2.0) release
 
 And the consistent support I have found in the Cosmos and Cosmwasm community which motivates me to work on this extension 💜
 
