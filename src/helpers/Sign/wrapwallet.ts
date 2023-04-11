@@ -5,8 +5,8 @@ import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 import {DirectSecp256k1HdWalletOptions} from "@cosmjs/proto-signing/build/directsecp256k1hdwallet"
 
 export const SIGN_TYPE = {
-    ethsecp256: 'ethsecp256',
-    tmsecp256: 'tmsecp256'
+    ethsecp256k1: 'ethsecp256k1',
+    tmsecp256k1: 'tmsecp256k1'
 };
 
 export class WrapWallet {
@@ -15,7 +15,7 @@ export class WrapWallet {
 
     constructor(type, mnemonic, options) {
         this.mnemonic = mnemonic;
-        this.signType = WrapWallet.isEthSecp256(type) ? SIGN_TYPE.ethsecp256 : SIGN_TYPE.tmsecp256;;
+        this.signType = WrapWallet.isEthSecp256k1(type) ? SIGN_TYPE.ethsecp256k1 : SIGN_TYPE.tmsecp256k1;
     }
 
     static async fromMnemonic(type: string, mnemonic: string, options?: Partial<DirectSecp256k1HdWalletOptions>): Promise<WrapWallet>{
@@ -25,14 +25,14 @@ export class WrapWallet {
     }
 
     static async generate(type, length, options = {}) {
-        if (WrapWallet.isEthSecp256(type)){
+        if (WrapWallet.isEthSecp256k1(type)){
             return EthSecp256k1HdWallet.generate(length, options);
         }
         return DirectSecp256k1HdWallet.generate(length, options);
     }
 
-    static isEthSecp256(type){
-        if (typeof type !== "undefined" && type !== null && type !== "" && type === SIGN_TYPE.ethsecp256){
+    static isEthSecp256k1(type){
+        if (typeof type !== "undefined" && type !== null && type !== "" && type === SIGN_TYPE.ethsecp256k1){
             return true;
         }
         return false;
@@ -44,7 +44,7 @@ export class WrapWallet {
     }
 
     async signAmino(signerAddress, signDoc) {
-        let wallet = (this.signType === SIGN_TYPE.ethsecp256) ? (await EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+        let wallet = (this.signType === SIGN_TYPE.ethsecp256k1) ? (await EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         },)) : (await Secp256k1HdWallet.fromMnemonic(this.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
@@ -58,7 +58,7 @@ export class WrapWallet {
     }
 
     async getWallet(){
-        if (this.signType !== SIGN_TYPE.ethsecp256){
+        if (this.signType !== SIGN_TYPE.ethsecp256k1){
             return DirectSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
                 prefix: global.workspaceChain.addressPrefix,
             },);
