@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { Constants } from '../constants';
 import { Executer } from '../helpers/cosmwasm/executer';
 import { Workspace } from '../helpers/workspace';
-import { CosmwasmHistoryView } from '../views/cosmwasmHistoryView';
+import { CosmwasmHistoryView } from '../views/CosmwasmHistoryView';
 
 export class CosmwasmCmds {
 	public static async Register(context: vscode.ExtensionContext) {
@@ -21,11 +21,12 @@ export class CosmwasmCmds {
 				const panel = vscode.window.createWebviewPanel(
 					'history', // Identifies the type of the webview. Used internally
 					vscode.l10n.t('Cosmwasm History'), // Title of the panel displayed to the user
-					vscode.ViewColumn.Active, // Editor column to show the new webview panel in.
+					vscode.ViewColumn.Active, 
 					{
 						enableScripts: true
-					} // Webview options. More on these later.
+					} 
 				);
+				panel.iconPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'icon.svg');
 				let view = new CosmwasmHistoryView(context.globalState);
 				view.getWebviewContent(context.extensionUri, panel.webview);
 			}

@@ -20,6 +20,10 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ## [Unreleased]
 
+### Added
+
+- Added cosmy wasmy logo for cw history tab 
+
 ### Fixed
 
 - Closes [#59](https://github.com/spoo-bar/cosmy-wasmy/issues/59) which prevented the extension loading on mac due to webpack export [#51](https://github.com/spoo-bar/cosmy-wasmy/pull/51)
