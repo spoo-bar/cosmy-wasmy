@@ -216,6 +216,7 @@ export class ContractCmds {
 					retainContextWhenHidden: true,
 				}
 			);
+			panel.iconPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'icon.svg');
 			const wasmBinary = await vscode.workspace.fs.readFile(wasm)
 			let view = new WasmVmPanel(panel, wasmBinary);
 			await view.getWebviewContent(context.extensionUri);

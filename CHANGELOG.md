@@ -22,7 +22,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Added
 
-- Added cosmy wasmy logo for cw history tab 
+- Added cosmy wasmy logo for cw history tab and vm simulate page 
 
 ### Fixed
 
