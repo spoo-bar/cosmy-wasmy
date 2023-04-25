@@ -25,7 +25,8 @@
     "Chihuahua",
     "Stargaze",
     "Neutron",
-    "OKTC"
+    "OKTC",
+    "OKBC"
   ],
   "activationEvents": [
     "onView:account",
@@ -428,8 +429,34 @@
                 "chainGasDenom": "wei",
                 "chainDenomDecimals": "18",
                 "signType": "ethsecp256k1",
-                "accountExplorerLink": "https://www.oklink.com/cn/oktc-test/address/${accountAddress}",
-                "txExplorerLink": "https://www.oklink.com/cn/oktc-test/tx/${txHash}"
+                "accountExplorerLink": "https://www.oklink.com/oktc-test/address/${accountAddress}",
+                "txExplorerLink": "https://www.oklink.com/oktc-test/tx/${txHash}"
+              },
+              {
+                "configName": "OKBC localnet",
+                "chainId": "okbchain-67",
+                "chainEnvironment": "localnet",
+                "addressPrefix": "ex",
+                "rpcEndpoint": "http://localhost:26657",
+                "defaultGasPrice": "100000000",
+                "chainDenom": "okb",
+                "chainGasDenom": "wei",
+                "chainDenomDecimals": "18",
+                "signType": "ethsecp256k1"
+              },
+              {
+                "configName": "OKBC testnet",
+                "chainId": "okbchaintest-195",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "ex",
+                "rpcEndpoint": "https://okbtesttmrpc.okbchain.org",
+                "defaultGasPrice": "100000000",
+                "chainDenom": "okb",
+                "chainGasDenom": "wei",
+                "chainDenomDecimals": "18",
+                "signType": "ethsecp256k1",
+                "accountExplorerLink": "https://www.oklink.com/okbc-test/address/${accountAddress}",
+                "txExplorerLink": "https://www.oklink.com/okbc-test/tx/${txHash}"
               }
             ]
           },

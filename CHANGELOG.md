@@ -18,6 +18,12 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [v2.2.2] - 25 April 2023
+
+### Added
+- Support [OKBChain](https://www.okx.com/okbc) - OKB Chain (OKBC) is an Ethereum scaling solution that provides users with high-performance decentralized applications and security, achieved with seamless integration. Added configurations for localnet as well as testnet chains
+
+
 ## [v2.2.1] - 13 April 2023
 
 ### Added
