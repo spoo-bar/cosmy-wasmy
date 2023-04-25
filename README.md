@@ -111,6 +111,8 @@ The following chains are pre-configured by default. Any other chains can be manu
 | 7 | [Osmosis](https://osmosis.zone/)       | localnet    | localosmosis  |
 | 8 | [OKTC](https://www.okx.com/oktc)       | localnet    | exchain-67    |
 | 9 | [OKTC](https://www.okx.com/oktc)       | testnet     | exchain-65    |
+| 10 | [OKBC](https://www.okx.com/okbc)      | localnet    | okbchain-67   |
+| 11 | [OKBC](https://www.okx.com/okbc)      | testnet     | okbchaintest-195  |
 
 You can set up the extension settings at
 > File > Preferences > Settings > Extensions > Cosmy Wasmy
