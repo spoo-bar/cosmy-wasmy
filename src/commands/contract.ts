@@ -40,41 +40,47 @@ export class ContractCmds {
 		context.subscriptions.push(disposable);
 
 		function importContract(contractAddr: string) {
-			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
-				vscode.window.withProgress({
-					location: vscode.ProgressLocation.Notification,
-					title: vscode.l10n.t("Fetching the details for the contract - {addr}", {
-						addr: contractAddr
-					}),
-					cancellable: false
-				}, (progress, token) => {
-					token.onCancellationRequested(() => { });
-					progress.report({ message: '' });
-					return new Promise((resolve, reject) => {
-						CosmwasmAPI.GetContract(contractAddr).then(contract => {
+			vscode.window.withProgress({
+				location: vscode.ProgressLocation.Notification,
+				title: vscode.l10n.t("Fetching the details for the contract - {addr}", {
+					addr: contractAddr
+				}),
+				cancellable: false
+			}, (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				
+				return new Promise((resolve, reject) => {
+					CosmwasmAPI.GetContract(contractAddr).then(contract => {
+						let isExist = Contract.ContractAddressExists(context.globalState, contractAddr);
+						let describe = "";
+						if (isExist){
+							Contract.UpdateContractCodeId(context.globalState, contract);
+							describe = "Update contract";
+						}
+						else{
 							Contract.AddContract(context.globalState, contract);
-							vscode.window.showInformationMessage(vscode.l10n.t("Added new contract: {codeId} - {label}", {
-								codeId: contract.codeId,
-								label: contract.label
-							}));
-							const contracts = Contract.GetContracts(context.globalState);
-							contractViewProvider.refresh(contracts);
-							resolve(contract);
-						}).catch(err => {
-							vscode.window.showErrorMessage(vscode.l10n.t("Could not import contract: {addr} - {err}", {
-								addr: contractAddr,
-								err: err
-							}));
-							reject(err);
-						});
+							describe = "Added new contract";
+						}
+						vscode.window.showInformationMessage(vscode.l10n.t("{describe}:{codeId}-{label}-{addr}", {
+							describe: describe,
+							codeId: contract.codeId,
+							label: contract.label,
+							addr: contractAddr
+						}));
+						
+						const contracts = Contract.GetContracts(context.globalState);
+						contractViewProvider.refresh(contracts);
+						resolve(contract);
+					}).catch(err => {
+						vscode.window.showErrorMessage(vscode.l10n.t("Could not import contract: {addr} - {err}", {
+							addr: contractAddr,
+							err: err
+						}));
+						reject(err);
 					});
 				});
-			}
-			else {
-				vscode.window.showErrorMessage(vscode.l10n.t("Contract has already been imported: {addr}", {
-					addr: contractAddr
-				}));
-			}
+			});
 		}
 	}
 
