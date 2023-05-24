@@ -94,7 +94,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 				<title>Tx Page</title>
 			</head>
 			<body>
-				<input type="number" id="codeid-text" placeholder="New CodeId"></input>
+				<input type="number" id="codeid-text" placeholder="Code ID"></input>
 				<textarea id="input-text" placeholder="{'payout':{}}"></textarea>
 				<button id="exec-button">${vscode.l10n.t("Migrate")}</button>
 				<script>
