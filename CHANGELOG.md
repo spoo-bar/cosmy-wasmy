@@ -24,6 +24,8 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Changed
 
+- Using custom Coin parse as the cosmjs default coin parse does not handle higher decimal coins, which breaks archway support which uses 18 decimal precision
+
 ### Deprecated
 
 ### Removed

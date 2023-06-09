@@ -11,6 +11,7 @@ import { TextDecoder } from 'util';
 import { Account } from '../models/account';
 import { TestExplorer } from './TestExplorer';
 import { CwSimulateKernel } from '../notebook/cwSimulateKernel';
+import { Coin } from '@cosmjs/amino';
 var toml = require('toml');
 
 export class Utils {
@@ -94,6 +95,21 @@ export class Utils {
         Utils.syncAccounts(content, context);
         Utils.syncChains(content);
     }
+
+    public static ParseCoins(input: string): Coin[] {
+        return input
+          .replace(/\s/g, "")
+          .split(",")
+          .filter(Boolean)
+          .map((part) => {
+            const match = part.match(/^([0-9]+)([a-zA-Z]+)/);
+            if (!match) throw new Error("Got an invalid coin string");
+            return {
+              amount: match[1].replace(/^0+/, "") || "0",
+              denom: match[2],
+            };
+          });
+      }
 
     private static syncChains(content: any) {
         const beakerNetworks = content.networks;
