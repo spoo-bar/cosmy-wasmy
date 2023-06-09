@@ -51,7 +51,7 @@ export class Contract extends vscode.TreeItem {
         ExtData.SaveContracts(context, contracts);
     }
 
-    public static UpdateContractCodeId(context: vscode.Memento, contract: Contract) {
+    public static UpdateContractCodeID(context: vscode.Memento, contract: Contract) {
         let contracts = this.GetContracts(context);
         for (const c of contracts) {
             if(c.contractAddress == contract.contractAddress) {

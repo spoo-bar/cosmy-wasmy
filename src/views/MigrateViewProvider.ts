@@ -11,7 +11,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 
 	constructor(
 		private readonly _extensionUri: vscode.Uri,
-		private readonly context: vscode.Memento,
+		private readonly _context: vscode.Memento,
 	) { }
 
 	resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
@@ -39,14 +39,14 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 							vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
 							return;
 						}
-						this.executeMigrate(data, contract, account);
+						this.executeMigrate(data, contract, account, this._context);
 						break;
 					}
 			}
 		});
 	}
 
-	private executeMigrate(data: any, contract: Contract, account: Account) {
+	private executeMigrate(data: any, contract: Contract, account: Account, context: vscode.Memento) {
 		const req = data.value;
 		vscode.window.withProgress({
 			location: { viewId: Constants.VIEWS_MIGRATE },
@@ -58,14 +58,22 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 			return new Promise(async (resolve, reject) => {
 				try {
 					let client = await Cosmwasm.GetSigningClient();
-					let res = await client.migrate(account.address, contract.contractAddress, Number(req.newCodeId), JSON.parse(req.input), "auto");
+					let newCodeID = Number(req.newCodeId)
+					let res = await client.migrate(account.address, contract.contractAddress, newCodeID, JSON.parse(req.input), "auto");
 					ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), JSON.stringify(res, null, 4), "Migrate");
-					await vscode.commands.executeCommand('cosmy-wasmy.addContract', contract.contractAddress);
+					updateContactCodeID(newCodeID);
 					resolve(undefined);
 				}
 				catch (err: any) {
 					ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Migrate");
 					reject(undefined);
+				}
+
+				function updateContactCodeID(newCodeID: number) {
+					contract.codeId = newCodeID;
+					Contract.UpdateContractCodeID(context, contract);
+					const contracts = Contract.GetContracts(context);
+					contractViewProvider.refresh(contracts);
 				}
 			});
 		});
@@ -94,7 +102,7 @@ export class MigrateViewProvider implements vscode.WebviewViewProvider {
 				<title>Tx Page</title>
 			</head>
 			<body>
-				<input type="number" id="codeid-text" placeholder="New CodeId"></input>
+				<input type="number" id="codeid-text" placeholder="Code ID"></input>
 				<textarea id="input-text" placeholder="{'payout':{}}"></textarea>
 				<button id="exec-button">${vscode.l10n.t("Migrate")}</button>
 				<script>
