@@ -28,6 +28,7 @@
     "cosmy-wasmy.execCosmwasm.title": "Execute Tx",
     "cosmy-wasmy.beakerTomlSync.title": "Sync Beaker config",
     "cosmy-wasmy.createCwNotebook.title": "Create a new CW Notebook",
+    "cosmy-wasmy.encodeToBase64.title": "Encode to Base64",
     "cosmy-wasmy.capabilities.trustedWorkspace.description": "The Cosmy Wasmy sidebar commands will work while in untrusted workspaces. However, cannot run tests or upload contract binaries when in untrusted workspaces. Additionally, JSON auto complete might also not work.",
 
     "cosmywasmy.chainConfigName.desc": "Used to select which of the Chain configs in `#cosmywasmy.chains#` is to be used in this workspace",
