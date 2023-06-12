@@ -95,6 +95,12 @@
         "icon": "$(refresh)"
       },
       {
+        "command": "cosmy-wasmy.sendTokens",
+        "title": "%cosmy-wasmy.sendTokens.title%",
+        "category": "Cosmy Wasmy",
+        "enablement": "viewItem == account"
+      },
+      {
         "command": "cosmy-wasmy.addContract",
         "title": "%cosmy-wasmy.addContract.title%",
         "category": "Cosmy Wasmy",
@@ -671,6 +677,11 @@
           "command": "cosmy-wasmy.copyMnemonic",
           "when": "view == account",
           "group": "cutcopypaste"
+        },
+        {
+          "command": "cosmy-wasmy.sendTokens",
+          "when": "view == account",
+          "group": "1_actions"
         },
         {
           "command": "cosmy-wasmy.addComments",

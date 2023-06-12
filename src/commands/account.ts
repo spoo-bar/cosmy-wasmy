@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { WrapWallet} from '../helpers/Sign/wrapwallet';
+import { WrapWallet } from '../helpers/Sign/wrapwallet';
 import { Constants } from '../constants';
-import { CosmwasmAPI } from '../helpers/cosmwasm/api';
+import { Cosmwasm, CosmwasmAPI } from '../helpers/cosmwasm/api';
 import { Workspace } from '../helpers/workspace';
 import { Account } from '../models/account';
 import { Contract } from '../models/contract';
@@ -17,6 +17,7 @@ export class AccountCmds {
 		this.registerDeleteAddressCmd(context, accountViewProvider);
 		this.registerSelectAccountCmd(context);
 		this.registerRefreshAccountCmd(context);
+		this.registerSendTokensCmd(context, accountViewProvider);
 	}
 
 
@@ -32,7 +33,7 @@ export class AccountCmds {
 						vscode.window.showQuickPick(options).then(rr => {
 							if (rr) {
 								if (rr === vscode.l10n.t("Generate seed phrase for me (Recommended)")) {
-									let defaultLen = WrapWallet.isEthSecp256k1(global.workspaceChain.signType)? 12 : 24;
+									let defaultLen = WrapWallet.isEthSecp256k1(global.workspaceChain.signType) ? 12 : 24;
 									WrapWallet.generate(global.workspaceChain.signType, defaultLen).then(wallet => {
 										const account = new Account(accountLabel, wallet.mnemonic);
 										saveNewAccount(account);
@@ -63,7 +64,7 @@ export class AccountCmds {
 
 		async function saveNewAccount(account: Account) {
 			if (!Account.AccountMnemonicExists(context.globalState, account.mnemonic)) {
-				if (!await Account.AddAccount(context.globalState, account)){
+				if (!await Account.AddAccount(context.globalState, account)) {
 					vscode.window.showErrorMessage(vscode.l10n.t("Given seed phrase is invalid - '{mnemonic}'", { mnemonic: account.mnemonic }));
 					return;
 				}
@@ -194,6 +195,46 @@ export class AccountCmds {
 				accountViewProvider.refresh(accounts);
 				return Promise.resolve();
 			});
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static registerSendTokensCmd(context: vscode.ExtensionContext, accountViewProvider: AccountDataProvider) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.sendTokens', async (item: Account) => {
+			const accounts = accountViewProvider.getCurrentAccounts();
+			const receiverLabel = await vscode.window.showQuickPick(accounts.map(a => a.label), {
+				canPickMany: false,
+				title: vscode.l10n.t("Select the receiver"),
+				placeHolder: accounts[0].address,
+			})
+			if (receiverLabel) {
+				const amount = await vscode.window.showInputBox({
+					title: vscode.l10n.t("Amount to send"),
+					placeHolder: vscode.l10n.t(item.description.toString()),
+				});
+				if (amount) {
+					const rAddr = accounts.find(a => a.label == receiverLabel)
+					vscode.window.withProgress({
+						location: vscode.ProgressLocation.Notification,
+						title: vscode.l10n.t("Sending {0} from {1} to {2}", amount, item.label, receiverLabel),
+						cancellable: false
+					}, async (progress, token) => {
+						token.onCancellationRequested(() => { });
+						progress.report({ message: '' });
+						const resp = await Cosmwasm.SendTokens(item, rAddr.address, amount, "Sent from cosmy-wasmy");
+						if (resp.isSuccess) {
+							const url = global.workspaceChain.txExplorerLink;
+							const explorerUrl = url.replace("${txHash}", resp.response.transactionHash);
+							vscode.window.showInformationMessage(new vscode.MarkdownString(vscode.l10n.t("Successfully transferred tokens. View transaction in explorer") + " - [" + resp.response.transactionHash + "](" + explorerUrl + ")", true).value);
+							vscode.commands.executeCommand("cosmy-wasmy.refreshAccount");
+						}
+						else {
+							vscode.window.showErrorMessage(resp.response.message);
+						}
+						return Promise.resolve();
+					});
+				}
+			}
 		});
 		context.subscriptions.push(disposable);
 	}
