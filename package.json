@@ -217,6 +217,11 @@
         "command": "cosmy-wasmy.createCwNotebook",
         "title": "%cosmy-wasmy.createCwNotebook.title%",
         "category": "Cosmy Wasmy"
+      },
+      {
+        "command": "cosmy-wasmy.encodeToBase64",
+        "title": "%cosmy-wasmy.encodeToBase64.title%",
+        "category": "Cosmy Wasmy"
       }
     ],
     "configuration": [
@@ -374,13 +379,14 @@
                 "chainDenom": "uosmo"
               },
               {
-                "configName": "Archway constantine-2",
-                "chainId": "constantine-2",
+                "configName": "Archway constantine-3",
+                "chainId": "constantine-3",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "archway",
-                "rpcEndpoint": "https://rpc.constantine-2.archway.tech/",
-                "defaultGasPrice": "0.025",
-                "chainDenom": "const",
+                "rpcEndpoint": "https://rpc.constantine.archway.tech/",
+                "defaultGasPrice": "1500000000000",
+                "chainDenom": "aconst",
+                "chainDenomDecimals": "18",
                 "accountExplorerLink": "https://testnet.mintscan.io/archway-testnet/account/${accountAddress}",
                 "txExplorerLink": "https://testnet.mintscan.io/archway-testnet/txs/${txHash}"
               },
@@ -583,6 +589,11 @@
           "command": "cosmy-wasmy.execCosmwasm",
           "when": "resourceLangId == json",
           "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.encodeToBase64",
+          "when": "editorLangId == json && editorHasSelection",
+          "group": "7_modification"
         }
       ],
       "editor/title": [
