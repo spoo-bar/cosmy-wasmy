@@ -27,6 +27,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Changed
 
 - Updated Archway constantine-2 to constantine-3 configuration in preset chain config
+- Using custom Coin parse as the cosmjs default coin parse does not handle higher decimal coins, which breaks archway support which uses 18 decimal precision
 
 ### Deprecated
 

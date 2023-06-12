@@ -4,7 +4,7 @@ import { Constants } from '../constants';
 import { Account } from '../models/account';
 import { ResponseHandler } from '../helpers/responseHandler';
 import { Cosmwasm } from '../helpers/cosmwasm/api';
-import { Coin, parseCoins } from '@cosmjs/launchpad';
+import { Utils } from './utils';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {
@@ -71,7 +71,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 let label = data.value.label;
 
                 try {
-                    let funds = parseCoins(data.value.funds);
+                    let funds = Utils.ParseCoins(data.value.funds);
                     let res = await this.instantiateContract(account, codeId, req, label, funds, admin);
                     ResponseHandler.OutputSuccess(JSON.stringify(data.value, null, 4), JSON.stringify(res, null, 4), "Initialize");
                     if (data.value.import) {
