@@ -18,7 +18,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
-## [Unreleased]
+## [v2.3.0] - 12 June 2023
 
 ### Added
 
@@ -30,16 +30,9 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 - Updated Archway constantine-2 to constantine-3 configuration in preset chain config
 - Using custom Coin parse as the cosmjs default coin parse does not handle higher decimal coins, which breaks archway support which uses 18 decimal precision
 
-### Deprecated
-
-### Removed
-
 ### Fixed
 
 - Fixed issue where contract migration would only allow to migrating to the same Code ID. Thanks to [Barry](https://github.com/zjg555543) from [OKX](https://github.com/okx) for the fix.
-
-### Security 
-
 
 
 ## [v2.2.2] - 25 April 2023

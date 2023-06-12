@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -392,7 +392,6 @@
                 "rpcEndpoint": "https://rpc.constantine.archway.tech/",
                 "defaultGasPrice": "1500000000000",
                 "chainDenom": "aconst",
-                "chainDenomDecimals": "18",
                 "accountExplorerLink": "https://testnet.mintscan.io/archway-testnet/account/${accountAddress}",
                 "txExplorerLink": "https://testnet.mintscan.io/archway-testnet/txs/${txHash}"
               },

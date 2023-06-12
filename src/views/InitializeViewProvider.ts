@@ -5,6 +5,7 @@ import { Account } from '../models/account';
 import { ResponseHandler } from '../helpers/responseHandler';
 import { Cosmwasm } from '../helpers/cosmwasm/api';
 import { Utils } from './utils';
+import { Coin } from '@cosmjs/amino';
 
 
 export class InitializeViewProvider implements vscode.WebviewViewProvider {
