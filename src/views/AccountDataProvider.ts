@@ -44,4 +44,8 @@ export class AccountDataProvider implements vscode.TreeDataProvider<Account> {
 		}
 	}
 
+	public getCurrentAccounts(): Account[] {
+		return this.accounts;
+	}
+
 }

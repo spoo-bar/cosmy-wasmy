@@ -162,4 +162,22 @@ export class Cosmwasm {
             reject(undefined);
         }
     }
+
+    public static async SendTokens(account: Account, recipientAddress: string, fundsStr: string, memo: string) {
+        try {
+            let funds = Utils.ParseCoins(fundsStr);
+            let client = await Cosmwasm.GetSigningClient();
+            let response = await client.sendTokens(account.address, recipientAddress, funds, "auto", memo);
+            return {
+                isSuccess: true,
+                response: response
+            };
+        }
+        catch (err: any) {
+            return {
+                isSuccess: false,
+                response: err
+            };
+        }
+    }
 }

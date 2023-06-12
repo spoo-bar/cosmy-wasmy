@@ -5,6 +5,7 @@
     "cosmy-wasmy.copyAddress.title": "Copy Address",
     "cosmy-wasmy.copyMnemonic.title": "Copy Mnemonic",
     "cosmy-wasmy.deleteAccount.title": "Delete Account",
+    "cosmy-wasmy.sendTokens.title": "Send Tokens",
     "cosmy-wasmy.refreshAccount.title": "Refresh Account View",
     "cosmy-wasmy.addContract.title": "Import Contract",
     "cosmy-wasmy.deleteContract.title": "Delete Contract",
