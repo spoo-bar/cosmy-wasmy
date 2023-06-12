@@ -217,6 +217,11 @@
         "command": "cosmy-wasmy.createCwNotebook",
         "title": "%cosmy-wasmy.createCwNotebook.title%",
         "category": "Cosmy Wasmy"
+      },
+      {
+        "command": "cosmy-wasmy.encodeToBase64",
+        "title": "%cosmy-wasmy.encodeToBase64.title%",
+        "category": "Cosmy Wasmy"
       }
     ],
     "configuration": [
@@ -584,6 +589,11 @@
           "command": "cosmy-wasmy.execCosmwasm",
           "when": "resourceLangId == json",
           "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.encodeToBase64",
+          "when": "editorLangId == json && editorHasSelection",
+          "group": "7_modification"
         }
       ],
       "editor/title": [

@@ -22,6 +22,8 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Added
 
+- Added a feature to have context menu option to base64 encode selected text. Works only in JSON files.
+
 ### Changed
 
 - Updated Archway constantine-2 to constantine-3 configuration in preset chain config
