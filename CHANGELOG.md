@@ -24,6 +24,8 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Changed
 
+- Updated Archway constantine-2 to constantine-3 configuration in preset chain config
+
 ### Deprecated
 
 ### Removed
