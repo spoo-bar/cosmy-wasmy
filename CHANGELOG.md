@@ -18,6 +18,16 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [v2.3.1] - 07 July 2023
+
+### Removed
+
+- The 'Initialize + Import' button in the contract initialize view.
+
+### Fixed
+
+- Fixed the issue where could not import a new contract after copying an address to the clipboard from the extension
+
 ## [v2.3.0] - 12 June 2023
 
 ### Added
