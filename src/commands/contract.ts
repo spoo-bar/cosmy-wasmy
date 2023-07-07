@@ -22,20 +22,15 @@ export class ContractCmds {
 	}
 
 	private static registerAddContractCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', (contractAddr: string) => {
-			if (contractAddr) {
-				importContract(contractAddr);
-			}
-			else {
-				vscode.window.showInputBox({
-					title: vscode.l10n.t("Contract Address"),
-					placeHolder: vscode.l10n.t("Cosmwasm contract address")
-				}).then(contractAddrInput => {
-					if (contractAddrInput) {
-						importContract(contractAddrInput);
-					}
-				});
-			}
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContract', () => {
+			vscode.window.showInputBox({
+				title: vscode.l10n.t("Contract Address"),
+				placeHolder: vscode.l10n.t("Cosmwasm contract address")
+			}).then(contractAddrInput => {
+				if (contractAddrInput) {
+					importContract(contractAddrInput);
+				}
+			});
 		});
 		context.subscriptions.push(disposable);
 
