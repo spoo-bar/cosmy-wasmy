@@ -130,7 +130,7 @@ export class InitializeViewProvider implements vscode.WebviewViewProvider {
                 <input id="funds-text" placeholder="10${denom}"></input>
 				<textarea id="input-text" placeholder="{'count': 100}"></textarea>
 				<button id="exec-button">${vscode.l10n.t("Initialize")}</button>
-                <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">${vscode.l10n.t("Initialize")} + ${vscode.l10n.t("Import")}</button>
+                <!-- <button id="exec-import-button" title="Initialize the contract and automatically import it to Cosmy Wasmy">${vscode.l10n.t("Initialize")} + ${vscode.l10n.t("Import")}</button> -->
 				<script>
                 (function () {
                     const vscode = acquireVsCodeApi();
