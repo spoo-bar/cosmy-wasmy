@@ -9,7 +9,7 @@ import { SignProvider } from './signProvider';
 import { TxProvider } from './txProvider';
 import { TextDecoder } from 'util';
 import { Account } from '../models/account';
-import { TestExplorer } from './TestExplorer';
+import { TestExplorer } from './testExplorer';
 import { CwSimulateKernel } from '../notebook/cwSimulateKernel';
 import { Coin } from '@cosmjs/amino';
 var toml = require('toml');

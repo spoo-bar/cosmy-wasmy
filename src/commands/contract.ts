@@ -5,7 +5,7 @@ import { Workspace } from '../helpers/workspace';
 import { Contract } from '../models/contract';
 import { ContractDataProvider } from '../views/contractDataProvider';
 import { CosmwasmTerminal } from '../views/cosmwasmTerminal';
-import { WasmVmPanel } from '../views/WasmVmPanel';
+import { WasmVmPanel } from '../views/wasmVmPanel';
 
 export class ContractCmds {
 	public static async Register(context: vscode.ExtensionContext) {

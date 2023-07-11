@@ -1,6 +1,6 @@
 import { CodeDetails, CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { WrapWallet } from '../Sign/wrapwallet';
+import { WrapWallet } from '../sign/wrapwallet';
 import { GasPrice } from '@cosmjs/stargate';
 import { FaucetClient } from "@cosmjs/faucet-client";
 import { Contract } from '../../models/contract';
