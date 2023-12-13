@@ -31,7 +31,7 @@ export class Account extends vscode.TreeItem {
 			try {
 				account.balance = await CosmwasmAPI.GetBalance(account.address);
 			}
-			catch {
+			catch (err) {
 				account.balance = "NaN"; // lol but yea todo - when cant fetch balance, show that balance was not fetched. until then making it seem like js is being naughty 😈
 			}
 		}

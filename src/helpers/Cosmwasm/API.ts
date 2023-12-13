@@ -18,6 +18,20 @@ export class CosmwasmAPI {
         return contract;
     }
 
+    public static async GetAllContracts(): Promise<Contract[]> {
+        let importedContracts = new Array<Contract>();
+        let client = await Cosmwasm.GetQueryClient();
+        const codes = await client.getCodes();
+        for (let code of codes) {
+            const contracts = await client.getContracts(code.id);
+            for (let contract of contracts) {
+              let contractInfo = await client.getContract(contract);
+              importedContracts.push(new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, global.workspaceChain.configName));
+            }
+        }
+        return importedContracts;
+    }
+
     public static async GetBalance(address: string): Promise<string> {
         let client = await Cosmwasm.GetQueryClient();
         let denom = global.workspaceChain.chainDenom;

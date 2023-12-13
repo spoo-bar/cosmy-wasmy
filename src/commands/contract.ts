@@ -10,6 +10,7 @@ import { WasmVmPanel } from '../views/WasmVmPanel';
 export class ContractCmds {
 	public static async Register(context: vscode.ExtensionContext) {
 		this.registerAddContractCmd(context, contractViewProvider);
+		this.registerAddAllContractsCmd(context, contractViewProvider);
 		this.registerSelectContractCmd(context);
 		this.registerDeleteContractCmd(context, contractViewProvider);
 		this.registerUpdateContractAdminCmd(context);
@@ -31,6 +32,59 @@ export class ContractCmds {
 					importContract(contractAddrInput);
 				}
 			});
+		});
+		context.subscriptions.push(disposable);
+
+		function importContract(contractAddr: string) {
+			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
+				vscode.window.withProgress({
+					location: vscode.ProgressLocation.Notification,
+					title: vscode.l10n.t("Fetching the details for the contract - {addr}", {
+						addr: contractAddr
+					}),
+					cancellable: false
+				}, (progress, token) => {
+					token.onCancellationRequested(() => { });
+					progress.report({ message: '' });
+					return new Promise((resolve, reject) => {
+						CosmwasmAPI.GetContract(contractAddr).then(contract => {
+							Contract.AddContract(context.globalState, contract);
+							vscode.window.showInformationMessage(vscode.l10n.t("Added new contract: {codeId} - {label}", {
+								codeId: contract.codeId,
+								label: contract.label
+							}));
+							const contracts = Contract.GetContracts(context.globalState);
+							contractViewProvider.refresh(contracts);
+							resolve(contract);
+						}).catch(err => {
+							vscode.window.showErrorMessage(vscode.l10n.t("Could not import contract: {addr} - {err}", {
+								addr: contractAddr,
+								err: err
+							}));
+							reject(err);
+						});
+					});
+				});
+			}
+			else {
+				vscode.window.showErrorMessage(vscode.l10n.t("Contract has already been imported: {addr}", {
+					addr: contractAddr
+				}));
+			}
+		}
+	}
+
+	private static registerAddAllContractsCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAllContracts', () => {
+			CosmwasmAPI.GetAllContracts().then(contracts => {
+				console.log("done")
+			})
+			if (global.workspaceChain.chainEnvironment == "localnet") {
+				
+			}
+			else {
+				vscode.window.showErrorMessage(vscode.l10n.t("Sorry! This command is only available for localnet chains"));
+			}
 		});
 		context.subscriptions.push(disposable);
 

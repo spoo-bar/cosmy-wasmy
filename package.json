@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -105,6 +105,12 @@
         "title": "%cosmy-wasmy.addContract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
+      },
+      {
+        "command": "cosmy-wasmy.addAllContracts",
+        "title": "%cosmy-wasmy.addAllContracts.title%",
+        "category": "Cosmy Wasmy",
+        "icon": "$(cloud-download)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
@@ -642,6 +648,11 @@
         },
         {
           "command": "cosmy-wasmy.addContract",
+          "when": "view == contract",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.addAllContracts",
           "when": "view == contract",
           "group": "navigation"
         },

@@ -8,6 +8,7 @@
     "cosmy-wasmy.sendTokens.title": "Send Tokens",
     "cosmy-wasmy.refreshAccount.title": "Refresh Account View",
     "cosmy-wasmy.addContract.title": "Import Contract",
+    "cosmy-wasmy.addAllContracts.title": "Import All Contracts",
     "cosmy-wasmy.deleteContract.title": "Delete Contract",
     "cosmy-wasmy.updateContractAdmin.title": "Update Admin",
     "cosmy-wasmy.clearContractAdmin.title": "Clear Admin",
