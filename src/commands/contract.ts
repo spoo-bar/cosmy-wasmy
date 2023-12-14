@@ -75,12 +75,9 @@ export class ContractCmds {
 	}
 
 	private static registerAddAllContractsCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
-		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addAllContracts', () => {
-			CosmwasmAPI.GetAllContracts().then(contracts => {
-				console.log("done")
-			})
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContractsAll', () => {
 			if (global.workspaceChain.chainEnvironment == "localnet") {
-				
+				importAllContracts();
 			}
 			else {
 				vscode.window.showErrorMessage(vscode.l10n.t("Sorry! This command is only available for localnet chains"));
@@ -88,7 +85,11 @@ export class ContractCmds {
 		});
 		context.subscriptions.push(disposable);
 
-		function importContract(contractAddr: string) {
+		function importAllContracts() {
+			CosmwasmAPI.GetAllContracts().then(contracts => {
+				console.log("done")
+			})
+
 			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
 				vscode.window.withProgress({
 					location: vscode.ProgressLocation.Notification,

@@ -107,10 +107,10 @@
         "icon": "$(add)"
       },
       {
-        "command": "cosmy-wasmy.addAllContracts",
-        "title": "%cosmy-wasmy.addAllContracts.title%",
+        "command": "cosmy-wasmy.addContractsAll",
+        "title": "%cosmy-wasmy.addContractsAll.title%",
         "category": "Cosmy Wasmy",
-        "icon": "$(cloud-download)"
+        "icon": "$(expand-all)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
@@ -652,7 +652,7 @@
           "group": "navigation"
         },
         {
-          "command": "cosmy-wasmy.addAllContracts",
+          "command": "cosmy-wasmy.addContractsAll",
           "when": "view == contract",
           "group": "navigation"
         },
