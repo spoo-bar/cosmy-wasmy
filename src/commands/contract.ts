@@ -80,51 +80,47 @@ export class ContractCmds {
 				importAllContracts();
 			}
 			else {
-				vscode.window.showErrorMessage(vscode.l10n.t("Sorry! This command is only available for localnet chains"));
+				vscode.window.showErrorMessage(vscode.l10n.t("Sorry! This command is only available for localnet chains. {chain} is marked as '{type}'", {
+					chain: global.workspaceChain.configName,
+					type: global.workspaceChain.chainEnvironment
+				}));
 			}
 		});
 		context.subscriptions.push(disposable);
 
 		function importAllContracts() {
-			CosmwasmAPI.GetAllContracts().then(contracts => {
-				console.log("done")
-			})
-
-			if (!Contract.ContractAddressExists(context.globalState, contractAddr)) {
-				vscode.window.withProgress({
-					location: vscode.ProgressLocation.Notification,
-					title: vscode.l10n.t("Fetching the details for the contract - {addr}", {
-						addr: contractAddr
-					}),
-					cancellable: false
-				}, (progress, token) => {
-					token.onCancellationRequested(() => { });
-					progress.report({ message: '' });
-					return new Promise((resolve, reject) => {
-						CosmwasmAPI.GetContract(contractAddr).then(contract => {
-							Contract.AddContract(context.globalState, contract);
-							vscode.window.showInformationMessage(vscode.l10n.t("Added new contract: {codeId} - {label}", {
-								codeId: contract.codeId,
-								label: contract.label
-							}));
-							const contracts = Contract.GetContracts(context.globalState);
-							contractViewProvider.refresh(contracts);
-							resolve(contract);
-						}).catch(err => {
-							vscode.window.showErrorMessage(vscode.l10n.t("Could not import contract: {addr} - {err}", {
-								addr: contractAddr,
-								err: err
-							}));
-							reject(err);
+			vscode.window.withProgress({
+				location: vscode.ProgressLocation.Notification,
+				title: vscode.l10n.t("Fetching all contracts on the chain - {chain}", {
+					chain: global.workspaceChain.configName
+				}),
+				cancellable: false
+			}, (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				return new Promise((resolve, reject) => {
+					CosmwasmAPI.GetAllContracts().then(resContracts => {
+						let contractsToAdd:Contract[] = [];
+						resContracts.forEach(contract => {
+							if (!Contract.ContractAddressExists(context.globalState, contract.contractAddress)) {
+								contractsToAdd.push(contract);
+							}
 						});
+						Contract.AddManyContract(context.globalState, contractsToAdd);
+						vscode.window.showInformationMessage(vscode.l10n.t("Added {count} contracts!", {
+							count: contractsToAdd.length
+						}));
+						const contracts = Contract.GetContracts(context.globalState);
+						contractViewProvider.refresh(contracts);
+						resolve(contracts);
+					}).catch(err => {
+						vscode.window.showErrorMessage(vscode.l10n.t("Could not import contracts: {err}", {
+							err: err
+						}));
+						reject(err);
 					});
 				});
-			}
-			else {
-				vscode.window.showErrorMessage(vscode.l10n.t("Contract has already been imported: {addr}", {
-					addr: contractAddr
-				}));
-			}
+			})
 		}
 	}
 
