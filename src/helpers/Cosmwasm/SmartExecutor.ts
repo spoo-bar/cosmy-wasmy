@@ -11,7 +11,7 @@ export class SmartExecutor {
     private client: SigningCosmWasmClient;
 
     public async SetupAccount(mnemonic: string, addressPrefix: string) {
-        this.wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, mnemonic, {
+        this.wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, mnemonic, {
             prefix: addressPrefix,
         });
         const accounts = await this.wallet.getAccounts();

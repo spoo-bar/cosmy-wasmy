@@ -136,6 +136,7 @@ export class ChainConfig {
     chainGasDenom!: string;
     chainDenomDecimals!: string;
     signType!: string;
+    coinType!: string;
 
     public Validate() {
         if (!this) {

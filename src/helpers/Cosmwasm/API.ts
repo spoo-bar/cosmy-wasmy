@@ -68,7 +68,7 @@ export class Cosmwasm {
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
         const account = Workspace.GetSelectedAccount();
-        let signer = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+        let signer = await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, account.mnemonic, {
             prefix: global.workspaceChain.addressPrefix,
         });
         let gasDenom = global.workspaceChain.chainGasDenom;
