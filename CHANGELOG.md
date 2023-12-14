@@ -18,6 +18,23 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- For localnet chains, all contracts on the chain can be imported in single click.
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security 
+
+
 ## [v2.3.1] - 07 July 2023
 
 ### Removed

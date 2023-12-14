@@ -36,6 +36,12 @@ export class Contract extends vscode.TreeItem {
         ExtData.SaveContracts(context, contracts);
     }
 
+    public static AddManyContract(context: vscode.Memento, newContracts: Contract[]) {
+        let contracts = this.GetContracts(context);
+        contracts.push(...newContracts);
+        ExtData.SaveContracts(context, contracts);
+    }
+
     public static DeleteContract(context: vscode.Memento, contract: Contract) {
         let contracts = this.GetContracts(context).filter(c => c.contractAddress != contract.contractAddress);
         ExtData.SaveContracts(context, contracts);
