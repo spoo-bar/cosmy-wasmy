@@ -100,19 +100,21 @@ Its recommended post installation to configure the extension for your use case. 
 
 The following chains are pre-configured by default. Any other chains can be manually added in the settings.
 
-|    | Project                               | Environment | ChainID       |
-| -- | ------------------------------------- | ----------- | ------------- |
-| 1 | [Osmosis](https://osmosis.zone/)       | testnet     | osmo-test-4   |
-| 2 | [Juno](https://www.junonetwork.io/)    | testnet     | uni-6         |
-| 3 | [Archway](https://archway.io/)         | testnet     | constantine-3 |
-| 4 | [Stargaze](https://www.stargaze.zone/) | testnet     | elgafar-1     |
-| 5 | [Neutron](https://neutron.org/)        | testnet     | baryon-1      |
-| 6 | [Juno](https://www.junonetwork.io/)    | localnet    | testing       |
-| 7 | [Osmosis](https://osmosis.zone/)       | localnet    | localosmosis  |
-| 8 | [OKTC](https://www.okx.com/oktc)       | localnet    | exchain-67    |
-| 9 | [OKTC](https://www.okx.com/oktc)       | testnet     | exchain-65    |
-| 10 | [OKBC](https://www.okx.com/okbc)      | localnet    | okbchain-67   |
-| 11 | [OKBC](https://www.okx.com/okbc)      | testnet     | okbchaintest-195  |
+|     | Project                                   | Environment | ChainID          |
+| --- | ----------------------------------------- | ----------- | ---------------- |
+| 1   | [Osmosis](https://osmosis.zone/)          | testnet     | osmo-test-4      |
+| 2   | [Juno](https://www.junonetwork.io/)       | testnet     | uni-6            |
+| 3   | [Archway](https://archway.io/)            | testnet     | constantine-3    |
+| 4   | [Stargaze](https://www.stargaze.zone/)    | testnet     | elgafar-1        |
+| 5   | [Neutron](https://neutron.org/)           | testnet     | baryon-1         |
+| 6   | [Juno](https://www.junonetwork.io/)       | localnet    | testing          |
+| 7   | [Osmosis](https://osmosis.zone/)          | localnet    | localosmosis     |
+| 8   | [OKTC](https://www.okx.com/oktc)          | localnet    | exchain-67       |
+| 9   | [OKTC](https://www.okx.com/oktc)          | testnet     | exchain-65       |
+| 10  | [OKBC](https://www.okx.com/okbc)          | localnet    | okbchain-67      |
+| 11  | [OKBC](https://www.okx.com/okbc)          | testnet     | okbchaintest-195 |
+| 12  | [Finschia](https://www.finschia.network/) | localnet    | simd-testing     |
+| 13  | [Finschia](https://www.finschia.network/) | testnet     | ebony-2          |
 
 You can set up the extension settings at
 > File > Preferences > Settings > Extensions > Cosmy Wasmy
