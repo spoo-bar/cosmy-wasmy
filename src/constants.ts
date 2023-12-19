@@ -30,4 +30,9 @@ export class Constants {
     public static readonly LANGUAGE_TOML = "toml";
     public static readonly LANGUAGE_JSON = "json";
     
+    public static readonly SIGN_TYPE = {
+        ethsecp256k1: 'ethsecp256k1',
+        tmsecp256k1: 'tmsecp256k1'
+    };
+    public static readonly COMMON_COIN_TYPE = "118";
 }
