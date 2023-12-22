@@ -474,6 +474,28 @@
                 "signType": "ethsecp256k1",
                 "accountExplorerLink": "https://www.oklink.com/okbc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/okbc-test/tx/${txHash}"
+              },
+              {
+                "configName": "Finschia localnet",
+                "chainId": "simd-testing",
+                "chainEnvironment": "localnet",
+                "addressPrefix": "link",
+                "rpcEndpoint": "http://localhost:26657",
+                "defaultGasPrice": "0.015",
+                "chainDenom": "cony",
+                "faucetEndpoint": "http://localhost:8081"
+              },
+              {
+                "configName": "Ebony",
+                "chainId": "ebony-2",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "tlink",
+                "rpcEndpoint": "https://ebony-rpc.finschia.io/",
+                "defaultGasPrice": "0.015",
+                "chainDenom": "tcony",
+                "accountExplorerLink": "https://explorer.blockchain.line.me/ebony/address/${accountAddress}",
+                "txExplorerLink": "https://explorer.blockchain.line.me/ebony/transaction/${txHash}",
+                "faucetEndpoint": "https://faucet-ebonynw.line-apps.com"
               }
             ]
           },
