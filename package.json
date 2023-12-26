@@ -2,7 +2,7 @@
   "name": "cosmy-wasmy",
   "displayName": "Cosmy Wasmy",
   "description": "wibbly wobbly cosmy wasmy tool to interact with cosmwasm smart contracts",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "preview": false,
   "publisher": "Spoorthi",
   "icon": "media/icon.png",
@@ -105,6 +105,12 @@
         "title": "%cosmy-wasmy.addContract.title%",
         "category": "Cosmy Wasmy",
         "icon": "$(add)"
+      },
+      {
+        "command": "cosmy-wasmy.addContractsAll",
+        "title": "%cosmy-wasmy.addContractsAll.title%",
+        "category": "Cosmy Wasmy",
+        "icon": "$(expand-all)"
       },
       {
         "command": "cosmy-wasmy.deleteContract",
@@ -309,6 +315,11 @@
                     "%cosmywasmy.chains.items.signType.ethsecp256k1.desc%"
                   ]
                 },
+                "coinType": {
+                  "type": "string",
+                  "default": "118", 
+                  "description": "%cosmywasmy.chains.items.coinType.desc%"
+                },
                 "chainDenom": {
                   "type": "string",
                   "description": "%cosmywasmy.chains.items.chainDenom.desc%"
@@ -468,6 +479,30 @@
                 "signType": "ethsecp256k1",
                 "accountExplorerLink": "https://www.oklink.com/okbc-test/address/${accountAddress}",
                 "txExplorerLink": "https://www.oklink.com/okbc-test/tx/${txHash}"
+              },
+              {
+                "configName": "Finschia localnet",
+                "chainId": "simd-testing",
+                "chainEnvironment": "localnet",
+                "addressPrefix": "link",
+                "rpcEndpoint": "http://localhost:26657",
+                "defaultGasPrice": "0.015",
+                "chainDenom": "cony",
+                "coinType": "438",
+                "faucetEndpoint": "http://localhost:8081"
+              },
+              {
+                "configName": "Ebony",
+                "chainId": "ebony-2",
+                "chainEnvironment": "testnet",
+                "addressPrefix": "tlink",
+                "rpcEndpoint": "https://ebony-rpc.finschia.io/",
+                "defaultGasPrice": "0.015",
+                "chainDenom": "tcony",
+                "coinType": "438",
+                "accountExplorerLink": "https://explorer.blockchain.line.me/ebony/address/${accountAddress}",
+                "txExplorerLink": "https://explorer.blockchain.line.me/ebony/transaction/${txHash}",
+                "faucetEndpoint": "https://faucet-ebonynw.line-apps.com"
               }
             ]
           },
@@ -642,6 +677,11 @@
         },
         {
           "command": "cosmy-wasmy.addContract",
+          "when": "view == contract",
+          "group": "navigation"
+        },
+        {
+          "command": "cosmy-wasmy.addContractsAll",
           "when": "view == contract",
           "group": "navigation"
         },
@@ -1204,6 +1244,7 @@
     "@cosmjs/launchpad": "^0.27.1",
     "@cosmjs/math": "^0.30.1",
     "@cosmjs/proto-signing": "^0.28.4",
+    "@cosmjs/crypto": "^0.31.0",
     "@terran-one/cw-simulate": "^2.8.0",
     "@vscode/l10n": "^0.0.10",
     "@vscode/l10n-dev": "^0.0.24",
@@ -1213,6 +1254,6 @@
     "json-schema-faker": "^0.5.0-rcv.46",
     "node-fetch": "^3.3.0",
     "toml": "^3.0.0",
-    "web3": "^1.8.1"
+    "web3": "^4.0.2"
   }
 }

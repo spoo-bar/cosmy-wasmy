@@ -36,7 +36,7 @@ export class SignProvider implements vscode.WebviewViewProvider {
 			return;
 		}
 		try {
-			let wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+			let wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix,
 			});
 			const signDoc = this.makeSignDoc(account.address, data.value);

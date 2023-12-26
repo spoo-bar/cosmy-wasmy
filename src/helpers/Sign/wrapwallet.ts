@@ -2,7 +2,8 @@
 import { EthSecp256k1HdWallet } from './ethsecp256k1hdwallet';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
-import {DirectSecp256k1HdWalletOptions} from "@cosmjs/proto-signing/build/directsecp256k1hdwallet"
+import { DirectSecp256k1HdWalletOptions } from "@cosmjs/proto-signing/build/directsecp256k1hdwallet";
+import { HdPath,Slip10RawIndex } from "@cosmjs/crypto";
 
 export const SIGN_TYPE = {
     ethsecp256k1: 'ethsecp256k1',
@@ -11,15 +12,24 @@ export const SIGN_TYPE = {
 
 export class WrapWallet {
     private signType;
+    private hdPath:HdPath;
     public mnemonic;
 
-    constructor(type, mnemonic, options) {
+    constructor(type, coinType, mnemonic,  options) {
         this.mnemonic = mnemonic;
         this.signType = WrapWallet.isEthSecp256k1(type) ? SIGN_TYPE.ethsecp256k1 : SIGN_TYPE.tmsecp256k1;
+        const currentCoinType = coinType || "118";
+        this.hdPath = [
+            Slip10RawIndex.hardened(44),
+            Slip10RawIndex.hardened(Number(currentCoinType)),
+            Slip10RawIndex.hardened(0),
+            Slip10RawIndex.normal(0),
+            Slip10RawIndex.normal(0),
+          ];
     }
 
-    static async fromMnemonic(type: string, mnemonic: string, options?: Partial<DirectSecp256k1HdWalletOptions>): Promise<WrapWallet>{
-        return new WrapWallet(type, mnemonic, {
+    static async fromMnemonic(type: string, coinType: string, mnemonic: string, options?: Partial<DirectSecp256k1HdWalletOptions>): Promise<WrapWallet>{
+        return new WrapWallet(type, coinType, mnemonic,  {
             ...options,
         });
     }
@@ -60,10 +70,12 @@ export class WrapWallet {
     async getWallet(){
         if (this.signType !== SIGN_TYPE.ethsecp256k1){
             return DirectSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+                hdPaths: [this.hdPath],
                 prefix: global.workspaceChain.addressPrefix,
             },);
         }
         return EthSecp256k1HdWallet.fromMnemonic(this.mnemonic, {
+            hdPaths: [this.hdPath],
             prefix: global.workspaceChain.addressPrefix,
         },);
     }
