@@ -23,7 +23,7 @@ export class Account extends vscode.TreeItem {
 	public static async GetAccounts(context: vscode.Memento): Promise<Account[]> {
 		const accountData = this.GetAccountsBasic(context);
 		for (let account of accountData) {
-			const wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+			const wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix
 			});
 			const accounts = await wallet.getAccounts();
@@ -45,7 +45,7 @@ export class Account extends vscode.TreeItem {
 	public static async AddAccount(context: vscode.Memento, account: Account) {
 		try{
 			//fix import error mnemonic,  failed to load account when restart vscode
-			await (await WrapWallet.fromMnemonic(global.workspaceChain.signType, account.mnemonic, {
+			await (await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, account.mnemonic, {
 				prefix: global.workspaceChain.addressPrefix
 			})).getAccounts();
 	
