@@ -1,6 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { GasPrice } from '@cosmjs/stargate';
-import { WrapWallet } from '../Sign/wrapwallet';
+import { WrapWallet } from '../sign/wrapwallet';
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 

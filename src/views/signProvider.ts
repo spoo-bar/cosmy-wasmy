@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { WrapWallet } from '../helpers/Sign/wrapwallet';
+import { WrapWallet } from '../helpers/sign/wrapwallet';
 import { StdSignDoc } from "@cosmjs/amino";
 import { Workspace } from '../helpers/workspace';
 import { ResponseHandler } from '../helpers/responseHandler';
