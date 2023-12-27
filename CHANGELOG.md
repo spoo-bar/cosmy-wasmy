@@ -34,6 +34,8 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Fixed
 
+- refactor workspace and chainConfig class
+
 ### Security 
 
 
