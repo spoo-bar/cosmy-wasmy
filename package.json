@@ -245,7 +245,7 @@
             "markdownDescription": "%cosmywasmy.chainConfigName.desc%",
             "scope": "resource",
             "order": 0,
-            "default": "Juno UNI-5 testnet",
+            "default": "Juno uni-6",
             "deprecationMessage": "%cosmywasmy.chainConfigName.deprecationDesc%"
           },
           "cosmywasmy.chains": {
