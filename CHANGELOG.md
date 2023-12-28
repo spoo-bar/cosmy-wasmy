@@ -35,6 +35,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Fixed
 
 - Fix default chain name
+- Fix auto complete for latest cosmwasm version
 
 ### Security 
 
