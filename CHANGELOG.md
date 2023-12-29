@@ -36,6 +36,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 - Fix default chain name
 - Fix auto complete for latest cosmwasm version
+- Refactor workspace and chainConfig class
 
 ### Security 
 

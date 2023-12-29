@@ -124,6 +124,7 @@ export class Utils {
             chainConfig.rpcEndpoint = network.rpc_endpoint;
             chainConfig.defaultGasPrice = this.getGasPriceAmount(content.gas_price);
             chainConfig.chainDenom = this.getGasPriceDenom(content.gas_price);
+            chainConfig.Validate();
             Workspace.AddChainConfig(chainConfig);
         }
     }
