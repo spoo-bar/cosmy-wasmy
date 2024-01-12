@@ -18,7 +18,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
-## [Unreleased]
+## [v2.4.0] - 12 January 2024
 
 ### Added
 
@@ -27,18 +27,10 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 - Support `coinType` - Can use it when generate account, default `118`.
 - Updated cosmjs to 0.32.2
 
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
 
 - Fix default chain name
 - Fix auto complete for latest cosmwasm version
-
-### Security 
 
 
 ## [v2.3.1] - 07 July 2023
