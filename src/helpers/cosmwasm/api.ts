@@ -61,9 +61,9 @@ export class CosmwasmAPI {
 
 export class Cosmwasm {
 
-    public static async GetQueryClient() {
+    public static async GetQueryClient():  Promise<CosmWasmClient> {
         const rpcEndpoint = global.workspaceChain.rpcEndpoint;
-        return await CosmWasmClient.connect(rpcEndpoint);
+        return CosmWasmClient.connect(rpcEndpoint);
     }
 
     public static async GetSigningClient(): Promise<SigningCosmWasmClient> {
