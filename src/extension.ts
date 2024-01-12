@@ -31,6 +31,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	contractViewProvider.refresh(Contract.GetContracts(context.globalState));
 	accountViewProvider.refresh(await Account.GetAccounts(context.globalState));
+
+	(BigInt.prototype as any).toJSON = function () {
+		return this.toString();
+	};
 }
 
 // this method is called when your extension is deactivated

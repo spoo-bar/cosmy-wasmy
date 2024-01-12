@@ -25,6 +25,7 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 - For localnet chains, all contracts on the chain can be imported in single click.
 - Support [Finschia testnet](https://www.finschia.io/) - Finschia aims to become the world’s No. 1 blockchain ecosystem, leading the popularization of Web3 and securing over 1 billion users. Added configurations for localnet as well as testnet chains
 - Support `coinType` - Can use it when generate account, default `118`.
+- Updated cosmjs to 0.32.2
 
 ### Changed
 
