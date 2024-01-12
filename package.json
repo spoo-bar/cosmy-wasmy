@@ -400,7 +400,7 @@
                 "chainId": "constantine-3",
                 "chainEnvironment": "testnet",
                 "addressPrefix": "archway",
-                "rpcEndpoint": "https://rpc.constantine.archway.tech/",
+                "rpcEndpoint": "https://rpc.constantine.archway.io/",
                 "defaultGasPrice": "1500000000000",
                 "chainDenom": "aconst",
                 "accountExplorerLink": "https://testnet.mintscan.io/archway-testnet/account/${accountAddress}",
