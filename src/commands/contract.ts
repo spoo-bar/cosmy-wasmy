@@ -77,13 +77,10 @@ export class ContractCmds {
 	private static registerAddAllContractsCmd(context: vscode.ExtensionContext, contractViewProvider: ContractDataProvider) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.addContractsAll', () => {
 			if (global.workspaceChain.chainEnvironment == "localnet") {
-				importAllContracts();
+				importAllContracts(); // imports all contracts on the chain
 			}
 			else {
-				vscode.window.showErrorMessage(vscode.l10n.t("Sorry! This command is only available for localnet chains. {chain} is marked as '{type}'", {
-					chain: global.workspaceChain.configName,
-					type: global.workspaceChain.chainEnvironment
-				}));
+				importUserContracts(); // imports all the contracts on the chain for given user
 			}
 		});
 		context.subscriptions.push(disposable);
@@ -100,7 +97,48 @@ export class ContractCmds {
 				progress.report({ message: '' });
 				return new Promise((resolve, reject) => {
 					CosmwasmAPI.GetAllContracts().then(resContracts => {
-						let contractsToAdd:Contract[] = [];
+						let contractsToAdd: Contract[] = [];
+						resContracts.forEach(contract => {
+							if (!Contract.ContractAddressExists(context.globalState, contract.contractAddress)) {
+								contractsToAdd.push(contract);
+							}
+						});
+						Contract.AddManyContract(context.globalState, contractsToAdd);
+						vscode.window.showInformationMessage(vscode.l10n.t("Added {count} contracts!", {
+							count: contractsToAdd.length
+						}));
+						const contracts = Contract.GetContracts(context.globalState);
+						contractViewProvider.refresh(contracts);
+						resolve(contracts);
+					}).catch(err => {
+						vscode.window.showErrorMessage(vscode.l10n.t("Could not import contracts: {err}", {
+							err: err
+						}));
+						reject(err);
+					});
+				});
+			})
+		}
+
+		function importUserContracts() {
+			const account = Workspace.GetSelectedAccount();
+			if (!account) {
+				vscode.window.showErrorMessage(vscode.l10n.t("No account selected to import their contracts. Select an account from the Accounts view."));
+				return;
+			}
+			vscode.window.withProgress({
+				location: vscode.ProgressLocation.Notification,
+				title: vscode.l10n.t("Fetching contracts on the chain - {chain} of {addr}", {
+					chain: global.workspaceChain.configName,
+					addr: account.address
+				}),
+				cancellable: false
+			}, (progress, token) => {
+				token.onCancellationRequested(() => { });
+				progress.report({ message: '' });
+				return new Promise((resolve, reject) => {
+					CosmwasmAPI.GetUserContracts(account.address).then(resContracts => {
+						let contractsToAdd: Contract[] = [];
 						resContracts.forEach(contract => {
 							if (!Contract.ContractAddressExists(context.globalState, contract.contractAddress)) {
 								contractsToAdd.push(contract);

@@ -18,6 +18,22 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- For testnet and mainnet chain, all contracts by the selected account can be imported in a single click
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security 
+
 ## [v2.4.0] - 12 January 2024
 
 ### Added
