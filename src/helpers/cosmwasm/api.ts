@@ -1,4 +1,5 @@
-import { CodeDetails, CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { CodeDetails, CosmWasmClient, MsgExecuteContractEncodeObject } from "@cosmjs/cosmwasm-stargate";
+import { MsgExecuteContract, } from "cosmjs-types/cosmwasm/wasm/v1/tx";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { WrapWallet } from '../sign/wrapwallet';
 import { GasPrice } from '@cosmjs/stargate';
@@ -8,6 +9,7 @@ import { Workspace } from "../workspace";
 import { ResponseHandler } from "../responseHandler";
 import { Account } from "../../models/account";
 import { Utils } from "../../views/utils";
+import { TextEncoder } from "util";
 
 
 export class CosmwasmAPI {
@@ -25,8 +27,8 @@ export class CosmwasmAPI {
         for (let code of codes) {
             const contracts = await client.getContracts(code.id);
             for (let contract of contracts) {
-              let contractInfo = await client.getContract(contract);
-              importedContracts.push(new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, global.workspaceChain.configName));
+                let contractInfo = await client.getContract(contract);
+                importedContracts.push(new Contract(contractInfo.label, contractInfo.address, contractInfo.codeId, contractInfo.creator, global.workspaceChain.configName));
             }
         }
         return importedContracts;
@@ -52,7 +54,7 @@ export class CosmwasmAPI {
         if (!isNaN(parseFloat(decimals))) {
             return Utils.TransDecimals(balance.amount, decimals);
         }
-        
+
         return balance.amount;
     }
 
@@ -72,7 +74,7 @@ export class CosmwasmAPI {
 
 export class Cosmwasm {
 
-    public static async GetQueryClient():  Promise<CosmWasmClient> {
+    public static async GetQueryClient(): Promise<CosmWasmClient> {
         const rpcEndpoint = global.workspaceChain.rpcEndpoint;
         return CosmWasmClient.connect(rpcEndpoint);
     }
@@ -86,7 +88,7 @@ export class Cosmwasm {
         if (!gasDenom) {
             gasDenom = global.workspaceChain.chainDenom;
         }
-        
+
         let gasPrice = global.workspaceChain.defaultGasPrice + gasDenom;
         let client = await SigningCosmWasmClient.connectWithSigner(
             global.workspaceChain.rpcEndpoint,
@@ -127,6 +129,38 @@ export class Cosmwasm {
         }
         catch (err: any) {
             ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Tx");
+            return {
+                isSuccess: false,
+                response: err
+            };
+        }
+    }
+
+    public static async Simulate(account: Account, contract: string, req: any, memo: string, fundsStr: string) {
+        try {
+            let client = await Cosmwasm.GetSigningClient();
+            let funds = Utils.ParseCoins(fundsStr);
+            const inputJson = JSON.stringify(req);
+            const encodeInput = toUtf8(inputJson);
+            const encodeMsg = MsgExecuteContract.fromPartial({
+                sender: account.address,
+                contract: contract,
+                msg: encodeInput,
+                funds: [...(funds || [])],
+            });
+            const msg: MsgExecuteContractEncodeObject = {
+                typeUrl: "/cosmwasm.wasm.v1.MsgExecuteContract",
+                value: encodeMsg,
+            };
+            let gasConsumed = await client.simulate(account.address, [msg], memo)
+            ResponseHandler.OutputSuccess(JSON.stringify(req, null, 4), "Gas Consumed: " + gasConsumed, "Simulate");
+            return {
+                isSuccess: true,
+                response: gasConsumed
+            };
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(JSON.stringify(req, null, 4), err, "Simulate");
             return {
                 isSuccess: false,
                 response: err
@@ -205,4 +239,7 @@ export class Cosmwasm {
             };
         }
     }
+}
+function toUtf8(str: string): Uint8Array {
+    return new TextEncoder().encode(str);
 }

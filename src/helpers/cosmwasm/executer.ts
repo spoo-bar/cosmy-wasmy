@@ -100,6 +100,47 @@ export class Executer {
             }
         });
     }
+
+    public Simulate(value: any, location: vscode.ProgressLocation | { viewId: string }) {
+        const account = Workspace.GetSelectedAccount();
+        if (!account) {
+            vscode.window.showErrorMessage(vscode.l10n.t("No account selected. Select an account from the Accounts view."));
+            return;
+        }
+        const contract = Workspace.GetSelectedContract();
+        if (!contract) {
+            vscode.window.showErrorMessage(vscode.l10n.t("No contract selected. Select a contract in the Contracts view."));
+            return;
+        }
+        try {
+            JSON.parse(value.input);
+        } catch {
+            vscode.window.showErrorMessage(vscode.l10n.t("The input is not valid JSON"));
+            return;
+        }
+
+        const req = JSON.parse(value.input);
+
+        if (this.useHistoryHandler) {
+            HistoryHandler.RecordAction(this.context, contract, Action.Simulate, value);
+        }
+
+        vscode.window.withProgress({
+            location: location,
+            title: vscode.l10n.t("Simulating msg on the contract - {label}", { label: contract.label }),
+            cancellable: false
+        }, async (progress, token) => {
+            token.onCancellationRequested(() => { });
+            progress.report({ message: '' });
+            const gasUsed = await Cosmwasm.Simulate(account, contract.contractAddress, req, "Sent from cosmy-wasmy", value.funds);
+            if (gasUsed.isSuccess) {
+                return Promise.resolve();
+            }
+            else {
+                return Promise.reject();
+            }
+        });
+    }
 }
 
 

@@ -49,5 +49,6 @@ export enum Action {
     Tx,
     Migrate,
     Initialize,
-    Invalid
+    Invalid,
+    Simulate
 }

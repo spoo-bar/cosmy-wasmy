@@ -23,8 +23,11 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Added
 
 - For testnet and mainnet chain, all contracts by the selected account can be imported in a single click
+- Add option to simulate a contract execution in the tx view in sidebar
 
 ### Changed
+
+- Cosmwasm history view now shows the input at the end of the table as it can be unknowingly long
 
 ### Deprecated
 

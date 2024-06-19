@@ -38,6 +38,10 @@ export class CosmwasmHistoryView {
                                 this.executer.Execute(action.inputData, vscode.ProgressLocation.Notification)
                                 break;
                             }
+                            case Action.Simulate: {
+                                this.executer.Simulate(action.inputData, vscode.ProgressLocation.Notification);
+                                break;
+                            }
                             default: { }
                         }
                     }
@@ -136,9 +140,9 @@ export class CosmwasmHistoryView {
                 <th>Run</th>
                 <th>Type</th>
                 <th>Label</th>
-                <th>Input Data</th>
-                <th>Input Funds</th>
                 <th>Contract Address</th>
+                <th>Input Funds</th>
+                <th>Input Data</th>
             </tr>`;
             content += this.getTableData();
             content += "</table></div><br />";
@@ -175,9 +179,9 @@ export class CosmwasmHistoryView {
             else {
                 tableContent += "<td><span class=\"error\"><i>" + vscode.l10n.t("Contract not found in imported contracts.") + "</i></span></td>";
             }
-            tableContent += "<td>" + inputData + "</td>";
-            tableContent += "<td>" + inputFunds + "</td>";
             tableContent += "<td>" + item.contractAddr + "</td>";
+            tableContent += "<td>" + inputFunds + "</td>";
+            tableContent += "<td>" + inputData + "</td>";
             tableContent += "</tr>";
         });
         return tableContent;

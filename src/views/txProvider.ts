@@ -24,6 +24,11 @@ export class TxProvider implements vscode.WebviewViewProvider {
 						new Executer(this.context, true).Execute(data.value, { viewId: Constants.VIEWS_EXECUTE });
 						break;
 					}
+				case 'simulate-text':
+					{
+						new Executer(this.context, true).Simulate(data.value, { viewId: Constants.VIEWS_EXECUTE });
+						break;
+					}
 			}
 		});
 	}
@@ -56,6 +61,7 @@ export class TxProvider implements vscode.WebviewViewProvider {
 				<textarea id="input-text" placeholder="{'increment':{}}"></textarea>
 				<input id="funds-text" placeholder="10${denom}"></input>
 				<button id="exec-button">${vscode.l10n.t("Execute")}</button>
+				<button id="simulate-button" class="secondary">${vscode.l10n.t("Simulate")}</button>
 				<script>
 					(function () {
 						const vscode = acquireVsCodeApi();
@@ -63,6 +69,14 @@ export class TxProvider implements vscode.WebviewViewProvider {
 							const input = document.getElementById('input-text').value;
 							const funds = document.getElementById('funds-text').value;
 							vscode.postMessage({ type: 'exec-text', value: {
+								input: input,
+								funds: funds
+							}});
+						});
+						document.querySelector('#simulate-button').addEventListener('click', () => {
+							const input = document.getElementById('input-text').value;
+							const funds = document.getElementById('funds-text').value;
+							vscode.postMessage({ type: 'simulate-text', value: {
 								input: input,
 								funds: funds
 							}});
