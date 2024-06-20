@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { CWSimulateApp } from '@terran-one/cw-simulate';
-import { parseCoins } from "@cosmjs/launchpad";
+import { Coin, parseCoins } from "@cosmjs/launchpad";
 import { JSONSchemaFaker } from "json-schema-faker";
 var toml = require('toml');
 
@@ -159,7 +159,14 @@ export class WasmVmPanel {
 
 
     private async initializeContract(value: any) {
-        let funds = parseCoins(value.funds);
+        let funds : Coin[]
+        try {
+            funds = parseCoins(value.funds);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage('Invalid funds for initialize: ' + error.message);
+            return;
+        }
         let input: any;
         try {
             input = JSON.parse(value.input);
