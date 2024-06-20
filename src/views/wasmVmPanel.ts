@@ -1,8 +1,7 @@
 import * as vscode from "vscode";
 import { CWSimulateApp } from '@terran-one/cw-simulate';
 import { Coin, parseCoins } from "@cosmjs/launchpad";
-import { JSONSchemaFaker } from "json-schema-faker";
-var toml = require('toml');
+import { ChainConfig } from "../helpers/workspace";
 
 
 export class WasmVmPanel {
@@ -14,12 +13,12 @@ export class WasmVmPanel {
     private readonly _app: CWSimulateApp;
     private readonly _codeId: number;
 
-    constructor(panel: vscode.WebviewPanel, wasm: Uint8Array) {
+    constructor(panel: vscode.WebviewPanel, wasm: Uint8Array, chainConfig: ChainConfig) {
         this._panel = panel;
         this._wasmBinary = wasm;
         this._app = new CWSimulateApp({
-            chainId: 'cosmy-wasmy-1',
-            bech32Prefix: 'test'
+            chainId: chainConfig.chainId,
+            bech32Prefix: chainConfig.addressPrefix,
         });
         this._codeId = this._app.wasm.create('', this._wasmBinary);
 
@@ -56,7 +55,8 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;" size="5">${vscode.l10n.t("Bech32 Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;">${vscode.l10n.t("Bech32 Prefix")}</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.height}" style="margin-right:20px;">${vscode.l10n.t("Block Height")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>

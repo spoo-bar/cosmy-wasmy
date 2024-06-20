@@ -302,7 +302,7 @@ export class ContractCmds {
 			);
 			panel.iconPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'icon.svg');
 			const wasmBinary = await vscode.workspace.fs.readFile(wasm)
-			let view = new WasmVmPanel(panel, wasmBinary);
+			let view = new WasmVmPanel(panel, wasmBinary, global.workspaceChain);
 			await view.getWebviewContent(context.extensionUri);
 		});
 
