@@ -28,9 +28,6 @@ export class WasmVmPanel {
     }
 
     public async getWebviewContent(extensionUri: vscode.Uri) {
-        const contractName = await this.getContractName();
-        const schemaFile = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "schema", contractName + ".json");
-        const defaltData = await SampleInput.Load(schemaFile);
         const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
@@ -47,9 +44,6 @@ export class WasmVmPanel {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <script type="module" src="${toolkitUri}"></script>
-            <script>
-                var data = ${JSON.stringify(defaltData)};
-            </script>
             <script type="module" src="${mainUri}"></script>
             <title>${this._panel.title}</title>
           </head>
@@ -62,8 +56,7 @@ export class WasmVmPanel {
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
                 <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;" size="5">${vscode.l10n.t("Chain Prefix")}</vscode-text-field>
-                <vscode-text-field disabled value="${schemaFile.path}" size="50">${vscode.l10n.t("Schema File")}</vscode-text-field>
+                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;" size="5">${vscode.l10n.t("Bech32 Prefix")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
                 <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
@@ -84,10 +77,7 @@ export class WasmVmPanel {
                             <vscode-text-field id="executeFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
                         </div>
                         <div>
-                            <label for="executeInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
-                            <vscode-dropdown id="executeInputDrop">
-                            </vscode-dropdown>
-                            <vscode-text-area id="executeInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                            <vscode-text-area id="executeInput" style="margin-top:20px;" cols="30" placeholder="{'count': 6}">Execute Input</vscode-text-area>
                         </div>
                         <div>
                             <vscode-button id="executeBtn">${vscode.l10n.t("Execute")}</vscode-button>
@@ -97,13 +87,10 @@ export class WasmVmPanel {
                 <vscode-panel-view id="view-2">
                     <div>
                         <div>
-                            <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
+                            <vscode-text-field id="queryContractAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Contract Address")}</vscode-text-field> 
                             </div>
                         <div>
-                        <label for="queryInputDrop" style="display:block; margin-top:20px;">Input Msg:</label>
-                            <vscode-dropdown id="queryInputDrop">
-                            </vscode-dropdown>
-                            <vscode-text-area id="queryInput" style="margin-left:20px;" cols="30" placeholder="{'count': 6}"></vscode-text-area>
+                            <vscode-text-area id="queryInput" style="margin-top:20px;" cols="30" placeholder="{'count': 6}">Query Input</vscode-text-area>
                         </div>
                         <div>
                             <vscode-button id="queryBtn">${vscode.l10n.t("Query")}</vscode-button>
@@ -113,7 +100,7 @@ export class WasmVmPanel {
                 <vscode-panel-view id="view-3">
                     <div>
                         <div>
-                            <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="42">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
+                            <vscode-text-field id="instantiateSenderAddr" placeholder="test1f44ddca9awepv2rnudztguq5rmrran2m20zzd6" size="50">${vscode.l10n.t("Sender Address")}</vscode-text-field> 
                             <vscode-text-field id="instantiateLabel" placeholder="Counter v0.1" style="margin-left:20px;">${vscode.l10n.t("Contract Label")}</vscode-text-field> 
                             <vscode-text-field id="instantiateFunds" placeholder="10utokenx" style="margin-left:20px;" size="8">${vscode.l10n.t("Funds")}</vscode-text-field> 
                         </div>
@@ -173,7 +160,13 @@ export class WasmVmPanel {
 
     private async initializeContract(value: any) {
         let funds = parseCoins(value.funds);
-        let input = JSON.parse(value.input);
+        let input: any;
+        try {
+            input = JSON.parse(value.input);
+        } catch (error) {
+            vscode.window.showErrorMessage('Invalid JSON input for initialize: ' + error.message);
+            return;
+        }
         let result = await this._app.wasm.instantiateContract(value.senderAddr, funds, this._codeId, input, value.label);
         this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
         if (result.ok && typeof result.val !== 'string') {
@@ -204,14 +197,6 @@ export class WasmVmPanel {
         return webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, ...pathList));
     }
 
-    private async getContractName() {
-        const cargoToml = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, "Cargo.toml");
-        const doc = await vscode.workspace.openTextDocument(cargoToml);
-        const cargo = toml.parse(doc.getText());
-        const contractName = cargo.package.name;
-        return contractName;
-    }
-
     public dispose() {
         WasmVmPanel.currentPanel = undefined;
 
@@ -225,58 +210,4 @@ export class WasmVmPanel {
         }
     }
 
-}
-
-class SampleInput {
-    instantiate: string;
-    query: Input[];
-    execute: Input[];
-
-    static async Load(schemaFile: vscode.Uri): Promise<SampleInput> {
-        let sampleInput = new SampleInput();
-        try {
-            const doc = await vscode.workspace.openTextDocument(schemaFile);
-            const schema = JSON.parse(doc.getText());
-            loadInstantiate();
-            loadExecute();
-            loadQuery();
-
-            function loadQuery() {
-                sampleInput.query = [];
-                for (const query of schema.query.oneOf) {
-                    const endpointName = query.required[0];
-                    const val = JSON.stringify(JSONSchemaFaker.generate(query, {}));
-                    const defaultVal = new Input(endpointName, val);
-                    sampleInput.query.push(defaultVal);
-                }
-            }
-
-            function loadExecute() {
-                sampleInput.execute = [];
-                for (const exec of schema.execute.oneOf) {
-                    const endpointName = exec.required[0];
-                    const val = JSON.stringify(JSONSchemaFaker.generate(exec, {}));
-                    const defaultVal = new Input(endpointName, val);
-                    sampleInput.execute.push(defaultVal);
-                }
-            }
-
-            function loadInstantiate() {
-                sampleInput.instantiate = JSON.stringify(JSONSchemaFaker.generate(schema.instantiate, {}));
-            }
-        }
-        finally {
-            return sampleInput;
-        }
-    }
-}
-
-class Input {
-    id: string;
-    data: string;
-
-    constructor(id: string, data: string) {
-        this.id = id;
-        this.data = data;
-    }
 }
