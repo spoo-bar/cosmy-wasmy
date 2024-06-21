@@ -40,6 +40,14 @@ function main() {
     { title: 'Address', columnDataKey: 'Header4' },
   ];
 
+  document.getElementById('accounts-grid').rowsData = [{}];
+  document.getElementById('accounts-grid').columnDefinitions = [
+    { title: '#', columnDataKey: 'Header1' },
+    { title: 'Address', columnDataKey: 'Header2' },
+    { title: 'Mnemonic', columnDataKey: 'Header3' },
+    { title: 'Balance', columnDataKey: 'Header4' },
+  ];
+
   // Handle the message inside the webview
   window.addEventListener('message', event => {
     const message = event.data; // The JSON data the extension sent
@@ -64,6 +72,11 @@ function main() {
         break;
     }
   });
+
+  for(const acc of accountsData){
+    const length = document.getElementById('accounts-grid').rowsData.length;
+    document.getElementById('accounts-grid').rowsData.push({ Header1: length, Header2: acc.address, Header3: acc.mnemonic, Header4: acc.balance});
+  }
 }
 
 function displayResponseDataGrid() {

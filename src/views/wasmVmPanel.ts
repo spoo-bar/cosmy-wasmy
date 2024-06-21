@@ -2,16 +2,24 @@ import * as vscode from "vscode";
 import { CWSimulateApp } from '@terran-one/cw-simulate';
 import { Coin, parseCoins } from "@cosmjs/launchpad";
 import { ChainConfig } from "../helpers/workspace";
+import { WrapWallet } from "../helpers/sign/wrapwallet";
 
 
 export class WasmVmPanel {
     public static currentPanel: WasmVmPanel | undefined;
+    private accounts = [];
     private readonly _panel: vscode.WebviewPanel;
     private _disposables: vscode.Disposable[] = [];
 
     private readonly _wasmBinary: Uint8Array;
     private readonly _app: CWSimulateApp;
     private readonly _codeId: number;
+
+    private readonly mnemonics = [
+        "future master you three together square ski wrong shoulder online ridge tattoo",
+        "vacant tenant leave hill unique bless song manual model junk because slot",
+        "flock grape accident crowd helmet rifle giraffe marine toilet zebra attitude wrestle"
+    ]
 
     constructor(panel: vscode.WebviewPanel, wasm: Uint8Array, chainConfig: ChainConfig) {
         this._panel = panel;
@@ -21,12 +29,25 @@ export class WasmVmPanel {
             bech32Prefix: chainConfig.addressPrefix,
         });
         this._codeId = this._app.wasm.create('', this._wasmBinary);
-
         this._setWebviewMessageListener(this._panel.webview);
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     }
 
     public async getWebviewContent(extensionUri: vscode.Uri) {
+        for(const mnemonic of this.mnemonics) {
+            const wallet = await WrapWallet.fromMnemonic(global.workspaceChain.signType, global.workspaceChain.coinType, mnemonic, {
+                prefix: global.workspaceChain.addressPrefix
+            });
+            const addr = (await wallet.getAccounts())[0].address;
+            const balance = 1000000 + global.workspaceChain.chainDenom;
+            this._app.bank.setBalance(addr, parseCoins(balance));
+            this.accounts.push({
+                address: addr,
+                balance: balance,
+                mnemonic: wallet.mnemonic,
+            });
+        }
+
         const toolkitUri = this.getUri(this._panel.webview, extensionUri, [
             "node_modules",
             "@vscode",
@@ -43,6 +64,9 @@ export class WasmVmPanel {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width,initial-scale=1.0">
             <script type="module" src="${toolkitUri}"></script>
+            <script>
+                var accountsData = ${JSON.stringify(this.accounts)};
+            </script>
             <script type="module" src="${mainUri}"></script>
             <title>${this._panel.title}</title>
           </head>
@@ -53,13 +77,17 @@ export class WasmVmPanel {
             <vscode-panels id="meta-panel" aria-label="Default">
                 <vscode-panel-tab id="tab-1">${vscode.l10n.t("SETUP")}</vscode-panel-tab>
                 <vscode-panel-tab id="tab-2">${vscode.l10n.t("CONTRACTS")}</vscode-panel-tab>
+                <vscode-panel-tab id="tab-3">${vscode.l10n.t("ACCOUNTS")}</vscode-panel-tab>
                 <vscode-panel-view id="view-1">
-                <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
-                <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;">${vscode.l10n.t("Bech32 Prefix")}</vscode-text-field>
-                <vscode-text-field disabled value="${this._app.height}" style="margin-right:20px;">${vscode.l10n.t("Block Height")}</vscode-text-field>
+                    <vscode-text-field disabled value="${this._app.chainId}" style="margin-right:20px;">${vscode.l10n.t("Chain ID")}</vscode-text-field> 
+                    <vscode-text-field disabled value="${this._app.bech32Prefix}" style="margin-right:20px;">${vscode.l10n.t("Bech32 Prefix")}</vscode-text-field>
+                    <vscode-text-field disabled value="${this._app.height}" style="margin-right:20px;">${vscode.l10n.t("Block Height")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
+                    <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
+                </vscode-panel-view>
+                <vscode-panel-view id="view-3">
+                    <vscode-data-grid id="accounts-grid" grid-template-columns="5% 35% 45% 15%" aria-label="Default"></vscode-data-grid>
                 </vscode-panel-view>
             </vscode-panels>
             <br />
@@ -159,7 +187,7 @@ export class WasmVmPanel {
 
 
     private async initializeContract(value: any) {
-        let funds : Coin[]
+        let funds: Coin[]
         try {
             funds = parseCoins(value.funds);
         }
