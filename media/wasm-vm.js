@@ -14,6 +14,15 @@ function main() {
   const queryButton = document.getElementById("queryBtn");
   queryButton.addEventListener("click", handleQueryClick);
 
+  const refreshContractsButton = document.getElementById("refreshContractsBtn");
+  refreshContractsButton.addEventListener("click", unimplemented);
+
+  const refreshAccountsButton = document.getElementById("refreshAccBtn");
+  refreshAccountsButton.addEventListener("click", unimplemented);
+
+  const addNewAccButton = document.getElementById("addNewAccBtn");
+  addNewAccButton.addEventListener("click", unimplemented);
+
   document.getElementById('vm-responses-grid').rowsData = [];
   document.getElementById('vm-responses-grid').columnDefinitions = [
     { title: '#', columnDataKey: 'Header1' },
@@ -164,4 +173,12 @@ function handleQueryClick() {
   vscode.postMessage(msg);
   history.push(msg);
   displayHistoryDataGrid();
+}
+
+function unimplemented() {
+  const msg = {
+    command: "unimplemented",
+    value: {},
+  };
+  vscode.postMessage(msg);
 }
