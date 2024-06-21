@@ -36,8 +36,9 @@ function main() {
   document.getElementById('contracts-grid').rowsData = [{}];
   document.getElementById('contracts-grid').columnDefinitions = [
     { title: '#', columnDataKey: 'Header1' },
-    { title: 'Label', columnDataKey: 'Header3' },
-    { title: 'Address', columnDataKey: 'Header4' },
+    { title: 'Label', columnDataKey: 'Header2' },
+    { title: 'Address', columnDataKey: 'Header3' },
+    { title: 'Balance', columnDataKey: 'Header4'},
   ];
 
   document.getElementById('accounts-grid').rowsData = [{}];
@@ -68,7 +69,7 @@ function main() {
         break;
       case 'append-contract':
         const length = document.getElementById('contracts-grid').rowsData.length;
-        document.getElementById('contracts-grid').rowsData.push({ Header1: length, Header3: message.value.label, Header4: message.value.address});
+        document.getElementById('contracts-grid').rowsData.push({ Header1: length, Header2: message.value.label, Header3: message.value.address, Header4: message.value.balance});
         break;
     }
   });

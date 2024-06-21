@@ -84,7 +84,7 @@ export class WasmVmPanel {
                     <vscode-text-field disabled value="${this._app.height}" style="margin-right:20px;">${vscode.l10n.t("Block Height")}</vscode-text-field>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-2">
-                    <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 75%" aria-label="Default"></vscode-data-grid>
+                    <vscode-data-grid id="contracts-grid" grid-template-columns="5% 20% 60% 15%" aria-label="Default"></vscode-data-grid>
                 </vscode-panel-view>
                 <vscode-panel-view id="view-3">
                     <vscode-data-grid id="accounts-grid" grid-template-columns="5% 35% 45% 15%" aria-label="Default"></vscode-data-grid>
@@ -206,10 +206,16 @@ export class WasmVmPanel {
         this._panel.webview.postMessage({ command: 'instantiate-res', value: result });
         if (result.ok && typeof result.val !== 'string') {
             const contractAddress = result.val.events[0].attributes[0].value;
+            const balance = this._app.bank.getBalance(contractAddress)[0];
+            let balanceString = '';
+            if (balance) {
+                balanceString = balance.amount + balance.denom;
+            }
             this._panel.webview.postMessage({
                 command: 'append-contract', value: {
                     label: value.label,
-                    address: contractAddress
+                    address: contractAddress,
+                    balance: balanceString,
                 }
             });
         }
