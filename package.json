@@ -1251,7 +1251,7 @@
     "@vscode/webview-ui-toolkit": "^1.2.0",
     "cross-fetch": "^3.1.5",
     "ethers": "^5.6.0",
-    "json-schema-faker": "^0.5.0-rcv.46",
+    "json-schema-faker": "^0.5.1",
     "node-fetch": "^3.3.0",
     "toml": "^3.0.0",
     "web3": "^4.0.2"
