@@ -9,6 +9,7 @@ export class CosmwasmCmds {
 		this.registerQueryHistoryCmd(context);
 		this.registerQueryCosmwasmCmd(context);
 		this.registerTxCosmwasmCmd(context);
+		this.registerQueryTxCmd(context);
 	}
 	private static registerQueryHistoryCmd(context: vscode.ExtensionContext) {
 		let disposable = vscode.commands.registerCommand('cosmy-wasmy.history', () => {
@@ -21,10 +22,10 @@ export class CosmwasmCmds {
 				const panel = vscode.window.createWebviewPanel(
 					'history', // Identifies the type of the webview. Used internally
 					vscode.l10n.t('Cosmwasm History'), // Title of the panel displayed to the user
-					vscode.ViewColumn.Active, 
+					vscode.ViewColumn.Active,
 					{
 						enableScripts: true
-					} 
+					}
 				);
 				panel.iconPath = vscode.Uri.joinPath(context.extensionUri, 'media', 'icon.svg');
 				let view = new CosmwasmHistoryView(context.globalState);
@@ -78,4 +79,21 @@ export class CosmwasmCmds {
 		});
 		context.subscriptions.push(disposable);
 	}
+
+	private static registerQueryTxCmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.queryTx', async () => {
+			vscode.window.showInputBox({
+				title: vscode.l10n.t("Tx Hash"),
+				placeHolder: vscode.l10n.t("Paste the SHA256 hash of the transaction"),
+			}).then(txHash => {
+				if (txHash) {
+					const cosmwasmExecutor = new Executer(context.globalState, true);
+					cosmwasmExecutor.QueryTx(txHash, vscode.ProgressLocation.Notification);
+				}
+			})
+		});
+
+		context.subscriptions.push(disposable);
+	}
+
 }

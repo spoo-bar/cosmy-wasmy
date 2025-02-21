@@ -1,15 +1,14 @@
-import { CodeDetails, CosmWasmClient, MsgExecuteContractEncodeObject } from "@cosmjs/cosmwasm-stargate";
-import { MsgExecuteContract, } from "cosmjs-types/cosmwasm/wasm/v1/tx";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { WrapWallet } from '../sign/wrapwallet';
-import { GasPrice } from '@cosmjs/stargate';
+import { CodeDetails, CosmWasmClient, MsgExecuteContractEncodeObject, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { FaucetClient } from "@cosmjs/faucet-client";
-import { Contract } from '../../models/contract';
-import { Workspace } from "../workspace";
-import { ResponseHandler } from "../responseHandler";
-import { Account } from "../../models/account";
-import { Utils } from "../../views/utils";
+import { GasPrice } from '@cosmjs/stargate';
+import { MsgExecuteContract, } from "cosmjs-types/cosmwasm/wasm/v1/tx";
 import { TextEncoder } from "util";
+import { Account } from "../../models/account";
+import { Contract } from '../../models/contract';
+import { Utils } from "../../views/utils";
+import { ResponseHandler } from "../responseHandler";
+import { WrapWallet } from '../sign/wrapwallet';
+import { Workspace } from "../workspace";
 
 
 export class CosmwasmAPI {
@@ -109,6 +108,24 @@ export class Cosmwasm {
         }
         catch (err: any) {
             ResponseHandler.OutputError(JSON.stringify(query, null, 4), err, "Query");
+            return {
+                isSuccess: false,
+                response: err
+            };
+        }
+    }
+
+    public static async QueryTx(txHash: string) {
+        try {
+            let resp = await (await Cosmwasm.GetQueryClient()).getTx(txHash);
+            ResponseHandler.OutputSuccess(txHash, JSON.stringify(resp, null, 4), "Query Tx");
+            return {
+                isSuccess: true,
+                response: resp
+            };
+        }
+        catch (err: any) {
+            ResponseHandler.OutputError(txHash, err, "Query Tx");
             return {
                 isSuccess: false,
                 response: err

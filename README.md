@@ -171,7 +171,7 @@ All the given keybindings can be customized
 | Show Cosmwasm History | cosmy-wasmy.history | ctrl+shift+a | Shows latest queries and transactions and with saved inputs. Allows easy re-execution of same queries. The number of saved queries is configurable in the settings. | 
 | Export Cosmy Wasmy data | cosmy-wasmy.export |  | Export imported accounts, all imported contracts and history as a JSON file. Careful sharing this file with others as it will include your seed phrase | 
 | Create a new CW Notebook | cosmy-wasmy.createCwNotebook |   | Create a new CW Notebook with some sample content |
-
+| Query Tx | cosmy-wasmy.queryTx | | Queries the details of the transaction given the tx hash |
 ---
 
 ## Features
