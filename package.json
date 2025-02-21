@@ -234,6 +234,11 @@
         "command": "cosmy-wasmy.encodeToBase64",
         "title": "%cosmy-wasmy.encodeToBase64.title%",
         "category": "Cosmy Wasmy"
+      },
+      {
+        "command": "cosmy-wasmy.queryTx",
+        "title": "%cosmy-wasmy.queryTx.title%",
+        "category": "Cosmy Wasmy"
       }
     ],
     "configuration": [

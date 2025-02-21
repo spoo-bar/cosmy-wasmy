@@ -1,4 +1,3 @@
-import { isMultisigThresholdPubkey } from '@cosmjs/amino';
 import * as vscode from 'vscode';
 import { Action, HistoryHandler } from '../extensionData/historyHandler';
 import { Workspace } from "../workspace";
@@ -43,6 +42,24 @@ export class Executer {
             token.onCancellationRequested(() => { });
             progress.report({ message: '' });
             let response = await Cosmwasm.Query(contract.contractAddress, query);
+            if (response.isSuccess) {
+                return Promise.resolve();
+            }
+            else {
+                return Promise.reject();
+            }
+        });
+    }
+
+    public QueryTx(input: string, location: vscode.ProgressLocation) {
+        vscode.window.withProgress({
+            location: location,
+            title: vscode.l10n.t("Querying the tx - {txhash}", { txhash: input }),
+            cancellable: false
+        }, async (progress, token) => {
+            token.onCancellationRequested(() => { });
+            progress.report({ message: '' });
+            let response = await Cosmwasm.QueryTx(input);
             if (response.isSuccess) {
                 return Promise.resolve();
             }
