@@ -27,6 +27,7 @@ export class Commands {
 		this.syncBeakerTomlCmd(context);
 		this.createNewCWNotebookCmd(context);
 		this.encodeToBase64Cmd(context);
+		this.decodeFromBase64Cmd(context);
 		//this.registerRecordCWCmd(context);		
 	}
 
@@ -164,6 +165,23 @@ export class Commands {
 				const selectedText = activeTextEditor.document.getText(new vscode.Range(selection.start, selection.end));
 				let b = Buffer.from(selectedText);
 				e.replace(selection, b.toString("base64"));
+			})
+		});
+		context.subscriptions.push(disposable);
+	}
+
+	private static decodeFromBase64Cmd(context: vscode.ExtensionContext) {
+		let disposable = vscode.commands.registerCommand('cosmy-wasmy.decodeFromBase64', (item: vscode.Uri) => {
+			let activeTextEditor = vscode.window.activeTextEditor;
+			if (activeTextEditor.document.uri.path != item.path) {
+				vscode.window.showErrorMessage(vscode.l10n.t("Something went wrong in fetching the selected text. Please try again!"));
+				return;
+			}
+			const selection = activeTextEditor.selection;
+			activeTextEditor.edit(function(e) {
+				const selectedText = activeTextEditor.document.getText(new vscode.Range(selection.start, selection.end));
+				let b = Buffer.from(selectedText, "base64");
+				e.replace(selection, b.toString("utf-8"));
 			})
 		});
 		context.subscriptions.push(disposable);

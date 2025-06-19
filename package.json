@@ -236,6 +236,11 @@
         "category": "Cosmy Wasmy"
       },
       {
+        "command": "cosmy-wasmy.decodeFromBase64",
+        "title": "%cosmy-wasmy.decodeFromBase64.title%",
+        "category": "Cosmy Wasmy"
+      },
+      {
         "command": "cosmy-wasmy.queryTx",
         "title": "%cosmy-wasmy.queryTx.title%",
         "category": "Cosmy Wasmy"
@@ -637,6 +642,11 @@
         },
         {
           "command": "cosmy-wasmy.encodeToBase64",
+          "when": "editorLangId == json && editorHasSelection",
+          "group": "7_modification"
+        },
+        {
+          "command": "cosmy-wasmy.decodeFromBase64",
           "when": "editorLangId == json && editorHasSelection",
           "group": "7_modification"
         }
