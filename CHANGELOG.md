@@ -18,6 +18,22 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Security 
 -->
 
+## [Unreleased]
+
+### Added
+
+- Added a feature to have context menu option to decode base64 selected text. Works only in JSON files.
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security 
+
 ## [v2.5.0] - 05 June 2025
 
 ### Added
@@ -29,14 +45,6 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 ### Changed
 
 - Cosmwasm history view now shows the input at the end of the table as it can be unknowingly long
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security 
 
 ## [v2.4.0] - 12 January 2024
 
