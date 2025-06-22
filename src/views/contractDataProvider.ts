@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Constants } from '../constants';
-import { Contract } from '../models/contract';
 import { ContractSortOrder, Workspace } from '../helpers/workspace';
+import { Contract } from '../models/contract';
 
 
 export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
@@ -20,7 +20,7 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 
 
 	refresh(contracts: Contract[]): void {
-		this.contracts = contracts.filter(c => !c.chainConfig || c.chainConfig == "" || c.chainConfig == global.workspaceChain.configName);
+		this.contracts = contracts.filter(c => !c.chainConfig || c.chainConfig == global.workspaceChain.configName);
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
@@ -48,7 +48,6 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 			contract.description = contract.contractAddress;
 			contract.tooltip = getContractTooltip();
 			contract.contextValue = Constants.VIEWS_CONTRACT;
-			contract.iconPath = contract.chainConfig == global.workspaceChain.configName ? "" : new vscode.ThemeIcon("debug-disconnect");
 			contract.command = {
 				title: vscode.l10n.t("Select Contract"),
 				command: "cosmy-wasmy.selectContract",
@@ -62,10 +61,6 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 			tooltip += vscode.l10n.t("Creator: {addr}", { addr: contract.creator });
 			if (contract.notes && contract.notes.trim().length > 0) {
 				tooltip += "\n\n" + contract.notes;
-			}
-			if (contract.chainConfig != global.workspaceChain.configName) {
-				tooltip += "\n\n";
-				tooltip += "$(alert) *" + vscode.l10n.t("The imported contracts are not associated with any of the configured chains. Delete and reimport the contract to fix this.") + "*";
 			}
 			return new vscode.MarkdownString(tooltip, true);
 		}
@@ -92,7 +87,6 @@ export class ContractDataProvider implements vscode.TreeDataProvider<Contract> {
 				if (element) { return this.getContractsByCode(element.codeId); }
 				else { return this.getCodeIds(); }
 			}
-				break;
 
 			case ContractSortOrder.None:
 			default: { if (!element) { return this.contracts; } }
