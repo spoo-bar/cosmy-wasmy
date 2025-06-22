@@ -30,6 +30,8 @@ All notable changes to the Cosmy Wasmy extension will be documented in this file
 
 ### Removed
 
+- Remove the plug disconnected icon when the contracts were imported with v1 of the extension.
+
 ### Fixed
 
 ### Security 
